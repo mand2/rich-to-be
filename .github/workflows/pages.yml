@@ -22,6 +22,8 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
+    outputs:
+      page_url: ${{ steps.deploy.outputs.page_url }}   # slack 잡이 링크를 만들 베이스 URL
     steps:
       # ponytail: actions 는 v4 고정. 2026-08-26 실행 로그에서 Node 20 deprecated 경고가 떴고
       # 러너가 Node 24 로 강제 실행 중이다. 지금은 성공하니 둔다 — 실제로 깨지거나
@@ -56,6 +58,7 @@ jobs:
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
           SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
+          NOTES_BASE_URL: ${{ needs.deploy.outputs.page_url }}
         run: |
           # -z/-0: 한글 파일명을 git 이 "\353\250\270..." 로 이스케이프해 내보내는 걸 막는다
           git diff -z --name-only --diff-filter=A ${{ github.event.before }} ${{ github.sha }} \

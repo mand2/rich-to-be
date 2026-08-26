@@ -1,19 +1,18 @@
 #!/usr/bin/env python3
-"""notes/*.html 을 슬랙 채널에 올린다. 파일당 "<파일명> 정리 >>>" 메시지 + 스레드에 파일. 외부 의존성 0 (urllib 만 쓴다).
+"""발행된 노트 링크를 슬랙 채널에 올린다. 파일당 "<파일명> 정리 >>> <링크>" 한 줄. 외부 의존성 0 (urllib 만 쓴다).
 
 리포 루트 .env 에 두 줄 (환경변수로 이미 있으면 그쪽이 이긴다). .env.example 참고:
 
-    SLACK_BOT_TOKEN=xoxb-...   # scopes: files:write, chat:write
+    SLACK_BOT_TOKEN=xoxb-...   # scope: chat:write
     SLACK_CHANNEL=C0XXXXXXX    # 봇을 채널에 /invite 해 둘 것
 
     .venv/bin/python scripts/slack.py notes/morning-routine/260826_한경-모닝루틴.html
     .venv/bin/python scripts/slack.py --selftest
 
-files.upload 은 2025 년에 죽었다. getUploadURLExternal -> PUT -> completeUploadExternal 3단계가 현행이다.
+Pages 아티팩트의 루트가 notes/ 라서 notes/ 아래 경로가 그대로 URL 경로가 된다.
 """
 import argparse
 import json
-import mimetypes
 import os
 import sys
 import urllib.parse
@@ -22,6 +21,9 @@ from pathlib import Path
 
 API = "https://slack.com/api/"
 ENV_FILE = Path(__file__).resolve().parent.parent / ".env"
+# ponytail: CI 는 deploy-pages 의 page_url 을 NOTES_BASE_URL 로 넘긴다. 이 기본값은 로컬 실행용 —
+# 리포/계정이 바뀌면 여기도 바꾼다.
+BASE_URL = "https://mand2.github.io/rich-to-be/"
 
 
 def dotenv(path=ENV_FILE):
@@ -49,43 +51,23 @@ def call(method, token, **params):
     return body
 
 
-def multipart(filename, blob):
-    """upload_url 에 보낼 multipart/form-data 본문. (content_type, body)"""
-    boundary = "----richtobe"  # ponytail: 고정 boundary. 노트 HTML 에 이 문자열이 들어갈 일이 없어서 충돌 검사를 뺐다.
-    mime = mimetypes.guess_type(filename)[0] or "application/octet-stream"
-    head = (
-        f"--{boundary}\r\n"
-        f'Content-Disposition: form-data; name="file"; filename="{filename}"\r\n'
-        f"Content-Type: {mime}\r\n\r\n"
-    ).encode()
-    return f"multipart/form-data; boundary={boundary}", head + blob + f"\r\n--{boundary}--\r\n".encode()
+def note_url(path, base=BASE_URL):
+    """notes/invest/x.html -> <base>invest/x.html. 한글 파일명은 퍼센트 인코딩한다."""
+    parts = Path(path).parts
+    rel = parts[parts.index("notes") + 1:] if "notes" in parts else parts[-1:]
+    return base.rstrip("/") + "/" + "/".join(urllib.parse.quote(p) for p in rel)
 
 
-def upload(path, token, channel):
-    """채널에 "<파일명> 정리 >>>" 를 올리고, 그 스레드에 파일을 붙인다."""
-    path = Path(path)
-    blob = path.read_bytes()
-    parent = call("chat.postMessage", token, channel=channel, text=f"{path.stem} 정리 >>>")
-    slot = call("files.getUploadURLExternal", token, filename=path.name, length=len(blob))
-    ctype, body = multipart(path.name, blob)
-    urllib.request.urlopen(
-        urllib.request.Request(slot["upload_url"], data=body, headers={"Content-Type": ctype})
-    ).read()
-    done = call(
-        "files.completeUploadExternal",
-        token,
-        files=json.dumps([{"id": slot["file_id"], "title": path.stem}]),
-        channel_id=channel,
-        thread_ts=parent["ts"],
-    )
-    return done["files"][0].get("permalink", "")
+def post(path, token, channel, base=BASE_URL):
+    url = note_url(path, base)
+    call("chat.postMessage", token, channel=channel, text=f"{Path(path).stem} 정리 >>> {url}")
+    return url
 
 
 def selftest():
-    ctype, body = multipart("a b.html", b"<p>hi</p>")
-    assert "boundary=----richtobe" in ctype
-    assert b'filename="a b.html"' in body and b"Content-Type: text/html" in body
-    assert body.endswith(b"\r\n------richtobe--\r\n") and b"<p>hi</p>\r\n--" in body
+    assert note_url("notes/invest/260826_a.html") == "https://mand2.github.io/rich-to-be/invest/260826_a.html"
+    assert note_url("/x/notes/morning-routine/한글.html", "http://e.com") == "http://e.com/morning-routine/%ED%95%9C%EA%B8%80.html"
+    assert note_url("bare.html", "http://e.com/") == "http://e.com/bare.html"
     import tempfile
     with tempfile.NamedTemporaryFile("w", suffix=".env", delete=False) as f:
         f.write('# 주석\nSLACK_BOT_TOKEN="xoxb-1"\n\nSLACK_CHANNEL = C0X \nBROKEN\n')
@@ -97,6 +79,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("paths", nargs="*", type=Path)
     ap.add_argument("--channel", default=os.environ.get("SLACK_CHANNEL"))  # 없으면 .env
+    ap.add_argument("--base-url", default=os.environ.get("NOTES_BASE_URL") or BASE_URL)
     ap.add_argument("--selftest", action="store_true")
     a = ap.parse_args()
     if a.selftest:
@@ -107,7 +90,7 @@ def main():
     if not (a.paths and token and a.channel):
         sys.exit(".env 의 SLACK_BOT_TOKEN / SLACK_CHANNEL(--channel) 과 파일 경로가 있어야 한다")
     for p in a.paths:
-        print(f"{p} -> {upload(p, token, a.channel)}")
+        print(f"{p} -> {post(p, token, a.channel, a.base_url)}")
 
 
 if __name__ == "__main__":

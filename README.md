@@ -33,7 +33,7 @@ Python 3.11+ 면 된다. `.venv` 경로는 고정이다 — 스킬이 `.venv/bin
 ```sh
 .venv/bin/python scripts/transcript.py "<URL>"          # 자막 받기
 .venv/bin/python scripts/transcript.py "<URL>" --probe  # 자막 지연 확인
-.venv/bin/python scripts/slack.py <노트.html>           # 슬랙 채널에 올리기 (.env 는 .env.example 참고)
+.venv/bin/python scripts/slack.py <노트.html>           # 슬랙 채널에 링크 보내기 (.env 는 .env.example 참고)
 ```
 
 ## 발행

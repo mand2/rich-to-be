@@ -27,7 +27,7 @@ Python은 **반드시 `.venv/bin/python`** 을 쓴다. `youtube-transcript-api` 
 |---|---|
 | `transcript.py` | 자막 받기. `.work/<video_id>/` 에 `transcript.txt` 와 `meta.json` 을 만든다 |
 | `caption-lag.md` | 자동자막 지연 보정 절차 (기본 2.2초 자동 적용, 어긋날 때만 `--probe` → `--lag`) |
-| `slack.py` | 만든 노트를 슬랙 채널에 업로드. `.env` 에 `SLACK_BOT_TOKEN`(files:write, chat:write) + `SLACK_CHANNEL`, 봇을 채널에 초대해 둘 것. 파일명 메시지 + 스레드에 파일 |
+| `slack.py` | 발행된 노트 링크를 슬랙 채널에 전송. `.env` 에 `SLACK_BOT_TOKEN`(chat:write) + `SLACK_CHANNEL`, 봇을 채널에 초대해 둘 것. "<파일명> 정리 >>> <Pages 링크>" 한 줄. 베이스 URL 은 CI 가 `NOTES_BASE_URL` 로 넘긴다 |
 | `build-notes-index.py` | `notes/index.html` 의 목록 블록을 채운다. 노트의 `<h1>` 과 한 줄 결론·헤드라인을 파싱한다 |
 
 ## 파이프라인
