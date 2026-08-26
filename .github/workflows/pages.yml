@@ -27,8 +27,6 @@ jobs:
       # 러너가 Node 24 로 강제 실행 중이다. 지금은 성공하니 둔다 — 실제로 깨지거나
       # v5 가 안정되면 checkout/upload-pages-artifact/deploy-pages 를 한꺼번에 올린다.
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0   # github.event.before 와 diff 하려면 이력이 필요하다
 
       # 표준 라이브러리만 쓴다 — ubuntu 기본 python3 로 충분하다
       - run: python3 scripts/build-notes-index.py --selftest
@@ -41,10 +39,20 @@ jobs:
       - id: deploy
         uses: actions/deploy-pages@v4
 
-      # ponytail: push 로 새로 추가된(A) 노트만 보낸다. 브랜치 첫 푸시나 force push 면
-      # event.before 가 0000... 이라 건너뛴다 — 그때는 로컬에서 slack.py 를 직접 돌린다.
+  # 발행과 전송을 다른 잡으로 둔다 — 한 잡에 묶으면 슬랙만 재실행할 수 없고
+  # (아티팩트가 중복 업로드돼 deploy-pages 가 죽는다) 발행이 실패하면 전송이 통째로 스킵된다.
+  slack:
+    needs: deploy
+    # ponytail: push 로 새로 추가된(A) 노트만 보낸다. 브랜치 첫 푸시나 force push 면
+    # event.before 가 0000... 이라 건너뛴다 — 그때는 로컬에서 slack.py 를 직접 돌린다.
+    if: github.event_name == 'push' && github.event.before != '0000000000000000000000000000000000000000'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # github.event.before 와 diff 하려면 이력이 필요하다
+
       - name: 새 노트 슬랙 전송
-        if: github.event_name == 'push' && github.event.before != '0000000000000000000000000000000000000000'
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
           SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
