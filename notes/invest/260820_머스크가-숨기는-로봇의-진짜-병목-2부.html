@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>머스크가 숨기는 로봇의 진짜 병목 (2부) — 스터디 노트</title>
+<style>
+:root {
+  --accent: #0f766e;
+  --ink: #16181d;
+  --muted: #6b7280;
+  --line: #e5e3de;
+  --wash: #f7f6f3;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: #fff; }
+.note {
+  max-width: 720px; margin: 0 auto; padding: 32px 28px;
+  font-family: Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  color: var(--ink); font-size: 15px; line-height: 1.72;
+  word-break: keep-all;
+}
+
+header { border-bottom: 2px solid var(--ink); padding-bottom: 18px; margin-bottom: 26px; }
+.label { font-size: 11px; letter-spacing: .14em; color: var(--accent); font-weight: 700; }
+h1 { font-size: 27px; line-height: 1.3; margin: 10px 0 12px; letter-spacing: -.02em; }
+.meta { font-size: 12.5px; color: var(--muted); }
+.meta a { color: var(--muted); }
+
+.conclusion {
+  border-left: 3px solid var(--accent); background: var(--wash);
+  padding: 16px 18px; margin-bottom: 34px; font-size: 15.5px;
+}
+.tag {
+  display: block; font-size: 11px; font-weight: 700; letter-spacing: .1em;
+  color: var(--accent); margin-bottom: 6px;
+}
+
+section { margin-bottom: 34px; }
+h2 { font-size: 19px; margin: 0 0 4px; letter-spacing: -.01em; }
+.num {
+  display: inline-block; min-width: 26px; height: 22px; margin-right: 8px;
+  background: var(--accent); color: #fff; font-size: 12px; font-weight: 700;
+  text-align: center; line-height: 22px; border-radius: 3px;
+}
+.sub { font-size: 13px; color: var(--muted); margin: 0 0 16px; }
+time { font-variant-numeric: tabular-nums; font-size: 12px; color: var(--accent); font-weight: 600; }
+
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.card { border: 1px solid var(--line); border-radius: 5px; padding: 14px 16px; }
+.card h4 { margin: 0 0 8px; font-size: 14.5px; }
+.card p { margin: 0; font-size: 14px; }
+
+.term { border-top: 1px solid var(--line); padding: 13px 0; }
+.term h4 { margin: 0 0 5px; font-size: 15px; }
+.term h4 em { font-style: normal; font-weight: 400; font-size: 12.5px; color: var(--muted); }
+.term p { margin: 0; }
+.aside {
+  margin-top: 7px !important; background: var(--wash); padding: 8px 11px;
+  border-radius: 4px; font-size: 13.5px; color: #3f4450;
+}
+.aside b { color: var(--accent); font-weight: 700; }
+
+.step { display: flex; gap: 14px; padding: 15px 0; border-top: 1px solid var(--line); }
+.marker {
+  flex: 0 0 26px; height: 26px; border-radius: 50%; background: var(--ink); color: #fff;
+  font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+}
+.step .body { flex: 1; }
+.step h4 { margin: 0 0 6px; font-size: 15px; display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.step p { margin: 0; }
+blockquote {
+  margin: 9px 0 0; padding-left: 12px; border-left: 2px solid var(--line);
+  color: #3f4450; font-size: 14px;
+}
+
+.insight { padding: 12px 0; border-top: 1px solid var(--line); }
+.insight h4 { margin: 0 0 4px; font-size: 15px; }
+.insight p { margin: 0; font-size: 14.5px; }
+
+.watch { margin: 0; padding-left: 18px; }
+.watch li { margin-bottom: 9px; }
+
+table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 6px; }
+th, td { border: 1px solid var(--line); padding: 7px 10px; text-align: left; vertical-align: top; }
+th { background: var(--wash); font-size: 13px; }
+
+footer {
+  margin-top: 38px; padding-top: 14px; border-top: 1px solid var(--line);
+  font-size: 12px; color: var(--muted);
+}
+
+@page { size: A4; margin: 14mm; }
+.card, .term, .step, .insight, .conclusion, blockquote, table { break-inside: avoid; page-break-inside: avoid; }
+h1, h2, h3, h4 { break-after: avoid; page-break-after: avoid; }
+@media print {
+  .note { max-width: none; padding: 0; font-size: 10.5pt; }
+  section { margin-bottom: 22px; }
+  a { text-decoration: none; color: inherit; }
+}
+</style>
+</head>
+<body>
+<div class="note">
+
+  <header>
+    <div class="label">STUDY NOTE · 피지컬 AI</div>
+    <h1>머스크가 숨기는 로봇의 진짜 병목</h1>
+    <div class="meta">언더스탠딩 : 세상의 모든 지식 · HMG경영연구원 박형근 실장 (2부) · 44분 19초 · <a href="https://www.youtube.com/watch?v=eID7A-G0Fq4">원본 영상</a></div>
+  </header>
+
+  <div class="conclusion">
+    <span class="tag">한 줄 결론</span>
+    피지컬 AI의 남은 병목은 기술이 아니라 <b>규제 · 소비자 수용성 · 부품 공급 생태계</b> 세 가지다. 기술 로드맵은 그려져 있지만 규제 5년에 소비자 수용 5년을 더하면 10년이 훌쩍 가고, 휴머노이드는 애초에 싸게 대량으로 찍어낼 부품망 자체가 아직 없다. 그래서 상용화는 어느 날 도착하는 게 아니라 서서히 스며든다.
+  </div>
+
+  <section>
+    <h2><span class="num">01</span> 이 대담의 출발점</h2>
+    <p class="sub">진행자의 질문 — "방향은 알겠는데, 그게 한 시간짜리냐 이틀짜리냐" <time>0:47–1:13</time></p>
+    <p>1부에서 과제와 걸림돌은 정리가 됐다. 진행자가 남겨 둔 질문은 하나다. <b>그래서 얼마나 걸리는가.</b> 5년인지 2년인지 20년인지, 감이라도 잡을 방법을 묻는다. 화자는 산업 연구원조차 이 질문이 어려운 이유를 두 축의 대비로 답하면서 대담을 연다.</p>
+    <div class="split">
+      <div class="card">
+        <h4>기술 로드맵 — 그려져 있다</h4>
+        <p>몇 년 뒤에 어떤 기술이 나오고, 어떤 설비가 언제 완공되는지는 이미 나와 있다. 여기까지는 예측의 영역이다.</p>
+      </div>
+      <div class="card">
+        <h4>그 사이의 환경 — 급변한다</h4>
+        <p>한미중 관계, 규제 이슈처럼 로드맵 위에 얹히는 변수는 산업을 예측하는 사람도 예측하지 못한다.</p>
+      </div>
+    </div>
+    <p>화자는 미중 갈등이 한국에 기회로 돌아온 것 자체를 "굉장한 우연"이라고 본다. 미국이 중국과 우호적이었다면 중국 전기차가 미국을 싹쓸이했을 것이고 현대차도 살아남기 어려웠을 거라는 것이다 <time>1:46</time>.</p>
+  </section>
+
+  <section>
+    <h2><span class="num">02</span> 용어 사전</h2>
+    <p class="sub">영상에 정의 없이 등장한 개념들</p>
+
+    <div class="term">
+      <h4>E2E <em>end-to-end</em></h4>
+      <p>카메라가 본 것에서 주행 판단까지를 중간 단계 없이 한 세트로 처리하는 방식. 테슬라가 2024년에 도입했다.</p>
+      <p class="aside"><b>포인트</b> — 화자가 자율주행에 대한 자기 견해를 바꾼 기점으로 지목한 기술이다. 이때 "기술이 비약적으로 발전"했다고 설명한다.</p>
+    </div>
+
+    <div class="term">
+      <h4>VLA <em>vision-language-action</em></h4>
+      <p>E2E에 언어 모델을 얹어, 비전만으로 판단하지 않고 상황을 언어적으로 해석한 뒤 판단하는 모델. 중국 기업들이 2024년 E2E를 받아들인 뒤 빠르게 보완한 방향이다.</p>
+      <p class="aside"><b>비유</b> — 화자는 카네만의 시스템 1·2를 든다. 직관적인 것은 빠른 연산으로 처리하고, 윤리적·가치 판단이 필요한 것은 "몇 초"를 들여 판단하도록 언어 모델을 심는다. "아이가 있고 횡단보도가 있고"를 언어로 만들면 더 깊은 사고를 할 수 있다는 것.</p>
+    </div>
+
+    <div class="term">
+      <h4>SDV <em>software-defined vehicle</em></h4>
+      <p>하드웨어 아키텍처부터 소프트웨어 중심으로 설계된 차. 차가 굴러다니며 주행 데이터를 축적하는 그릇이 된다.</p>
+      <p class="aside"><b>포인트</b> — 현대차의 현재 상태는 절반이다. 하부 하드웨어는 여전히 과거의 도메인 형태이고, 상단 소프트웨어 레이어(플레이오스)만 구현돼 최근 차종에 풀리고 있다. 하드웨어까지 바뀌는 진짜 SDV는 27년 말~28년 계획 <time>10:28–11:11</time>.</p>
+    </div>
+
+    <div class="term">
+      <h4>피지컬 AI 디바이스</h4>
+      <p>데이터를 수집해 오는 몸체. 차량(SDV)도, 로봇(아틀라스)도 여기에 해당한다.</p>
+      <p class="aside"><b>읽는 법</b> — "디바이스를 푼다"는 말은 데이터 수집 단말을 시장에 뿌린다는 뜻이다. 판매가 곧 데이터 확보다.</p>
+    </div>
+
+    <div class="term">
+      <h4>데이터 플라이휠 <em>data flywheel</em></h4>
+      <p>데이터를 수집하고 → 학습시키고 → 모델을 만들어 → 다시 디바이스로 다운로드하는 순환 사이클 <time>19:49–20:04</time>.</p>
+      <p class="aside"><b>포인트</b> — 이 바퀴를 돌리려면 학습 자원(인프라)이 필요하다. 화자가 꼽은 세 번째 허들이 여기다.</p>
+    </div>
+
+    <div class="term">
+      <h4>DCAS 레벨 2+ <em>자막 표기: 디카스 2</em></h4>
+      <p>자율주행은 아니고, 운전은 굉장히 잘하지만 여전히 핸들을 잡고 있어야 하는 레벨. 유럽에서 승인이 나고 있는 국제 규정(자막 표기 "UNC")을 한국도 2027년 9월부터 받아들여야 한다 <time>8:32–8:55</time>.</p>
+      <p class="aside"><b>포인트</b> — 현재 국내는 미국산 테슬라의 FSD만 허용되고 중국 생산분은 풀리지 않았다. 규제가 원산지 단위로 갈린다.</p>
+    </div>
+
+    <div class="term">
+      <h4>하모닉 드라이브 <em>harmonic drive</em></h4>
+      <p>로봇 관절의 액추에이터에 들어가는 고정밀 감속기. 그동안 일본에서 거의 전량 의존해 들어왔다 <time>23:18</time>.</p>
+      <p class="aside"><b>포인트</b> — 특허가 만료돼 국내에서 대체를 시작할 시점에 중국이 치고 올라왔다. 화자는 이를 "너트크래커 상황"이라 부른다 <time>23:36</time>.</p>
+    </div>
+
+    <div class="term">
+      <h4>의장 공정</h4>
+      <p>프레스 → 차체 → 도장 다음의 마지막 조립 공정. 도장까지 끝난 차체에 인테리어 시트, 대시보드, 엔진을 넣는 단계다 <time>40:47–41:00</time>.</p>
+      <p class="aside"><b>읽는 법</b> — 앞 공정은 자동화율이 95~97%인데 의장 공정만 2~30%에 머물러 있다. 자동차 공장의 마지막 허들이 여기라는 뜻이다.</p>
+    </div>
+
+    <div class="term">
+      <h4>언박스드 프로세스 <em>unboxed process</em></h4>
+      <p>차를 통째로 만들어 놓고 사람이 기어들어가 조립하는 대신, 차를 헤쳐서 모듈 단위 블록으로 조립하는 방식. 사이버캡에 처음 적용될 것으로 화자는 본다.</p>
+      <p class="aside"><b>비유</b> — 화자와 진행자의 표현 그대로. "밖에 다 만들어 놓고 기어 들어갈 게 아니라 안에서부터 쌓아 올리면 되잖아요" <time>41:19–41:22</time>.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">03</span> 영상의 논리 흐름</h2>
+    <p class="sub">"얼마나 걸리나"에서 "왜 그렇게 걸리나"까지 7단계</p>
+
+    <div class="step">
+      <div class="marker">1</div>
+      <div class="body">
+        <h4>시점을 못 맞추는 이유는 기술이 아니다 <time>1:14–1:46</time></h4>
+        <p>기술 로드맵은 그려져 있다. 예측을 무너뜨리는 것은 로드맵 위에 얹히는 환경 변화다. 그래서 산업 연구자도 시점은 못 짚는다.</p>
+        <blockquote>"기술의 그 로드맵은 어느 정도 그려져 있습니다. … 그 사이에 그 환경들이 최근에는 너무 급격하게 변하는 거죠."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">2</div>
+      <div class="body">
+        <h4>그래도 기술 쪽은 변곡점을 지났다 <time>3:29–4:09</time></h4>
+        <p>화자는 원래 "레벨 5는 안 올 수도 있다"고 말할 만큼 회의적이었다. 2024년 테슬라의 E2E 도입, 그리고 2025~26년 무렵 미국·중국에서 직접 탑승해 본 경험이 견해를 바꿨다. 테슬라 FSD, 바이두 아폴로, 위라이드, 중국 로컬 브랜드 판매 차량까지 타 봤고, 이틀간 약 250km를 달리며 개입을 한 번도 하지 않았다고 말한다.</p>
+        <blockquote>"아, 이게 될 거 같다는 느낌이 확 1년 사이에도 다른 거를 체감을 할 수 있어."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">3</div>
+      <div class="body">
+        <h4>기술이 돼도 관문이 두 개 더 있다 <time>5:31–7:50</time></h4>
+        <p>테슬라 데이터만 놓고 보면 이미 일반 통계보다 안전하다는 결과가 나온다. 그런데 규제기관은 그것을 "FSD 이해도가 높은 얼리 어댑터의 판단"으로 본다. 신뢰는 하루아침에 쌓이지 않는다. 규제를 다 풀어도 소비자 수용성이 남는다 — 사고 한 건이 크게 보도되면 소비자는 못 탄다.</p>
+        <blockquote>"5년 규제 기간, 5년 소비자 수용 기간 하면은 10년이 훌쩍 흘러가는 거예요."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">4</div>
+      <div class="body">
+        <h4>현대차: 포트폴리오는 다 갖췄는데, 데이터 축적은 아직 시작 전 <time>9:51–16:22</time></h4>
+        <p>SDV, 웨이모·엔비디아·구글 협업, 모셔널, 보스턴 다이나믹스, 그리고 글로벌 탑티어급 스마트 팩토리까지 — 화자는 피지컬 AI에 필요한 조각을 현대차그룹이 "우연치 않게" 다 갖고 있다고 본다. 문제는 시작점이다. 엔비디아 생태계를 먼저 쓰는 것도 데이터 축적 시간을 압축하려는 것이지만, 플랫폼이 비싸 언제까지나 머물 수는 없어 자체 개발과 투트랙으로 간다.</p>
+        <blockquote>"냉정하게 봤을 때 데이터 축적을 그때서부터 시작한다고 보는게 거의 맞다고 보여지거든요."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">5</div>
+      <div class="body">
+        <h4>휴머노이드의 진짜 병목 — 지능이 아니라 부품 <time>22:51–26:13</time></h4>
+        <p>심천에 가면 주문만 넣으면 원하는 부품이 나오는 공급망이 있는데 국내에는 그게 없다. 테슬라조차 공급망 대부분을 중국 안에 구축한 것으로 알려져 있다. 수십만 대를 풀려면 자동차 가격 수준까지 내려야 하는데, 손가락에 들어가는 직경 2cm짜리 구동기를 더 작고 더 세게 만들 수 있는 기업이 거의 없다. 협동 로봇의 가반 중량이 10~15kg인데 사람 손가락은 수십 kg을 든다.</p>
+        <blockquote>"병목이 아까 말씀드렸던 것처럼 부품 공급 생태계를 만드는 건데요."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">6</div>
+      <div class="body">
+        <h4>그래서 자동차 회사가 이 일을 한다 <time>27:43–29:24</time></h4>
+        <p>로봇 부품의 절반 이상이 자동차 부품과 공용화된다. 테슬라가 옵티머스에 배터리와 FSD 칩을 그대로 쓸 수 있었던 이유이자, 중국이 그 모습을 따라간 이유다. 연간 1억 대에서 정체된 자동차 다음 시장이 로봇이라면, 유사한 공급망과 수십만·수백만 대 양산 경험을 가진 쪽이 자동차 회사다. LG는 냉장고 컴프레서 모터 기술을 로봇용 액추에이터 표준으로 끌고 오려 하고 있다.</p>
+        <blockquote>"자동차 부품하고 굉장히 유사하다는 거예요. … 한 절반 정도 이상은 공용화가 되기 때문에"</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">7</div>
+      <div class="body">
+        <h4>테슬라의 우회로 — 못 넘을 난이도는 낮춰 버린다 <time>40:01–41:51</time></h4>
+        <p>자동차 공장에 굳이 휴머노이드가 필요하냐는 질문이 나온다. 남은 것은 의장 공정 하나인데, 테슬라는 언박스드 프로세스로 그 공정 자체를 해체했다. 100년 넘게 이어온 프레스–차체–도장–의장 순서 때문에 생긴 문제이지, 순서를 뒤집으면 자동화 여지가 크다는 것. 로봇이 올라가야 할 높이를 올리는 대신 넘어야 할 턱을 내린 셈이다.</p>
+        <blockquote>"근데 테슬라는 이거를 이렇게 낮춰 버린 거예요. 그래서 지금 수준에서도 데이터를 쌓을 수 있게 만들어서 이렇게 해 버린 거고"</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">8</div>
+      <div class="body">
+        <h4>그래서 결론은 "스며든다" <time>35:59–37:28</time></h4>
+        <p>화자는 어느 날 도착하는 방식이 아니라고 본다. 샌프란시스코에서 웨이모는 이미 서비스 지역 내 리프트 점유율을 넘어섰고, 사람들은 "굳이 왜 우버를 부르지?"라고 한다. 다만 웨이모는 차 한 대에 거의 2억, 6세대에 중국 지커 RT를 써도 1억 수천만 원이라 적자 때문에 확장이 더디다. 반면 사이버캡은 화자가 본 티어다운 기준 3~4천만 원이면 커버될 것 같다 — 규제와 수용성만 넘으면 바로 수익을 내는 구조다. 로봇도 같은 구조라는 것.</p>
+        <blockquote>"어느 순간 보니까 바뀌어 있는 거죠."</blockquote>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">04</span> 인사이트</h2>
+    <p class="sub">이 영상 밖에서도 쓰이는 원칙으로</p>
+
+    <div class="insight">
+      <h4>① 로드맵이 있다는 것과 시점을 안다는 것은 다른 말이다</h4>
+      <p>기술 일정은 그릴 수 있지만, 그 위에 얹히는 규제·지정학은 애초에 예측 대상이 아니다. 로드맵을 근거로 상용화 시점을 말하는 예측은 사실상 기술 축 하나만 본 예측이다. 남은 축이 몇 개인지부터 세는 게 먼저다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>② 도착 시점은 가장 빠른 관문이 아니라 가장 느린 관문이 정한다</h4>
+      <p>기술이 끝나도 규제가 남고, 규제가 끝나도 사회적 수용성이 남는다. 이 관문들은 기술과 다른 시계로 움직이며, 통계로 이겨도 신뢰는 그 속도로 쌓이지 않는다. 신기술의 일정을 볼 때는 완성 시점이 아니라 마지막 관문의 속도를 봐야 한다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>③ 병목은 가장 화려한 부품이 아니라 가장 지루한 부품에 있다</h4>
+      <p>휴머노이드의 걸림돌은 지능이 아니라 직경 2cm짜리 구동기, 감속기, 그리고 그걸 싸게 대량으로 찍어내는 공급망이었다. 데모가 되는 것과 수십만 대가 팔리는 것 사이의 거리는 대개 이런 눈에 안 띄는 자리에 있다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>④ 난이도를 못 넘으면 난이도를 낮추는 선택지가 있다</h4>
+      <p>테슬라는 로봇의 손을 의장 공정 수준까지 끌어올리는 대신, 의장 공정을 해체해 턱을 내렸다. 문제를 푸는 대신 문제를 다시 정의하는 것이다. 100년 이어왔다는 이유만으로 지켜지고 있는 제약이 있는지부터 확인할 만하다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>⑤ 레거시의 발목을 잡는 것은 기술력이 아니라 합격 기준이다</h4>
+      <p>"불량이 나면 안 된다"는 조직과 "60~70% 성능으로 일단 싣고 돌리면서 98%까지 올리자"는 조직은 같은 회사 안에서도 융화되지 않는다. 폭스바겐이 카리아드를 두고 10년 가까이 전환에 실패한 이유를 화자는 여기서 찾는다. 전환 실패는 능력 부족이 아니라 표준 충돌인 경우가 많다.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">05</span> 앞으로 지켜볼 것</h2>
+    <p class="sub">영상이 남긴 확인 지점</p>
+    <ul class="watch">
+      <li><b>테슬라 공장에서 옵티머스가 실제로 일을 시작하는가</b> — 진행자가 "제일 빠른 신호"로 지목했고 화자도 동의했다. 이게 안 되면 아직 한참 남은 것 <time>38:09–38:19</time>.</li>
+      <li><b>2027년 9월</b> — DCAS(레벨 2+) 국제 규정을 국내가 받아들여야 하는 시점. 화자는 27년 말부터 인증이 시작될 수 있다고 본다 <time>8:49–9:00</time>.</li>
+      <li><b>2027년 말~2028년</b> — 현대차그룹의 진짜 SDV 출시. 화자 기준 <b>본격적인 데이터 축적의 시작점</b>이다 <time>11:05–11:11</time>.</li>
+      <li><b>2027~2028년</b> — 현대차 공장에 보스턴 다이나믹스 로봇 시범 투입 계획. 화자는 회사 입장에서도 "사람과 어떻게 협업할 것인가"가 중간 단계의 과제라고 말한다 <time>38:42–39:10</time>.</li>
+      <li><b>판정 기준은 정밀도가 아니라 속도</b> — 지금 가장 문제는 "사람보다 정말 빠르냐"이고, 생산성이 안 나와서 아주 단순한 공정조차 대체가 어렵다 <time>42:16–42:25</time>.</li>
+      <li><b>국내 부품 생태계가 실제로 서는가</b> — LG의 구동 모터·로봇용 액추에이터 표준화, 현대차 계열사 선언 등이 올해 나왔다. 새만금 단지의 AI 데이터센터·태양광·ESS·로봇 부품 클러스터 구상도 여기 묶인다 <time>20:12–21:10</time>, <time>28:53–30:44</time>.</li>
+    </ul>
+  </section>
+
+  <footer>
+    유튜브 자동 생성 자막 전문(2026-08-20, 언더스탠딩)을 바탕으로 정리. 자동자막 표시 지연은 <b>기본값 2.2초</b>로 보정했으며 이는 측정값이 아니므로 타임스탬프에 오차가 있을 수 있다. 자막에 없는 사실은 보태지 않았고, 자릿수가 불명확한 수치는 옮기지 않았다. 발언자의 견해이며 투자 판단의 근거가 아닌 학습 자료입니다.
+  </footer>
+</div>
+</body>
+</html>

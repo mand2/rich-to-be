@@ -1,0 +1,46 @@
+# rich-to-be
+
+유튜브 영상을 한 장짜리 HTML 문서로 정리하는 [Claude Code](https://claude.com/claude-code) 스킬 두 개.
+
+- **`news-briefing-digest`** — 꼭지가 여럿인 뉴스 브리핑(조간·모닝루틴·마켓 브리핑)을 아침에 훑는 다이제스트로
+- **`youtube-study-note`** — 단일 주제 해설·강의를 다시 안 봐도 되는 학습 자료로
+
+산출물은 `notes/*.html` 이다. 브라우저에서 인쇄(Ctrl/Cmd+P) → PDF 로 저장하면 A4 한 문서가 된다.
+
+## 설치
+
+```sh
+git clone <이 리포> && cd rich-to-be
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+.venv/bin/python scripts/transcript.py --selftest   # OK 나오면 끝
+```
+
+Python 3.11+ 면 된다. `.venv` 경로는 고정이다 — 스킬이 `.venv/bin/python` 을 그대로 호출한다.
+
+## 쓰는 법
+
+리포 루트에서 `claude` 를 띄우고 유튜브 URL과 함께 정리해 달라고 하면 된다. 영상 성격에 따라 Claude가 둘 중 하나를 고른다.
+
+```
+> https://www.youtube.com/watch?v=... 이 영상 정리해줘
+```
+
+각 스킬의 `SKILL.md` 가 절차의 정본이다. 자동생성 자막이면 지연 보정값 확인을 요청한다.
+
+스크립트만 따로 쓸 수도 있다:
+
+```sh
+.venv/bin/python scripts/transcript.py "<URL>"          # 자막 받기
+.venv/bin/python scripts/transcript.py "<URL>" --probe  # 자막 지연 확인
+```
+
+진행 상황을 브라우저로 보려면 `.venv/bin/python web/serve.py` 로 로컬 8765 포트에 진행 페이지를 띄운다.
+
+## 한계
+
+- **한국어/영어 자막이 있는 영상만** 된다. 자막이 없으면 아무것도 못 한다.
+- 자동생성 자막의 지연 보정값은 사람이 영상과 대조해야 정확하다. 기본값 2.2초는 측정값이 아니다.
+- `notes/` 의 기존 노트는 예시로 커밋돼 있다. 그중 `.md` 짝이 있는 것들은 지금은 없는 코넬 노트 형식이다. 본인 리포로 쓸 거면 지우고 시작해라.
+
+자세한 개발 규칙은 `CLAUDE.md`, 설계 배경은 `docs/ideas/youtube-note-agents.md` 에 있다.

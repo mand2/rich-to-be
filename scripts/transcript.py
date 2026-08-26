@@ -1,23 +1,32 @@
 #!/usr/bin/env python3
-"""YouTube 자막을 받아 15분 구간 파일로 쪼갠다.
+"""YouTube 자막을 받아 구간 파일로 쪼갠다.
 
-    .venv/bin/python .claude/skills/youtube-note/transcript.py <URL|VIDEO_ID> [-o DIR]
+    .venv/bin/python scripts/transcript.py <URL|VIDEO_ID> [-o DIR]
+
+구간 경계는 두 가지로 정해진다:
+    --outline-only              transcript.txt 만 만든다. outliner 에이전트가 읽을 재료
+    --segments "0-264,264-549"  outliner 가 찾은 주제 경계로 자른다 (초 단위)
+    (둘 다 없으면)               15분 고정 격자 — 폴백
 
 출력 (기본 .work/<video_id>/):
-    transcript.txt   전문 — glossary 에이전트용
-    part-01.txt ...  15분 구간, 앞뒤 60초 겹침 — section-note 에이전트용
+    transcript.txt   전문 — glossary / outliner 에이전트용
+    part-01.txt ...  구간별 자막, 앞뒤 --overlap 초 겹침 — section-note 에이전트용
     meta.json        제목·저자·길이·구간수·자막종류
 """
 
 import argparse, json, math, re, sys, urllib.request
 from pathlib import Path
 
-CHUNK = 15 * 60          # 구간 길이(초)
+CHUNK = 15 * 60          # 격자 폴백의 구간 길이(초). --segments 가 없을 때만 쓰인다
 # 구간 앞뒤로 겹쳐 넣는 초. 중복 기재는 허용한다.
 # ponytail: 60초로 시작했다가 120초로 올렸다. 60초에서는 경계 직전에 한 번만
 # 언급된 고유명사를 다음 구간 에이전트가 못 봐서 오기(誤記)가 났다
 # (28:34 "스트레이 키즈" → Part 3가 "트와이스"로 적음). 더 늘리면 중복만 늘고
 # 이득은 줄어드니, 경계 오기가 또 나올 때만 조정할 것.
+#
+# ponytail: 이 값은 격자 절단 기준이다. --segments 로 주제 경계에서 자를 때는
+# 경계가 화제 전환점에 놓이므로 문맥 단절 위험이 낮다. 유형별 권장값은
+# SKILL.md 의 손잡이 표에 있다 (뉴스 30 / 대담 60 / 강의 120).
 OVERLAP = 120
 
 # 자동자막 표시지연 보정의 기본값(초). 영상 1개(aircAruvnKk)에서 수동 자막을
@@ -70,13 +79,37 @@ def to_lines(snippets, lag=0.0):
     return out
 
 
-def split_parts(lines, chunk=CHUNK, overlap=OVERLAP):
-    """[(part_no, core_lo, core_hi, [(t, text), ...]), ...]"""
-    duration = lines[-1][0] if lines else 0.0
-    n = max(1, math.ceil(duration / chunk))
+def parse_segments(s):
+    """"0-264,264-549" → [(0.0, 264.0), (264.0, 549.0)]. 초 단위 주제 경계."""
+    bounds = []
+    for chunk in s.split(","):
+        lo, _, hi = chunk.strip().partition("-")
+        try:
+            lo, hi = float(lo), float(hi)
+        except ValueError:
+            sys.exit(f"--segments 형식이 잘못됐다: {chunk!r} (예: 0-264)")
+        if lo >= hi:
+            sys.exit(f"--segments 구간이 뒤집혔다: {chunk!r}")
+        bounds.append((lo, hi))
+    if not bounds:
+        sys.exit("--segments 가 비었다")
+    for (_, hi), (nlo, _) in zip(bounds, bounds[1:]):
+        if hi > nlo:
+            sys.exit(f"--segments 본구간이 서로 겹친다: {hi} > {nlo} (겹침은 --overlap 이 준다)")
+    return bounds
+
+
+def split_parts(lines, chunk=CHUNK, overlap=OVERLAP, bounds=None):
+    """[(part_no, core_lo, core_hi, [(t, text), ...]), ...]
+
+    bounds 가 있으면 그 주제 경계로, 없으면 chunk 격자로 자른다.
+    """
+    if bounds is None:
+        duration = lines[-1][0] if lines else 0.0
+        n = max(1, math.ceil(duration / chunk))
+        bounds = [(i * chunk, (i + 1) * chunk) for i in range(n)]
     parts = []
-    for i in range(n):
-        lo, hi = i * chunk, (i + 1) * chunk
+    for i, (lo, hi) in enumerate(bounds):
         sel = [(t, x) for t, x in lines if lo - overlap <= t < hi + overlap]
         parts.append((i + 1, lo, hi, sel))
     return parts
@@ -135,6 +168,12 @@ def main():
                    help=f"자동자막 표시지연 보정(초). 미지정 시 자동자막이면 {AUTO_CAPTION_LAG}")
     p.add_argument("--probe", action="store_true",
                    help=f"초반 {PROBE_SECONDS}초만 출력하고 끝낸다. 영상과 대조해 --lag 를 정하는 용도")
+    p.add_argument("--outline-only", action="store_true",
+                   help="transcript.txt 와 meta.json 만 만들고 구간 분할은 건너뛴다. outliner 에이전트용")
+    p.add_argument("--segments",
+                   help='주제 경계 "0-264,264-549,..." (초). 미지정 시 15분 격자로 폴백')
+    p.add_argument("--overlap", type=int, default=OVERLAP,
+                   help=f"구간 앞뒤 겹침(초). 기본 {OVERLAP}. 주제 경계로 자를 때는 줄여도 된다")
     p.add_argument("--selftest", action="store_true")
     a = p.parse_args()
 
@@ -165,10 +204,13 @@ def main():
     body = "\n".join(f"[{hhmmss(t)}] {x}" for t, x in lines)
     (out / "transcript.txt").write_text(body + "\n", encoding="utf-8")
 
-    parts = split_parts(lines)
+    bounds = parse_segments(a.segments) if a.segments else None
+    parts = [] if a.outline_only else split_parts(lines, overlap=a.overlap, bounds=bounds)
+    for stale in out.glob("part-*.txt"):     # 구간 수가 줄면 이전 실행의 파일이 남는다
+        stale.unlink()
     for no, lo, hi, sel in parts:
         head = (f"# Part {no} | 본구간 {hhmmss(lo)}–{hhmmss(hi)} "
-                f"| 앞뒤 {OVERLAP}초 겹침 포함\n\n")
+                f"| 앞뒤 {a.overlap}초 겹침 포함\n\n")
         text = "\n".join(f"[{hhmmss(t)}] {x}" for t, x in sel)
         (out / f"part-{no:02d}.txt").write_text(head + text + "\n", encoding="utf-8")
 
@@ -177,6 +219,9 @@ def main():
         "url": f"https://www.youtube.com/watch?v={vid}",
         "duration": hhmmss(lines[-1][0]),
         "parts": len(parts),
+        "split": ("미분할(--outline-only)" if a.outline_only
+                  else "주제 경계(--segments)" if bounds else f"{CHUNK // 60}분 격자"),
+        "overlap_sec": a.overlap,
         "language": track.language_code,
         "auto_generated": track.is_generated,
         "lag_correction_sec": lag,
@@ -226,6 +271,29 @@ def selftest():
 
     # 마지막 구간은 짧아도 그대로 둔다
     assert split_parts(mk(3900))[-1][3], "마지막 구간이 비면 안 된다"
+
+    # 주제 경계(--segments)로 자르기
+    assert parse_segments("0-264,264-549") == [(0.0, 264.0), (264.0, 549.0)]
+    assert parse_segments(" 0-264 , 264-549 ") == [(0.0, 264.0), (264.0, 549.0)]
+    b = parse_segments("0-264,264-549,549-866")
+    tp = split_parts(mk(900), overlap=30, bounds=b)
+    assert len(tp) == 3                                # 격자가 아니라 경계 수를 따른다
+    assert [(lo, hi) for _, lo, hi, _ in tp] == b      # 본구간이 경계 그대로
+    lo2 = min(t for t, _ in tp[1][3])                  # 겹침이 --overlap 을 따른다
+    assert 264 - 30 <= lo2 < 264, lo2                   # (mk는 5초 간격이라 딱 234는 아니다)
+    assert max(t for t, _ in tp[1][3]) < 549 + 30
+    assert all(sel for *_, sel in tp), "빈 구간이 나오면 안 된다"
+    # 경계 없이 부르면 격자 폴백 — 기존 동작이 그대로 남아 있어야 한다
+    assert len(split_parts(mk(1105))) == 2
+
+    # 잘못된 --segments 는 조용히 넘어가지 않는다 (경계는 에이전트가 만든 문자열이다)
+    for bad in ("0-10,5-20", "10-5", "0-", "abc"):
+        try:
+            parse_segments(bad)
+        except SystemExit:
+            pass
+        else:
+            raise AssertionError(f"거부됐어야 한다: {bad!r}")
     assert slug("But what is a neural network? | Deep learning") \
         == "But-what-is-a-neural-network-Deep-learning"
     print("selftest OK")

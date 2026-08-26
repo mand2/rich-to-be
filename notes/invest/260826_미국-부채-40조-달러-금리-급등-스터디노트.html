@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>미국 부채 40조 달러</title>
+<style>
+:root {
+  --accent: #1d4ed8;
+  --ink: #16181d;
+  --muted: #6b7280;
+  --line: #e5e3de;
+  --wash: #f7f6f3;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: #fff; }
+.note {
+  max-width: 720px; margin: 0 auto; padding: 32px 28px;
+  font-family: Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  color: var(--ink); font-size: 15px; line-height: 1.72;
+  word-break: keep-all;
+}
+
+header { border-bottom: 2px solid var(--ink); padding-bottom: 18px; margin-bottom: 26px; }
+.label { font-size: 11px; letter-spacing: .14em; color: var(--accent); font-weight: 700; }
+h1 { font-size: 27px; line-height: 1.3; margin: 10px 0 12px; letter-spacing: -.02em; }
+.meta { font-size: 12.5px; color: var(--muted); }
+.meta a { color: var(--muted); }
+
+.conclusion {
+  border-left: 3px solid var(--accent); background: var(--wash);
+  padding: 16px 18px; margin-bottom: 34px; font-size: 15.5px;
+}
+.tag {
+  display: block; font-size: 11px; font-weight: 700; letter-spacing: .1em;
+  color: var(--accent); margin-bottom: 6px;
+}
+.conclusion .note-add { display: block; margin-top: 8px; font-size: 14px; color: #3f4450; }
+
+section { margin-bottom: 34px; }
+h2 { font-size: 19px; margin: 0 0 4px; letter-spacing: -.01em; }
+.num {
+  display: inline-block; min-width: 26px; height: 22px; margin-right: 8px;
+  background: var(--accent); color: #fff; font-size: 12px; font-weight: 700;
+  text-align: center; line-height: 22px; border-radius: 3px;
+}
+.sub { font-size: 13px; color: var(--muted); margin: 0 0 16px; }
+time { font-variant-numeric: tabular-nums; font-size: 12px; color: var(--accent); font-weight: 600; }
+
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.card { border: 1px solid var(--line); border-radius: 5px; padding: 14px 16px; }
+.card h4 { margin: 0 0 8px; font-size: 14.5px; }
+.card p { margin: 0; font-size: 14px; }
+
+.term { border-top: 1px solid var(--line); padding: 13px 0; }
+.term h4 { margin: 0 0 5px; font-size: 15px; }
+.term h4 em { font-style: normal; font-weight: 400; font-size: 12.5px; color: var(--muted); }
+.term p { margin: 0; }
+.aside {
+  margin-top: 7px !important; background: var(--wash); padding: 8px 11px;
+  border-radius: 4px; font-size: 13.5px; color: #3f4450;
+}
+.aside b { color: var(--accent); font-weight: 700; }
+
+.step { display: flex; gap: 14px; padding: 15px 0; border-top: 1px solid var(--line); }
+.marker {
+  flex: 0 0 26px; height: 26px; border-radius: 50%; background: var(--ink); color: #fff;
+  font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+}
+.step .body { flex: 1; }
+.step h4 { margin: 0 0 6px; font-size: 15px; display: flex; gap: 8px; align-items: baseline; }
+.step p { margin: 0; }
+blockquote {
+  margin: 9px 0 0; padding-left: 12px; border-left: 2px solid var(--line);
+  color: #3f4450; font-size: 14px;
+}
+
+.insight { padding: 12px 0; border-top: 1px solid var(--line); }
+.insight h4 { margin: 0 0 4px; font-size: 15px; }
+.insight p { margin: 0; font-size: 14.5px; }
+
+.watch { margin: 0; padding-left: 18px; }
+.watch li { margin-bottom: 9px; }
+
+footer {
+  margin-top: 38px; padding-top: 14px; border-top: 1px solid var(--line);
+  font-size: 12px; color: var(--muted);
+}
+
+@page { size: A4; margin: 14mm; }
+.card, .term, .step, .insight, .conclusion, blockquote { break-inside: avoid; page-break-inside: avoid; }
+h1, h2, h3, h4 { break-after: avoid; page-break-after: avoid; }
+@media print {
+  .note { max-width: none; padding: 0; font-size: 10.5pt; }
+  section { margin-bottom: 22px; }
+  a { text-decoration: underline; }
+}
+@media (max-width: 560px) {
+  .split { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="note">
+
+  <header>
+    <div class="label">STUDY NOTE · 채권과 금리</div>
+    <h1>미국 부채 40조 달러, 파산 걱정까지는 아닌 이유</h1>
+    <div class="meta">이효석아카데미 · 15분 15초 · <a href="https://www.youtube.com/watch?v=503NEYQ6xXo">원본 영상</a></div>
+  </header>
+
+  <div class="conclusion">
+    <span class="tag">한 줄 결론</span>
+    지금의 금리 급등은 미국을 못 믿어서가 아니라 <b>채권 시장의 수급</b> 때문이다. 8월 들어 경제 지표는 급격히 나빠졌는데 금리가 오히려 올랐고, 미국이 망할 거라는 데 돈을 거는 CDS 프리미엄은 전혀 움직이지 않았다.
+    <span class="note-add">단, 화자도 금리 자체는 걱정된다고 말한다 — "금리가 진정되는 것이 주가가 안정되는데 무엇보다 우선순위"이며, 수급 문제는 쉽게 풀리지 않을 것 같으니 시간이 필요하다는 것이 최종 정리다.</span>
+  </div>
+
+  <section>
+    <h2><span class="num">01</span> 먼저, 두 세상 이해하기</h2>
+    <p class="sub">영상의 출발점 — 주식과 채권은 세상을 반대로 보는 사람들이 산다 <time>0:23–3:21</time></p>
+    <div class="split">
+      <div class="card">
+        <h4>주식쟁이의 빨간 세상</h4>
+        <p>세상이 좋아져야 가격이 오른다. 그래서 "막연한 긍정론자"다. 아무리 안 좋은 일이 있어도 "그래도 좋아질 거야"를 반복한다.</p>
+      </div>
+      <div class="card">
+        <h4>채권쟁이의 파란 세상</h4>
+        <p>세상이 안 좋아져야 가격이 오른다. 그래서 "세상이 망할 것만 찾아다니는" 염세주의자다. 코로나 때 매일 "팀장님, 망할 것 같습니다"라고 오던 팀원들이 그쪽이었다.</p>
+      </div>
+    </div>
+    <p>둘은 애초에 다른 판에서 논다. 그래서 <b>주식 시장에서 채권·금리 이야기가 나오기 시작했다는 건</b>, 채권 쪽 세상에서는 이미 피가 낭자하게 난리가 난 뒤라는 뜻이다. 화자가 과거 경험상 이럴 때는 대부분 뒷북이었다고 말하며 영상을 시작한다.</p>
+    <blockquote>"주식 시장에서 채권 금리 가지고 호들갑 떨 때 거의 대부분 뒷북인 경우가 많았다."</blockquote>
+  </section>
+
+  <section>
+    <h2><span class="num">02</span> 용어 사전</h2>
+    <p class="sub">영상에 등장한 개념을 화자의 설명 그대로</p>
+
+    <div class="term">
+      <h4>채권 <em>bond</em></h4>
+      <p>돈을 빌리면서 "갚을게요"라고 써 준 종이. 발행 주체에 따라 이름이 달라진다 — 미국 정부가 써 주면 <b>국채</b>, 회사가 써 주면 <b>회사채</b>.</p>
+      <p class="aside"><b>비유</b> — 효석 님이 HS 님에게 1억을 빌리고 차용증을 써 준다. 그 종이가 채권이다.</p>
+    </div>
+
+    <div class="term">
+      <h4>만기 <em>maturity</em></h4>
+      <p>채권 종이에 적히는 첫 번째 항목. 빌린 1억을 언제 갚을지 정한 시점. 1년물·2년물·10년물·30년물처럼 채권을 부르는 이름이 된다.</p>
+    </div>
+
+    <div class="term">
+      <h4>쿠폰 <em>coupon</em></h4>
+      <p>채권 종이에 적히는 두 번째 항목. 매년 이 종이를 가지고 있는 사람에게 발행자가 주기로 처음부터 써 둔 이자.</p>
+      <p class="aside"><b>포인트</b> — 쿠폰은 발행 시점에 고정된다. 그래서 30년물을 6%에 사면 이후 시장 금리가 0%로 가든 말든 30년 내내 6%를 받는다. 5단계 논리의 근거가 되는 성질이다.</p>
+    </div>
+
+    <div class="term">
+      <h4>펀더멘탈 = 크레딧 <em>credit</em></h4>
+      <p>채권 가격은 결국 <b>인기</b>로 결정되고, 그 인기는 종이에 사인한 주체를 <b>믿느냐</b>로 결정된다. 그 나라가, 그 회사가 괜찮은 곳이냐는 질문이 채권의 펀더멘탈이다.</p>
+      <p class="aside"><b>쉽게</b> — "1억을 빌려 줘 놓고 너는 잠이 오냐?"에 답이 되는 것. 갚을 거라는 믿음, 쿠폰을 줄 거라는 믿음, 그게 크레딧이다.</p>
+    </div>
+
+    <div class="term">
+      <h4>수급</h4>
+      <p>펀더멘탈과 무관하게 사고파는 물량 자체가 가격을 밀어내는 힘. 화자는 7월 주식 시장을 두고 "실적은 좋아지고 있는데 주가는 빠지는" 수급 장세라고 설명했고, 지금 채권 시장에서 같은 일이 벌어지고 있다고 본다.</p>
+    </div>
+
+    <div class="term">
+      <h4>서프라이즈 인덱스 <em>surprise index</em></h4>
+      <p>경제 지표가 <b>예상보다</b> 좋았는지 나빴는지를 나타내는 지표. 미국 국채 펀더멘탈 두 가지 중 '경제'를 볼 때 가장 많이 보는 지표다.</p>
+      <p class="aside"><b>읽는 법</b> — 기준이 '예상보다'인 이유는, 예상과 똑같이 나오면 가격이 움직일 이유가 없기 때문이다. 좋으면 "왜 이렇게 좋아?"(서프라이즈), 나쁘면 "왜 이렇게 안 좋아?"(쇼크).</p>
+    </div>
+
+    <div class="term">
+      <h4>CDS 프리미엄 <em>CDS premium</em></h4>
+      <p>미국 정부가 망하면 대박이 나는 상품의 가격. 즉 "미국이 망할지도 모르니 보험을 들겠다"고 할 때 내야 하는 보험료다.</p>
+      <p class="aside"><b>읽는 법</b> — 사람들이 파산을 실제로 얼마나 걱정하는지를 재는 눈금. 걱정이 커지면 보험료가 비싸진다.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">03</span> 영상의 논리 흐름</h2>
+    <p class="sub">"파산까지는 아니다"에 이르는 6단계</p>
+
+    <div class="step">
+      <div class="marker">1</div>
+      <div class="body">
+        <h4>주식판에 금리 얘기가 돌면 대개 뒷북이다 <time>2:19–3:21</time></h4>
+        <p>채권과 주식은 서로 다른 세상에서 논다. 채권 가격이 주식 시장을 위협할 정도라는 말이 건너왔다는 건, 저쪽에서는 이미 사달이 난 뒤라는 뜻이다.</p>
+        <blockquote>"이 세상에서는 이미 막 피가 낭자하고 막 난리가 났어. (…) 어 쟤네들 왜 그래? 우리도 죽겠다. 이런 얘기가 나오는 경우가 많다."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">2</div>
+      <div class="body">
+        <h4>그럼 채권 가격은 뭐로 움직이나 — 인기, 그리고 믿음 <time>5:03–8:01</time></h4>
+        <p>주식이든 채권이든 가격은 인기로 정해진다. 세상이 망할 것 같으면 채권이, 좋아질 것 같으면 주식이 인기다. 그리고 채권의 인기를 최종적으로 좌우하는 건 종이에 사인한 주체를 믿느냐 — 크레딧이다.</p>
+        <blockquote>"믿음, 믿음, 신뢰, 크레딧 이런 게 결국은 인기를 좌우한다."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">3</div>
+      <div class="body">
+        <h4>미국 국채의 펀더멘탈은 두 가지다 <time>8:01–8:45</time></h4>
+        <p>①경제 — 나쁘면 안전한 데로 도망가려 채권을 사고, 좋으면 주식을 산다. ②이 나라를 믿을 수 있느냐. 이 두 축이 이후의 검증 순서를 그대로 정한다.</p>
+        <blockquote>"경제가 좋냐 안 좋냐가 첫 번째고, 두 번째는 이 나라를 믿을 수 있냐가 두 번째예요."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">4</div>
+      <div class="body">
+        <h4>①경제 축 검증: 펀더멘탈이 안 먹힌 시장이었다 <time>9:45–10:25</time></h4>
+        <p>서프라이즈 인덱스는 8월부터 급락했다. 지표가 급격히 나빠졌으니 교과서대로면 채권 가격이 오르고 금리는 빠져야 하는데, 금리가 거꾸로 올랐다. 남는 설명은 하나 — 전날 다룬 채권 수급 요인이다.</p>
+        <blockquote>"이건 뭔가 펀더멘탈이 안 먹히는 시장이었다라는 거지. 왜 그러냐? 채권의 수급 요인 때문에 채권의 가격이 빠졌다."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">5</div>
+      <div class="body">
+        <h4>②믿음 축 검증: CDS는 미동도 없다 <time>10:25–11:26</time></h4>
+        <p>"부채가 40조 달러라며, 망하는 거 아니야?"라는 걱정이 사실이라면 파산에 거는 보험료가 뛰어야 한다. 그런데 금리가 이렇게 오르는 동안에도 미국 정부의 CDS 프리미엄은 전혀 움직이지 않았다. 두 축 중 믿음 축은 멀쩡하다는 뜻이다.</p>
+        <blockquote>"지금 미국 정부의 CDS 프리미엄은 (…) 전혀 움직임이 없어. 이번에 금리가 올라가는데도 불구하고."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">6</div>
+      <div class="body">
+        <h4>수급발 상승이라면 어딘가에서 멈춘다 <time>13:26–14:31</time></h4>
+        <p>못 믿어서 오르는 금리는 어디까지 갈지 알 수 없지만, 수급 때문에 오르는 금리는 적정한 수준에서 멈춘다. 주가가 끝없이 빠지지 않는 이유가 바닥에서 사려는 사람이 있어서인 것과 같다. 30년물이 6~7%라면 사볼 만하다고 여기는 수요가 생긴다.</p>
+        <blockquote>"30년 내내 나중에 금리가 뭐 0% 가든 얼마가 되든 상관없이 30년 내내 6% 준대. 해 볼 만하지 않나?"</blockquote>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">04</span> 인사이트</h2>
+    <p class="sub">영상 밖에서도 쓸 수 있는 형태로</p>
+
+    <div class="insight">
+      <h4>① 공포의 크기는 뉴스가 아니라 가격으로 잰다</h4>
+      <p>"망하는 거 아니야?"라는 말이 아무리 많이 돌아도, 망하는 쪽에 실제로 돈을 거는 상품이 조용하다면 진짜 공포는 그만큼 크지 않다. 걱정을 재려면 걱정을 사고파는 시장을 찾아 그 가격을 본다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>② 같은 방향의 가격에도 원인이 다르면 결말이 다르다</h4>
+      <p>금리 상승이라는 결과는 하나지만, 신뢰가 깨져서 오르는 것과 물량 때문에 오르는 것은 다른 사건이다. 앞엣것은 상단이 없고 뒤엣것은 멈출 지점이 있다. 가격의 방향이 아니라 원인을 먼저 분류해야 한다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>③ 지표가 설명을 배신할 때가 가장 정보량이 많다</h4>
+      <p>지표가 나빠졌는데 가격이 반대로 갔다면, 그건 노이즈가 아니라 "지금은 펀더멘탈이 작동하지 않는 국면"이라는 신호다. 예상과 어긋난 지점이 시장의 지배 요인을 알려준다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>④ 다른 판의 언어가 넘어왔다면 이미 늦은 소식이다</h4>
+      <p>어떤 문제가 내가 있는 판의 화제가 되었을 때는, 원래 그 문제를 다루던 판에서는 상황이 한참 진행된 뒤다. 소식이 도착한 시점이 아니라 소식이 출발한 시점을 기준으로 판단해야 한다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>⑤ 끝없이 가는 가격은 없다 — 반대편 매수자가 있는 한</h4>
+      <p>가격이 한 방향으로 계속 갈 수 없는 이유는, 어느 수준에 이르면 그게 매력적으로 보이는 사람이 생기기 때문이다. 주가의 바닥도, 금리의 천장도 같은 논리로 만들어진다.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">05</span> 앞으로 지켜볼 것</h2>
+    <ul class="watch">
+      <li><b>8월 28일 엔비디아 실적</b> — 금리를 낮출 유일한 방법은 신뢰가 생기는 것이고, 화자는 그 신뢰를 만들 수 있는 주체로 엔비디아를 지목한다. "AI 판을 만든 게 엔비디아니 네가 풀어야 한다"는 것.</li>
+      <li><b>실적에서 볼 항목 두 가지</b> — 현금을 얼마나 많이 낼 수 있는가, 그리고 여기저기 <b>보증을 선다</b>고 해서 생긴 우려를 다 해소해 줄 수 있는가.</li>
+      <li><b>10년물 5% / 30년물 6~7%</b> — 화자가 언급한 가격 기준선. 10년물은 5% 이전에 멈추거나, 30년물은 6~7%대에서 "해 볼 만한" 매수 수요가 붙는다는 관점.</li>
+      <li><b>서프라이즈 인덱스</b> — 8월부터의 급락이 이어지는지. 수급을 걷어내고 보면 채권을 살 이유가 충분했다는 근거가 이 지표다.</li>
+      <li><b>CDS 프리미엄</b> — 지금은 안정적이지만, 여기가 움직이기 시작하면 '수급 때문'이라는 설명 자체가 무너진다. 3~5단계 논리 전체를 지탱하는 관전 포인트.</li>
+      <li><b>시간</b> — 화자의 결론은 "당장 진정되기는 어렵다, 시간이 필요하다". 채권 나라와 주식 나라가 서로 맞춰 가는 과정이 남아 있다.</li>
+    </ul>
+  </section>
+
+  <footer>
+    유튜브 자동 생성 자막(표시 지연 2.2초 보정) 전문을 바탕으로 정리했습니다. 자막 오인식이 있을 수 있으며, 타임스탬프는 ±수 초 오차가 있을 수 있습니다. 내용은 발언자의 견해이며 투자 판단의 근거가 아닌 학습 자료입니다. · 출처: 이효석아카데미, <a href="https://www.youtube.com/watch?v=503NEYQ6xXo">미국 정부 부채 40조 달러, 진짜 파산하는 거냐고 묻는다면, 그 정도 상황은 아니라고 보는 이유</a>
+  </footer>
+
+</div>
+</body>
+</html>

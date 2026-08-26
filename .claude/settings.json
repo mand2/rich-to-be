@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(.venv/bin/python *)",
+      "Bash(ln -s *)",
+      "Bash(git worktree *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git rev-parse *)",
+      "Bash(grep *)",
+      "Bash(cut *)",
+      "Bash(wc *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(git -C * merge --ff-only *)",
+      "Bash(git merge --ff-only *)",
+      "Write(notes/**)",
+      "Edit(notes/**)"
+    ]
+  }
+}

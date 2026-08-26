@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Study Note — Learning while you sleep: beyond memory to dreaming</title>
+<style>
+:root {
+  --accent: #0f766e;
+  --ink: #16181d;
+  --muted: #6b7280;
+  --line: #e5e3de;
+  --wash: #f7f6f3;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: #fff; }
+.note {
+  max-width: 720px; margin: 0 auto; padding: 32px 28px;
+  font-family: Pretendard, "Apple SD Gothic Neo", system-ui, -apple-system, sans-serif;
+  color: var(--ink); font-size: 15px; line-height: 1.72;
+  word-break: keep-all;
+}
+
+header { border-bottom: 2px solid var(--ink); padding-bottom: 18px; margin-bottom: 26px; }
+.label { font-size: 11px; letter-spacing: .14em; color: var(--accent); font-weight: 700; }
+h1 { font-size: 27px; line-height: 1.3; margin: 10px 0 12px; letter-spacing: -.02em; }
+.meta { font-size: 12.5px; color: var(--muted); }
+.meta a { color: var(--muted); }
+
+.conclusion {
+  border-left: 3px solid var(--accent); background: var(--wash);
+  padding: 16px 18px; margin-bottom: 34px; font-size: 15.5px;
+}
+.conclusion p { margin: 0 0 8px; }
+.conclusion p:last-child { margin: 0; }
+.tag {
+  display: block; font-size: 11px; font-weight: 700; letter-spacing: .1em;
+  color: var(--accent); margin-bottom: 6px;
+}
+
+section { margin-bottom: 34px; }
+h2 { font-size: 19px; margin: 0 0 4px; letter-spacing: -.01em; }
+.num {
+  display: inline-block; min-width: 26px; height: 22px; margin-right: 8px;
+  background: var(--accent); color: #fff; font-size: 12px; font-weight: 700;
+  text-align: center; line-height: 22px; border-radius: 3px;
+}
+.sub { font-size: 13px; color: var(--muted); margin: 0 0 16px; }
+time { font-variant-numeric: tabular-nums; font-size: 12px; color: var(--accent); font-weight: 600; }
+
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.card { border: 1px solid var(--line); border-radius: 5px; padding: 14px 16px; }
+.card h4 { margin: 0 0 8px; font-size: 14.5px; }
+.card p { margin: 0; font-size: 14px; }
+
+.term { border-top: 1px solid var(--line); padding: 13px 0; }
+.term h4 { margin: 0 0 5px; font-size: 15px; }
+.term h4 em { font-style: normal; font-weight: 400; font-size: 12.5px; color: var(--muted); }
+.term p { margin: 0; }
+.aside {
+  margin-top: 7px !important; background: var(--wash); padding: 8px 11px;
+  border-radius: 4px; font-size: 13.5px; color: #3f4450;
+}
+.aside b { color: var(--accent); font-weight: 700; }
+
+.step { display: flex; gap: 14px; padding: 15px 0; border-top: 1px solid var(--line); }
+.marker {
+  flex: 0 0 26px; height: 26px; border-radius: 50%; background: var(--ink); color: #fff;
+  font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+}
+.step .body { flex: 1; }
+.step h4 { margin: 0 0 6px; font-size: 15px; display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.step p { margin: 0; }
+blockquote {
+  margin: 9px 0 0; padding-left: 12px; border-left: 2px solid var(--line);
+  color: #3f4450; font-size: 14px;
+}
+
+.insight { padding: 12px 0; border-top: 1px solid var(--line); }
+.insight h4 { margin: 0 0 4px; font-size: 15px; }
+.insight p { margin: 0; font-size: 14.5px; }
+
+.watch { margin: 0; padding-left: 18px; }
+.watch li { margin-bottom: 9px; }
+
+table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 4px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+th { background: var(--wash); font-size: 13px; }
+
+footer {
+  margin-top: 38px; padding-top: 14px; border-top: 1px solid var(--line);
+  font-size: 12px; color: var(--muted);
+}
+
+@page { size: A4; margin: 14mm; }
+.card, .term, .step, .insight, .conclusion, blockquote, tr { break-inside: avoid; page-break-inside: avoid; }
+h1, h2, h3, h4 { break-after: avoid; page-break-after: avoid; }
+@media print {
+  .note { max-width: none; padding: 0; font-size: 10.5pt; }
+  section { margin-bottom: 22px; }
+  a { text-decoration: underline; color: inherit; }
+}
+</style>
+</head>
+<body>
+<div class="note">
+
+  <header>
+    <div class="label">STUDY NOTE · CONTEXT ENGINEERING</div>
+    <h1>Learning while you sleep: beyond memory to dreaming</h1>
+    <div class="meta">Lamis Mukta (Anthropic, Applied AI) · AI Native DevCon, June 2026 · 31m 52s · <a href="https://www.youtube.com/watch?v=tTcxVv8HHNw">Original video</a></div>
+  </header>
+
+  <div class="conclusion">
+    <span class="tag">THE ONE-LINE TAKEAWAY</span>
+    <p>Model intelligence alone doesn't compound in your organization — the context you curate around it does, which is why memory is the multiplier on every model upgrade.</p>
+    <p>But memory written <em>in-band</em>, by the agent doing the task, hits a hard ceiling: it competes for the same tokens as the work, and it can only see one session. <b>Dreaming</b> — a batch, out-of-band process that reads many transcripts against the memory store and proposes changes — is what closes the continual-learning loop.</p>
+  </div>
+
+  <section>
+    <h2><span class="num">01</span> The starting frame</h2>
+    <p class="sub">Why context, not intelligence, is the lever <time>0:30–3:14</time></p>
+    <p>The talk opens on a joke that doubles as the thesis — "I hope that your context windows are not too full and you have a bit of space for a little bit more information about context." The speaker's seat is the Applied AI team at Anthropic, sitting between research, product and go-to-market, working with startups pushing "right up against the boundary of what is possible with models and products today."</p>
+    <div class="split">
+      <div class="card">
+        <h4>What new models give you</h4>
+        <p>Raw intelligence, released on a cadence, identical for everyone. It arrives knowing nothing about your codebase, your organization, or your preferences.</p>
+      </div>
+      <div class="card">
+        <h4>What context engineering gives you</h4>
+        <p>The task- and org-specific knowledge that is <em>orthogonal</em> to model intelligence — and therefore multiplies it, again, every time a smarter model ships.</p>
+      </div>
+    </div>
+    <p>The failure symptoms are familiar: agents not knowing their way around a codebase, not knowing user preferences, and — the one that stings — not being better at a task the second time they do it. No learning from mistakes means no continual learning.</p>
+  </section>
+
+  <section>
+    <h2><span class="num">02</span> Glossary</h2>
+    <p class="sub">The terms the talk uses as given</p>
+
+    <div class="term">
+      <h4>Context engineering</h4>
+      <p>The work of getting the right task-, user- and organization-specific information in front of the model, as distinct from making the model itself smarter.</p>
+      <p class="aside"><b>Point</b> — framed as an <em>investment</em>, not a fix: because it's orthogonal to intelligence, it keeps multiplying as models improve rather than being obsoleted by them.</p>
+    </div>
+
+    <div class="term">
+      <h4>CLAUDE.md</h4>
+      <p>A plain markdown file injected at the start of a session with instructions about the codebase, the organization, and user preferences. Shipped with Claude Code.</p>
+      <p class="aside"><b>In her words</b> — "unreasonably effective." Both human and agent can read and write it. Its failure mode is context bloat as the file grows.</p>
+    </div>
+
+    <div class="term">
+      <h4>Memory tools</h4>
+      <p>Tools that let agents autonomously decide when to read, write and update their own memories, during a session.</p>
+      <p class="aside"><b>Point</b> — the finding was that <em>autonomy works</em>. The subsequent direction was to become <em>less</em> opinionated about what the tools look like, not more.</p>
+    </div>
+
+    <div class="term">
+      <h4>Skills &amp; progressive disclosure</h4>
+      <p>A file whose front matter — a couple of sentences at the top — is all the agent reads before deciding to load it. Detail lives in the body and costs nothing until loaded. Good for procedural workflows you have an opinion about, end to end.</p>
+      <p class="aside"><b>Her analogy</b> — a bookshelf in your room. You scan the titles as someone talks to you and pull one down when it's relevant. "If someone walked up to me and started speaking to me in French and I noticed that I have a French dictionary, I could pull that out" — without seven years of French classes already loaded into your context.</p>
+    </div>
+
+    <div class="term">
+      <h4>Memory as a file system <em>— current best practice</em></h4>
+      <p>Model the memory store as a directory of markdown files. Don't prescribe special read/write tools — agents are already very good at bash and grep. Index it well so search over it does the job progressive disclosure did for skills.</p>
+      <p class="aside"><b>The three rules</b> — markdown for reading; let memories grow large but give agents tools to index and search them; give agents autonomy when writing.</p>
+    </div>
+
+    <div class="term">
+      <h4>In-band vs. out-of-band memory</h4>
+      <p><b>In-band</b>: the agent reads and writes memory inside the session where it's doing the task. <b>Out-of-band</b>: a separate process, with its own resources, curates memory outside any task session.</p>
+      <p class="aside"><b>Point</b> — this distinction is the hinge of the whole talk. Everything before it is in-band; dreaming is the out-of-band half.</p>
+    </div>
+
+    <div class="term">
+      <h4>Dreaming</h4>
+      <p>"A second-order process over memory" — a batch, asynchronous job with its own allocated token budget, whose only job is to make sure the memories themselves are effective and up to date.</p>
+      <p class="aside"><b>The three layers</b> — context (what agents reference) → memory processes (agents curating it themselves) → dreaming (a process curating the curation).</p>
+    </div>
+
+    <div class="term">
+      <h4>Hashing <em>— the concurrency mechanism</em></h4>
+      <p>Before drafting an edit the agent takes a hash of the memory; before committing it takes another. If they differ, someone else wrote in the meantime and the write is refused — the agent re-pulls, re-drafts, and tries again.</p>
+      <p class="aside"><b>Point</b> — this is optimistic concurrency control, named as ordinary engineering practice rather than as anything AI-specific. That framing comes back in the Q&amp;A.</p>
+    </div>
+
+    <div class="term">
+      <h4>Stale memory</h4>
+      <p>Something true in the past that isn't now, something written incorrectly, or something injected maliciously by a prompt injection aimed at your memory store.</p>
+      <p class="aside"><b>Point</b> — she flags this twice, and the second time as the limitation she'd forgotten to list: nothing in an in-band system <em>owns</em> the job of re-checking what's already written.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">03</span> The argument, step by step</h2>
+    <p class="sub">Eight moves from "add a markdown file" to "run a second process while the agents sleep"</p>
+
+    <div class="step">
+      <div class="marker">1</div>
+      <div class="body">
+        <h4>Intelligence alone doesn't compound <time>2:24–3:14</time></h4>
+        <p>A newer model doesn't know what it takes to succeed in your organization. Because that knowledge is orthogonal to intelligence, investing in it multiplies every future model rather than being replaced by one.</p>
+        <blockquote>"the intelligence alone is not going to compound because they need this context that helps them perform the specific tasks that you need them to."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">2</div>
+      <div class="body">
+        <h4>One year, four steps, each one simple <time>3:37–8:18</time></h4>
+        <p>CLAUDE.md → memory tools → skills → the file system. Each stage was the dumbest thing that could work, shipped, then pushed until its ceiling showed: bloat for CLAUDE.md, human opinion-forming for skills. The endpoint wasn't designed, it was arrived at.</p>
+        <blockquote>"At Anthropic, we like to say do the simple thing that works."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">3</div>
+      <div class="body">
+        <h4>The neat idea breaks in production <time>8:53–10:23</time></h4>
+        <p>Build the file-system memory as described and it works — you feel the continual learning. Then scale it: many agents writing at once, long runs, complicated codebases. Two agents write the same file. One agent hits a problem and edits the organization-wide context every other agent reads from. Humans and agents edit the same store with no shared record of who changed what.</p>
+        <blockquote>"if something was incorrect there, that would scale to all of your agents and be pretty disastrous."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">4</div>
+      <div class="body">
+        <h4>Four guardrails make autonomy deployable <time>10:27–13:46</time></h4>
+        <p>Not restrictions on the agent's creativity — the conditions under which that creativity can be shipped.</p>
+        <table>
+          <tr><th>Guardrail</th><th>What it has to answer</th></tr>
+          <tr><td><b>Versioning</b></td><td>Can I roll back a bad update? Which session and transcript produced it? Which agent or human made it?</td></tr>
+          <tr><td><b>Concurrency</b></td><td>Hash before drafting, hash before committing; mismatch means re-pull, re-draft, retry.</td></tr>
+          <tr><td><b>Permissioning</b></td><td>Org-wide curated knowledge read-only; an agent's own scratchpad writable; team- and cross-section scopes in between.</td></tr>
+          <tr><td><b>Portability</b></td><td>A clean API, so context you spent real effort curating is reachable from multiple product surfaces and systems.</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">5</div>
+      <div class="body">
+        <h4>What you get when it holds <time>14:06–15:15</time></h4>
+        <p>Accuracy first: the second run of a task goes better because the agent noted what went wrong. That produces a second-order effect on cost and speed — fewer tokens, more one-shots, because the agent actually knows what it's doing. And the humans get their own capacity back.</p>
+        <blockquote>"frees up capacity and context for you as product developers potentially to focus on product wins while you know that the agents are doing this kind of self-learning, continual learning loop in the background."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">6</div>
+      <div class="body">
+        <h4>The new bottleneck is in-band itself <time>15:19–17:04</time></h4>
+        <p>Two structural limits, neither fixable by better prompting. <b>Split focus</b>: you're asking one agent both to finish the task and to invest in memory that only helps a future run — an optimization problem with no clean answer, plus latency. <b>Visibility</b>: an agent sees only its own session, so cross-session patterns are invisible to it.</p>
+        <blockquote>"when you get frustrated that your agent keeps making the same mistake over sessions, it just doesn't understand how frustrating that is, because it has a new context window in each of those."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">7</div>
+      <div class="body">
+        <h4>The school analogy supplies the shape of the fix <time>17:04–18:06</time></h4>
+        <p>Students submit work; teachers mark it; a head teacher reviews everything. We built that structure in the real world for two reasons — some people have <em>dedicated capacity</em> for helping others learn, and some have <em>visibility over the whole cohort</em>, enough to spot a pattern and change the curriculum. Both are exactly what the in-band agent lacks.</p>
+        <blockquote>"as always, we kind of look to the real world to think about how to build these systems."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">8</div>
+      <div class="body">
+        <h4>Dreaming, mechanically <time>18:10–23:45</time></h4>
+        <p>Take the existing memory store plus a batch of session transcripts. An orchestrator deploys a fleet of sub-agents to analyze the transcripts, reviews their responses, decides which patterns are prevalent enough to warrant a change, and outputs a <em>proposed</em> new memory store — each proposal carrying example transcripts and prevalence stats as its evidence. A human accepts or rejects. Crucially, the transcripts include tool calls and metadata, not just the message passes.</p>
+        <blockquote>"the agent is able to … spend tokens on solving this problem of making agents learn better."</blockquote>
+      </div>
+    </div>
+
+    <p class="sub" style="margin-top:16px">The head teacher, made concrete: every geography student answers one question with garbage → the topic is missing from the curriculum. Every maths answer is wrong the same way → everyone's calculator is in radians, so publish the calculator setting; in agent terms, a tool is misconfigured and the transcripts show the same call failing. Everyone in the fleet is using too many em dashes → that's an organization-wide context change.</p>
+  </section>
+
+  <section>
+    <h2><span class="num">04</span> Principles worth taking out of the room</h2>
+    <p class="sub">What generalizes past this talk</p>
+
+    <div class="insight">
+      <h4>① The upgrade everyone gets is not the one that compounds</h4>
+      <p>A model release lands identically for you and your competitor. The only part that accumulates is the part you curated — which is why work that looks orthogonal to the frontier is the work that survives it. Ask of any investment: does a vendor's next release replace this, or multiply it?</p>
+    </div>
+
+    <div class="insight">
+      <h4>② Ship the simple thing to find where it breaks</h4>
+      <p>Four stages in a year, each one a plain file, each one adopted until its specific ceiling appeared. The ceiling is information you cannot get by designing harder up front — you get it by shipping the naive version and watching which way it fails.</p>
+    </div>
+
+    <div class="insight">
+      <h4>③ Autonomy scales on an audit trail, not on a shorter leash</h4>
+      <p>Versioning, hashing and permissioning don't constrain what the agent may invent; they make what it invents reversible, attributable and blast-radius-bounded. The way to grant more freedom is to make mistakes cheaper to undo, not to narrow the range of possible mistakes.</p>
+    </div>
+
+    <div class="insight">
+      <h4>④ Whoever does the work is the wrong one to grade it</h4>
+      <p>Asking one actor to both complete a task and invest in future performance sets those goals competing for the same budget, and the immediate task will usually win. Learning needs capacity that is <em>allocated separately</em> and cannot be raided by the work — that's what a teacher is, and what dreaming is.</p>
+    </div>
+
+    <div class="insight">
+      <h4>⑤ A recurring failure is invisible at the level where it recurs</h4>
+      <p>The agent repeating a mistake across sessions is not ignoring the pattern; it has never seen two instances at once. Any pattern that lives above the unit of work has to be reviewed above the unit of work — otherwise the fleet keeps making a mistake nobody in it is positioned to notice.</p>
+    </div>
+
+    <div class="insight">
+      <h4>⑥ Converging back on old engineering is a sign of maturity, not failure</h4>
+      <p>Asked whether versioning and concurrency mean reinventing databases from first principles, she agrees and reframes: you start by letting agents commit whatever they like, learn which primitives actually work, then codify those into the harness. Reaching for the boring, deterministic solution is what having enough signal looks like.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">05</span> To check, to build, to watch</h2>
+    <p class="sub">The talk's open items and thresholds</p>
+    <ul class="watch">
+      <li><b>Start in-band; the threshold to go further is stated.</b> CLAUDE.md, skills, and autonomous memory management "goes a really long way." Add production guardrails when you hit: many agents at once, agents running over long periods, a workspace or codebase you keep developing over time, or very complex domains.</li>
+      <li><b>Audit your memory design against the four guardrails.</b> Versioning (rollback + originating session + author), concurrency (hash before and after), permissioning (org-wide read-only, scratchpad writable), portability (clean API). Her word for the goal: "safe, verifiable, auditable."</li>
+      <li><b>Decide who owns staleness.</b> In a purely in-band system nothing re-checks what's already written — and stale includes maliciously injected. If you're not building dreaming yet, name the process that does this instead.</li>
+      <li><b>Feed dreaming the tool calls, not just the conversation.</b> The radians-vs-degrees example only surfaces if the transcripts carry tool calls, skills used, and metadata.</li>
+      <li><b>Steering is a design surface.</b> The agents that write and coordinate dreaming can be told what counts as important and what doesn't, which is where the process gets tuned to your organization.</li>
+      <li><b>Permissions and dreaming compose — if you configure them to.</b> Asked how dreaming respects hundreds of different permission sets: you choose exactly which session transcripts to attach. A time-window job takes everything; instead, select transcripts whose permission set matches the memory store.</li>
+      <li><b>Off-the-shelf, per her answer:</b> the versioning and hashing described are available through the memory and dreaming API in Claude Managed Agents. (Asked directly for an enterprise implementation; she noted she'd been "coy in the talk because we're not allowed to make product calls to action.")</li>
+      <li><b>Not a coding-only practice.</b> She uses memory for building presentations — how she likes things written, how she likes her slides — and it develops over time.</li>
+      <li><b>The cost objection, answered.</b> Dedicated token spend for dreaming sounds expensive; the counter is that better memory drives cost down through more one-shot completions and fewer wasted tokens. Worth measuring for yourself rather than assuming either direction.</li>
+    </ul>
+  </section>
+
+  <footer>
+    Compiled from the YouTube auto-generated transcript. Timestamps carry a default display-lag correction of 2.2 s, which is a default and not a measurement — expect small drift against the video. Content is the speaker's account of Anthropic's practice as of the talk; nothing outside the transcript has been added.
+  </footer>
+
+</div>
+</body>
+</html>

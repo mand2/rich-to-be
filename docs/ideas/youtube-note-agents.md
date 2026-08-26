@@ -1,5 +1,7 @@
 # YouTube 노트 — 에이전트 구조 refine
 
+> **2026-08-26 추가.** 이 문서가 설계한 `youtube-note` 스킬 하나는 `news-briefing-digest` 와 `youtube-study-note` 둘로 해체됐다. 폐기된 대안(NotebookLM 자동화, yt-dlp, YouTube Data API v3)에 대한 판단은 그대로 유효하다. 해체 경위와 무엇을 버렸는지는 `tasks/split-youtube-note.md`.
+
 `docs/youtube-note-plan.md` 의 후속. 계획서는 "스킬 1개 + NotebookLM 수동 복붙"으로 확정돼 있었다. 이 문서는 그 두 가지를 모두 뒤집는다.
 
 ## Problem Statement
