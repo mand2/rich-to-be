@@ -17,5 +17,20 @@
       "Write(notes/**)",
       "Edit(notes/**)"
     ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(jq -r \".tool_input.file_path\"); case \"$f\" in */notes/morning-routine/*.html|*/notes/invest/*.html) \"$CLAUDE_PROJECT_DIR/.venv/bin/python\" \"$CLAUDE_PROJECT_DIR/scripts/slack.py\" \"$f\";; esac",
+            "timeout": 60,
+            "statusMessage": "슬랙에 노트 올리는 중"
+          }
+        ]
+      }
+    ]
   }
 }
