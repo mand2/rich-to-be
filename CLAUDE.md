@@ -28,7 +28,7 @@ Python은 **반드시 `.venv/bin/python`** 을 쓴다. `youtube-transcript-api` 
 | `transcript.py` | 자막 받기. `.work/<video_id>/` 에 `transcript.txt` 와 `meta.json` 을 만든다 |
 | `caption-lag.md` | 자동자막 지연 보정 절차 (기본 2.2초 자동 적용, 어긋날 때만 `--probe` → `--lag`) |
 | `slack.py` | 만든 노트를 슬랙 채널에 업로드. `.env` 에 `SLACK_BOT_TOKEN`(files:write, chat:write) + `SLACK_CHANNEL`, 봇을 채널에 초대해 둘 것. 파일명 메시지 + 스레드에 파일 |
-| `md2html.py` + `note-page.html` | `notes/*.md` → 자기완결 HTML. **기존 노트 재렌더 전용이다** — 새 노트는 스킬이 HTML 을 직접 쓴다 |
+| `build-notes-index.py` | `notes/index.html` 의 목록 블록을 채운다. 노트의 `<h1>` 과 한 줄 결론·헤드라인을 파싱한다 |
 
 ## 파이프라인
 
@@ -38,13 +38,11 @@ transcript.py --outline-only (자동자막이면 2.2초 자동 보정) → 본�
 
 **전 과정을 메인 세션이 한다. 에이전트를 띄우지 않는다.** 자막 대조 검수 절은 두 스킬에서 제거됐다 — 되살릴 거면 git 이력에서 꺼내야 한다.
 
-## 진행 페이지 (`web/`)
+## 발행 (`notes/index.html` + GitHub Pages)
 
-`.venv/bin/python web/serve.py` 가 로컬 8765 포트에 진행 페이지를 띄운다. 링크·스킬·lag 을 받아 `claude -p --output-format stream-json` 으로 위 파이프라인을 헤드리스로 돌리고 **3단계**(자막 확보 · 자막 지연 확인 · 검수)를 그린다. **3단계는 더 이상 켜지지 않는다** — 검수 에이전트가 없어졌는데 `serve.py` 의 `AGENT_STAGE` 와 `index.html` 의 `STAGES` 는 그대로다. `--replay [로그]` 를 붙이면 `claude` 대신 지난 실행 로그를 되읽어 화면만 확인한다 (경로를 안 주면 `.work/last-run.jsonl`). 서버를 띄우고 내리는 절차는 `.claude/skills/progress-server/SKILL.md` 가 정본이다. 남은 일과 실측 기록은 `web/TODO.md` 에 있다.
+**GitHub Actions 가 `notes/` 폴더만 아티팩트로 올려 발행한다** (`.github/workflows/pages.yml`). Pages Source 는 GitHub Actions 이고 Jekyll 은 쓰지 않는다.
 
-**본문 작성과 저장은 단계로 두지 않는다.** 둘 다 메인 세션이 하고 진행 페이지가 잡을 수 있는 신호를 내지 않는다. **못 잡는 단계를 그려 두면 화면이 거짓말을 한다** — 지금 3단계가 정확히 그 상태다.
-
-**세 곳이 같이 움직인다.** `web/index.html` 의 `<option>` ↔ `serve.py` 의 `SKILLS` 표 ↔ `.claude/skills/` 의 **실제 폴더 이름**. 스킬을 추가·개명하면 세 곳을 같이 고친다. SKILL.md 의 명령줄을 고치면 `BASH_STAGE` 도 고친다. `web/serve.py --selftest` 는 자기 문자열만 검사하므로 SKILL.md 와의 어긋남은 못 잡는다.
+**목록을 손으로 적지 마라.** 노트를 추가·삭제했으면 `scripts/build-notes-index.py` 를 돌리고 결과를 커밋한다. 무엇을 어디서 파싱하는지는 그 스크립트가, 태그를 적는 `META` 는 `notes/index.html` 이 각각 문서다. 두 스킬 템플릿의 `conclusion` · `top3` · `meta` class 를 바꾸면 스크립트도 같이 고친다 — 못 찾아도 빌드는 안 깨지고 설명만 빈다.
 
 ## 절대 지키는 것
 
@@ -77,12 +75,10 @@ scripts/transcript.py "<URL>" --lag 3.5    # 영상과 대조한 값으로 재�
 
 `transcript.py` 는 스크립트 1개로 유지한다. fetch와 split을 파일로 쪼개지 않는다.
 
-로직을 고치면 `--selftest` 의 assert도 함께 고친다 — `scripts/transcript.py`, `scripts/md2html.py`, `web/serve.py` 셋 다 `--selftest` 를 갖고 있다. 별도 테스트 프레임워크는 두지 않는다.
+로직을 고치면 `--selftest` 의 assert도 함께 고친다 — `scripts/transcript.py` 와 `scripts/build-notes-index.py` 둘 다 `--selftest` 를 갖고 있다. 별도 테스트 프레임워크는 두지 않는다.
 
 의도적으로 한계를 안고 가는 상수·휴리스틱에는 `ponytail:` 주석으로 **어디서 온 값인지와 재조정 조건**을 남긴다. 예: `AUTO_CAPTION_LAG`, 다이제스트의 카드 상한 12.
 
 ## 설계 배경
 
-`docs/ideas/youtube-note-agents.md` 에 실측 근거와 폐기된 대안(NotebookLM 자동화, yt-dlp, YouTube Data API v3)이 정리돼 있다. **같은 대안을 다시 제안하기 전에 그 문서를 먼저 읽어라.** `docs/youtube-note-plan.md` 는 그 이전 초안이라 일부 내용이 뒤집혔다.
-
-두 스킬로 나누기 전에는 `youtube-note` 스킬 하나가 코넬 노트와 브리핑을 모두 만들었다. 해체 경위와 무엇을 버렸는지는 `tasks/split-youtube-note.md` 에 있다. **코넬 모드(구간 분할 + 병렬 `section-note` + `synthesizer`)는 계승자 없이 사라졌다** — 되살릴 거면 git 이력에서 꺼내야 한다.
+**폐기된 대안을 다시 제안하지 마라** — NotebookLM 자동화, yt-dlp, YouTube Data API v3 는 실측 후 버렸다. 근거(`docs/ideas/youtube-note-agents.md`), 스킬을 둘로 쪼갠 경위와 버린 코넬 모드(`tasks/split-youtube-note.md`) 는 삭제됐으니 필요하면 git 이력에서 꺼낸다.

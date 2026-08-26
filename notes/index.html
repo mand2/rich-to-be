@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>기록</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
+
+<!-- ===================================================================
+     설정 — 목록은 자동입니다.
+     notes/<폴더>/{yyMMdd}_<slug>.html 로 파일을 올리면 그냥 뜹니다.
+     제목·설명·태그를 다듬고 싶을 때만 아래 META 에 한 줄 추가하세요.
+     =================================================================== -->
+<script>
+const SITE = {
+  title: "기록",
+  subtitle: "유튜브 영상을 한 장으로 정리한 노트 보관소"
+};
+
+// 폴더 = 분류. 여기 없는 폴더가 생기면 폴더 이름 그대로 회색 라벨로 뜹니다.
+const KINDS = {
+  "morning-routine": { label: "모닝루틴", color: "var(--morning)" },
+  "invest":          { label: "투자",     color: "var(--invest)"  },
+  "self-study":      { label: "공부",     color: "var(--study)"   }
+};
+
+// 전부 선택 사항 — 제목·설명은 노트 HTML 에서 자동으로 뽑습니다.
+// 여기 적은 값이 항상 이깁니다. 태그는 자동으로 만들 수 없으니 여기에만 있습니다.
+const META = {
+  "morning-routine/260826_한경-모닝루틴.html":  { tags: ["쿠팡", "엔비디아", "SK하이닉스"] },
+  "morning-routine/260825_한경-모닝루틴-브리핑.html": { tags: ["원전", "한미약품", "코스피"] },
+  "invest/260826_미국-부채-40조-달러-금리-급등-스터디노트.html": { tags: ["채권", "금리", "이효석아카데미"] },
+  "invest/260820_머스크가-숨기는-로봇의-진짜-병목-2부.html": { tags: ["피지컬 AI", "휴머노이드", "언더스탠딩"] },
+  "self-study/260826_Learning-while-you-sleep-Beyond-memory-to-dreaming-study-note.html": { tags: ["context engineering", "Anthropic"] }
+};
+</script>
+<!-- =================== 설정 끝 =================== -->
+
+<style>
+:root{
+  --paper:#E9EDF1;
+  --card:#F4F7F9;
+  --ink:#16202C;
+  --ink-soft:#5D6B78;
+  --ink-faint:#8996A3;
+  --rule:#C7D0D9;
+  --rule-soft:#D9E0E6;
+  --morning:#A16207;   /* morning-routine — 다이제스트 */
+  --invest:#1D4ED8;    /* invest — 투자 스터디 노트 */
+  --study:#0F766E;     /* self-study — 개인 공부용 */
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --sans:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--sans);font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:820px;margin:0 auto;padding:0 24px 96px}
+
+/* ---------- 머리말 ---------- */
+.masthead{padding:72px 0 32px}
+.eyebrow{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  letter-spacing:.22em;text-transform:uppercase;color:var(--ink-faint);
+  margin:0 0 18px;
+}
+.masthead h1{
+  margin:0;font-size:clamp(34px,7vw,52px);font-weight:800;
+  letter-spacing:-.03em;line-height:1.05;
+}
+.masthead p{margin:12px 0 0;color:var(--ink-soft);font-size:15px}
+.tally{
+  font-family:var(--mono);font-size:12px;color:var(--ink-faint);
+  margin:22px 0 0;letter-spacing:.04em;
+}
+
+/* ---------- 검색 · 필터 ---------- */
+.controls{
+  position:sticky;top:0;z-index:20;
+  background:var(--paper);
+  padding:14px 0 12px;
+  border-bottom:1px solid var(--rule);
+}
+.search{position:relative;margin-bottom:12px}
+.search input{
+  width:100%;appearance:none;
+  font-family:var(--sans);font-size:15px;color:var(--ink);
+  background:var(--card);border:1px solid var(--rule-soft);border-radius:2px;
+  padding:11px 60px 11px 14px;
+}
+.search input::placeholder{color:var(--ink-faint)}
+.search input:focus{outline:2px solid var(--study);outline-offset:-1px;border-color:transparent}
+.slash{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  font-family:var(--mono);font-size:11px;color:var(--ink-faint);
+  border:1px solid var(--rule);border-radius:2px;padding:2px 6px;
+  pointer-events:none;
+}
+.search input:focus ~ .slash{opacity:0}
+.chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.chip{
+  font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.06em;
+  background:none;border:1px solid var(--rule);border-radius:2px;
+  color:var(--ink-soft);padding:5px 10px;cursor:pointer;
+  display:inline-flex;align-items:center;gap:6px;
+}
+.chip:hover{border-color:var(--ink-faint);color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip .dot{width:6px;height:6px;flex:none}
+.chip[aria-pressed="true"] .dot{box-shadow:0 0 0 1px var(--paper)}
+.chip.all{margin-right:5px}
+.chip.order{margin-left:auto}
+
+/* ---------- 기록 목록 (날짜 척추) ---------- */
+.year{
+  position:sticky;top:104px;z-index:10;
+  background:var(--paper);
+  font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.18em;
+  color:var(--ink-faint);
+  padding:20px 0 8px;
+  border-bottom:1px solid var(--rule-soft);
+}
+.entry{
+  display:grid;grid-template-columns:88px 1fr auto;
+  align-items:start;gap:0;
+  text-decoration:none;color:inherit;
+  border-bottom:1px solid var(--rule-soft);
+}
+.entry:hover{background:var(--card)}
+.entry:focus-visible{outline:2px solid var(--study);outline-offset:-2px}
+.date{
+  position:relative;
+  font-family:var(--mono);font-size:15px;font-weight:500;
+  color:var(--ink-soft);
+  padding:20px 18px 20px 0;
+  border-right:1px solid var(--rule);
+  text-align:right;white-space:nowrap;
+}
+.date .dow{display:block;font-size:11px;color:var(--ink-faint);margin-top:2px}
+.tick{
+  position:absolute;right:-4px;top:26px;
+  width:7px;height:7px;background:var(--ink-faint);
+  box-shadow:0 0 0 3px var(--paper);
+}
+.entry:hover .tick{box-shadow:0 0 0 3px var(--card)}
+.body{padding:20px 16px 20px 20px;min-width:0}
+.body h2{
+  margin:0;font-size:17px;font-weight:700;letter-spacing:-.015em;line-height:1.35;
+}
+.entry:hover .body h2{text-decoration:underline;text-underline-offset:3px}
+.body .desc{
+  margin:5px 0 0;font-size:14px;color:var(--ink-soft);
+  overflow:hidden;text-overflow:ellipsis;display:-webkit-box;
+  -webkit-line-clamp:2;-webkit-box-orient:vertical;
+}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin:10px 0 0;padding:0;list-style:none}
+.tags li{
+  font-family:var(--mono);font-size:10px;letter-spacing:.06em;
+  color:var(--ink-faint);border:1px solid var(--rule-soft);
+  padding:2px 6px;
+}
+.kind{
+  font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.12em;
+  padding:22px 0 20px;white-space:nowrap;
+}
+
+/* ---------- 비어 있을 때 ---------- */
+.empty{padding:64px 0;text-align:center}
+.empty p{margin:0 0 16px;color:var(--ink-soft);font-size:15px}
+.empty button{
+  font-family:var(--mono);font-size:12px;
+  background:var(--ink);color:var(--paper);border:0;border-radius:2px;
+  padding:9px 16px;cursor:pointer;
+}
+
+/* ---------- 꼬리말 ---------- */
+.howto{
+  margin-top:56px;padding-top:24px;border-top:1px solid var(--rule);
+  font-size:13px;color:var(--ink-soft);
+}
+.howto h3{
+  font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ink-faint);margin:0 0 12px;
+}
+.howto code{
+  display:block;background:var(--card);border:1px solid var(--rule-soft);
+  font-family:var(--mono);font-size:11.5px;line-height:1.8;color:var(--ink);
+  padding:12px 14px;margin:10px 0 0;overflow-x:auto;white-space:pre;
+}
+
+@media (max-width:600px){
+  .wrap{padding:0 18px 72px}
+  .masthead{padding:48px 0 24px}
+  .entry{grid-template-columns:1fr auto;gap:0 12px}
+  .date{
+    grid-column:1;grid-row:1;
+    text-align:left;border-right:0;padding:18px 0 0;
+    font-size:13px;
+  }
+  .date .dow{display:inline;margin-left:6px}
+  .tick{position:static;display:inline-block;margin-right:7px;box-shadow:none;vertical-align:2px}
+  .kind{grid-column:2;grid-row:1;padding:18px 0 0}
+  .body{grid-column:1/-1;grid-row:2;padding:6px 0 18px}
+  .year{top:96px}
+}
+@media (prefers-reduced-motion:no-preference){
+  .entry{animation:rise .34s ease both}
+  @keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <p class="eyebrow">Archive</p>
+    <h1 id="site-title">기록</h1>
+    <p id="site-sub"></p>
+    <p class="tally" id="tally"></p>
+  </header>
+
+  <div class="controls">
+    <div class="search">
+      <input id="q" type="search" placeholder="제목 · 태그 · 날짜로 찾기" aria-label="기록 검색" autocomplete="off">
+      <span class="slash">/</span>
+    </div>
+    <div class="chips" id="chips"></div>
+  </div>
+
+  <main id="list"></main>
+
+  <footer class="howto">
+    <h3>새 기록 추가하기</h3>
+    <code style="display:inline;padding:1px 5px;border:0;background:var(--card)">notes/&lt;폴더&gt;/{yyMMdd}_&lt;slug&gt;.html</code>
+    로 파일을 올리고 push 하면 끝입니다. 제목과 설명은 노트의 <code style="display:inline;padding:1px 5px;border:0;background:var(--card)">&lt;h1&gt;</code> 과
+    한 줄 결론 · 헤드라인에서 자동으로 뽑습니다. 폴더는 <strong>morning-routine · invest · self-study</strong> 셋뿐입니다.
+    <br><br>
+    태그를 달거나 자동 추출한 제목·설명을 덮어쓰고 싶을 때만 위쪽 <strong>META</strong> 에 한 줄 추가하세요.
+    <code>scripts/build-notes-index.py   # 로컬에서 목록을 미리 갱신할 때</code>
+  </footer>
+
+</div>
+
+<!-- notes-index:start — scripts/build-notes-index.py 가 채운다. 손으로 고치지 마세요. -->
+<script type="application/json" id="note-files">
+[
+ {
+  "file": "invest/260820_머스크가-숨기는-로봇의-진짜-병목-2부.html",
+  "title": "머스크가 숨기는 로봇의 진짜 병목",
+  "desc": "피지컬 AI의 남은 병목은 기술이 아니라 규제 · 소비자 수용성 · 부품 공급 생태계 세 가지다. 기술 로드맵은 그려져 있지만 규제 5년에 소비자 수용 5년을 더하면 10년이 훌쩍 가고, 휴머노이드는 애초에 싸게 대량으로 찍어낼 부품망 자체가 아직…"
+ },
+ {
+  "file": "invest/260826_미국-부채-40조-달러-금리-급등-스터디노트.html",
+  "title": "미국 부채 40조 달러, 파산 걱정까지는 아닌 이유",
+  "desc": "지금의 금리 급등은 미국을 못 믿어서가 아니라 채권 시장의 수급 때문이다. 8월 들어 경제 지표는 급격히 나빠졌는데 금리가 오히려 올랐고, 미국이 망할 거라는 데 돈을 거는 CDS 프리미엄은 전혀 움직이지 않았다. 단, 화자도 금리 자체는 걱정된다고…"
+ },
+ {
+  "file": "morning-routine/260825_한경-모닝루틴-브리핑.html",
+  "title": "한국경제신문 30분 만에 읽기 · 모닝루틴",
+  "desc": "미국, 웨스팅하우스 지분 공동 인수를 한국에 제안 · 한미약품, 비만신약 후보물질 3조 2천억 원 기술수출 · 코스피 3.12% 급락한 6,696"
+ },
+ {
+  "file": "morning-routine/260826_한경-모닝루틴.html",
+  "title": "한국경제신문 30분 만에 읽기 · 모닝루틴",
+  "desc": "공정위, 쿠팡 조사 거부에 사상 초유 '빈손 철수' · 엔비디아 실적 발표 임박 · SK하이닉스 성과급 자사주 안건 부결"
+ },
+ {
+  "file": "self-study/260826_Learning-while-you-sleep-Beyond-memory-to-dreaming-study-note.html",
+  "title": "Learning while you sleep: beyond memory to dreaming",
+  "desc": "Model intelligence alone doesn't compound in your organization — the context you curate around it does, which is why memory is the…"
+ }
+]
+</script>
+<!-- notes-index:end -->
+
+<script>
+const DOW = ["일","월","화","수","목","금","토"];
+
+function noteFiles() {
+  try { return JSON.parse(document.getElementById("note-files").textContent); }
+  catch (e) { return []; }   // 빌드 전이면 빈 목록 — 조용히 옛 목록을 보여주는 것보다 낫다
+}
+
+// ponytail: 파일명 규칙 {yyMMdd}_<slug>.html 에 의존한다. 세기는 20xx 고정 —
+// 규칙을 벗어난 파일은 버리지 않고 '미분류'로 맨 뒤에 붙인다.
+function fromPath(e) {
+  const rel = e.file;
+  const slash = rel.indexOf("/");
+  const kind = slash < 0 ? "" : rel.slice(0, slash);
+  const name = rel.slice(slash + 1).replace(/\.html$/i, "");
+  const m = name.match(/^(\d{2})(\d{2})(\d{2})[_-](.+)$/);
+  return Object.assign({
+    kind, file: rel,
+    date: m ? `20${m[1]}-${m[2]}-${m[3]}` : "",
+    title: (m ? m[4] : name).replace(/[-_]+/g, " ").trim()
+  }, e, META[rel] || {});   // 우선순위: META > 노트에서 파싱 > 파일명
+}
+
+const NOTES = noteFiles().map(fromPath);
+
+let activeKinds = new Set();
+let newestFirst = true;
+let query = "";
+
+const $ = (s) => document.querySelector(s);
+const listEl = $("#list");
+
+document.title = SITE.title;
+$("#site-title").textContent = SITE.title;
+$("#site-sub").textContent = SITE.subtitle || "";
+
+function buildChips() {
+  const box = $("#chips");
+  box.innerHTML = "";
+
+  const all = document.createElement("button");
+  all.className = "chip all";
+  all.type = "button";
+  all.dataset.kind = "";
+  all.textContent = `전체 ${NOTES.length}`;
+  all.addEventListener("click", () => { activeKinds.clear(); syncChips(); render(); });
+  box.appendChild(all);
+
+  Object.entries(KINDS).forEach(([key, k]) => {
+    const count = NOTES.filter(n => n.kind === key).length;
+    if (!count) return;
+    const b = document.createElement("button");
+    b.className = "chip";
+    b.type = "button";
+    b.dataset.kind = key;
+    b.innerHTML = `<span class="dot" style="background:${k.color}"></span>${k.label} ${count}`;
+    b.addEventListener("click", () => {
+      activeKinds.has(key) ? activeKinds.delete(key) : activeKinds.add(key);
+      syncChips();
+      render();
+    });
+    box.appendChild(b);
+  });
+
+  const order = document.createElement("button");
+  order.className = "chip order";
+  order.type = "button";
+  order.textContent = "최신순 ↓";
+  order.addEventListener("click", () => {
+    newestFirst = !newestFirst;
+    order.textContent = newestFirst ? "최신순 ↓" : "오래된순 ↑";
+    render();
+  });
+  box.appendChild(order);
+}
+
+function syncChips() {
+  document.querySelectorAll(".chip[data-kind]").forEach(c => {
+    const key = c.dataset.kind;
+    const on = key ? activeKinds.has(key) : activeKinds.size === 0;
+    c.setAttribute("aria-pressed", String(on));
+  });
+}
+
+function matches(n) {
+  if (activeKinds.size && !activeKinds.has(n.kind)) return false;
+  if (!query) return true;
+  const hay = [n.title, n.desc || "", n.date, (n.tags || []).join(" ")].join(" ").toLowerCase();
+  return hay.includes(query);
+}
+
+function render() {
+  const key = n => n.date || "0000-00-00";   // 규칙 밖 파일은 항상 맨 뒤로
+  const rows = NOTES.filter(matches).sort((a, b) =>
+    newestFirst ? key(b).localeCompare(key(a)) : key(a).localeCompare(key(b))
+  );
+
+  $("#tally").textContent =
+    rows.length === NOTES.length
+      ? `${NOTES.length}개의 기록 · 최근 ${NOTES.length ? fmtFull(latest()) : "—"}`
+      : `${rows.length} / ${NOTES.length}개 표시 중`;
+
+  if (!rows.length) {
+    listEl.innerHTML =
+      `<div class="empty"><p>조건에 맞는 기록이 없습니다.</p>
+       <button type="button" id="reset">필터 초기화</button></div>`;
+    $("#reset").addEventListener("click", () => {
+      query = ""; activeKinds.clear(); $("#q").value = "";
+      syncChips();
+      render();
+    });
+    return;
+  }
+
+  let html = "";
+  let year = null;
+  rows.forEach((n, i) => {
+    const y = n.date ? n.date.slice(0, 4) : "미분류";
+    if (y !== year) { year = y; html += `<div class="year">${y}</div>`; }
+    html += entryHTML(n, i);
+  });
+  listEl.innerHTML = html;
+}
+
+function entryHTML(n, i) {
+  const k = KINDS[n.kind] || { label: n.kind, color: "var(--ink-faint)" };
+  const md = n.date ? `${n.date.slice(5, 7)}.${n.date.slice(8, 10)}` : "—";
+  const dow = n.date ? DOW[new Date(n.date + "T00:00:00").getDay()] : "";
+  const tags = (n.tags || []).map(t => `<li>${esc(t)}</li>`).join("");
+  return `
+    <a class="entry" href="${esc(n.file)}" style="animation-delay:${Math.min(i * 26, 260)}ms">
+      <div class="date">
+        <span class="tick" style="background:${k.color}"></span>${md}
+        ${dow ? `<span class="dow">${dow}</span>` : ""}
+      </div>
+      <div class="body">
+        <h2>${esc(n.title)}</h2>
+        ${n.desc ? `<p class="desc">${esc(n.desc)}</p>` : ""}
+        ${tags ? `<ul class="tags">${tags}</ul>` : ""}
+      </div>
+      <div class="kind" style="color:${k.color}">${k.label}</div>
+    </a>`;
+}
+
+function latest() { return NOTES.map(n => n.date).filter(Boolean).sort().pop(); }
+function fmtFull(s) { return `${s.slice(0, 4)}.${s.slice(5, 7)}.${s.slice(8, 10)}`; }
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+$("#q").addEventListener("input", e => { query = e.target.value.trim().toLowerCase(); render(); });
+document.addEventListener("keydown", e => {
+  if (e.key === "/" && document.activeElement !== $("#q")) { e.preventDefault(); $("#q").focus(); }
+  if (e.key === "Escape" && document.activeElement === $("#q")) { $("#q").value = ""; query = ""; render(); $("#q").blur(); }
+});
+
+buildChips();
+syncChips();
+render();
+</script>
+</body>
+</html>
