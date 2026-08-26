@@ -23,7 +23,12 @@ jobs:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
+      # ponytail: actions 는 v4 고정. 2026-08-26 실행 로그에서 Node 20 deprecated 경고가 떴고
+      # 러너가 Node 24 로 강제 실행 중이다. 지금은 성공하니 둔다 — 실제로 깨지거나
+      # v5 가 안정되면 checkout/upload-pages-artifact/deploy-pages 를 한꺼번에 올린다.
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # github.event.before 와 diff 하려면 이력이 필요하다
 
       # 표준 라이브러리만 쓴다 — ubuntu 기본 python3 로 충분하다
       - run: python3 scripts/build-notes-index.py --selftest
@@ -35,3 +40,15 @@ jobs:
 
       - id: deploy
         uses: actions/deploy-pages@v4
+
+      # ponytail: push 로 새로 추가된(A) 노트만 보낸다. 브랜치 첫 푸시나 force push 면
+      # event.before 가 0000... 이라 건너뛴다 — 그때는 로컬에서 slack.py 를 직접 돌린다.
+      - name: 새 노트 슬랙 전송
+        if: github.event_name == 'push' && github.event.before != '0000000000000000000000000000000000000000'
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
+        run: |
+          # -z/-0: 한글 파일명을 git 이 "\353\250\270..." 로 이스케이프해 내보내는 걸 막는다
+          git diff -z --name-only --diff-filter=A ${{ github.event.before }} ${{ github.sha }} \
+            -- 'notes/morning-routine/*.html' 'notes/invest/*.html' | xargs -0 -r python3 scripts/slack.py
