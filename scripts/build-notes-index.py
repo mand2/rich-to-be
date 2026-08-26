@@ -28,9 +28,12 @@ RE_TAG_SPAN = re.compile(r'<span class="tag">.*?</span>', re.S)
 RE_META = re.compile(r'<div class="meta">(.*?)</div>', re.S)
 
 
+RE_BLOCK = re.compile(r"</?(?:p|div|br|li|ul|ol|h[1-6]|section|blockquote|tr|td|th)\b[^>]*>", re.I)
+
+
 def text(fragment):
-    """태그를 걷어내고 공백을 접는다."""
-    return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]*>", " ", fragment))).strip()
+    """태그를 걷어내고 공백을 접는다. 블록 태그만 공백으로 바꾼다 — <b>구조</b>를 가 '구조 를' 이 되면 안 된다."""
+    return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]*>", "", RE_BLOCK.sub(" ", fragment)))).strip()
 
 
 def clip(s, limit=DESC_MAX):
@@ -87,6 +90,8 @@ def write_index(entries):
 
 def selftest():
     assert text("<b>가</b> 나  <a href='#'>다</a>") == "가 나 다"
+    assert text("<b>구조</b>를 짰다") == "구조를 짰다"
+    assert text("<p>가</p><p>나</p>") == "가 나"
     assert clip("abcdef", 4) == "abcde…" or clip("abcdef", 4).endswith("…")
     assert describe('<div class="conclusion"><span class="tag">한 줄 결론</span>수급 때문이다.</div>') == "수급 때문이다."
     assert describe('<section class="top3"><ol><li><b>가</b> — x</li><li><b>나</b></li></ol></section>') == "가 · 나"

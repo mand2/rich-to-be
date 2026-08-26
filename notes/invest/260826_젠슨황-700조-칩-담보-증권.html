@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>젠슨황의 700조 칩 담보 증권 — 구조는 MBS와 같고, 담보만 다르다</title>
+<style>
+:root {
+  --accent: #1d4ed8;
+  --ink: #16181d;
+  --muted: #6b7280;
+  --line: #e5e3de;
+  --wash: #f7f6f3;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: #fff; }
+.note {
+  max-width: 720px; margin: 0 auto; padding: 32px 28px;
+  font-family: Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  color: var(--ink); font-size: 15px; line-height: 1.72;
+  word-break: keep-all;
+}
+
+header { border-bottom: 2px solid var(--ink); padding-bottom: 18px; margin-bottom: 26px; }
+.label { font-size: 11px; letter-spacing: .14em; color: var(--accent); font-weight: 700; }
+h1 { font-size: 27px; line-height: 1.3; margin: 10px 0 12px; letter-spacing: -.02em; }
+.meta { font-size: 12.5px; color: var(--muted); }
+.meta a { color: var(--muted); }
+
+.conclusion {
+  border-left: 3px solid var(--accent); background: var(--wash);
+  padding: 16px 18px; margin-bottom: 34px; font-size: 15.5px;
+}
+.tag {
+  display: block; font-size: 11px; font-weight: 700; letter-spacing: .1em;
+  color: var(--accent); margin-bottom: 6px;
+}
+
+section { margin-bottom: 34px; }
+h2 { font-size: 19px; margin: 0 0 4px; letter-spacing: -.01em; }
+.num {
+  display: inline-block; min-width: 26px; height: 22px; margin-right: 8px;
+  background: var(--accent); color: #fff; font-size: 12px; font-weight: 700;
+  text-align: center; line-height: 22px; border-radius: 3px;
+}
+.sub { font-size: 13px; color: var(--muted); margin: 0 0 16px; }
+time { font-variant-numeric: tabular-nums; font-size: 12px; color: var(--accent); font-weight: 600; }
+
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.card { border: 1px solid var(--line); border-radius: 5px; padding: 14px 16px; }
+.card h4 { margin: 0 0 8px; font-size: 14.5px; }
+.card p { margin: 0; font-size: 14px; }
+
+.term { border-top: 1px solid var(--line); padding: 13px 0; }
+.term h4 { margin: 0 0 5px; font-size: 15px; }
+.term h4 em { font-style: normal; font-weight: 400; font-size: 12.5px; color: var(--muted); }
+.term p { margin: 0; }
+.aside {
+  margin-top: 7px !important; background: var(--wash); padding: 8px 11px;
+  border-radius: 4px; font-size: 13.5px; color: #3f4450;
+}
+.aside b { color: var(--accent); font-weight: 700; }
+
+.step { display: flex; gap: 14px; padding: 15px 0; border-top: 1px solid var(--line); }
+.marker {
+  flex: 0 0 26px; height: 26px; border-radius: 50%; background: var(--ink); color: #fff;
+  font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+}
+.step .body { flex: 1; }
+.step h4 { margin: 0 0 6px; font-size: 15px; display: flex; gap: 8px; align-items: baseline; }
+.step p { margin: 0; }
+blockquote {
+  margin: 9px 0 0; padding-left: 12px; border-left: 2px solid var(--line);
+  color: #3f4450; font-size: 14px;
+}
+
+.insight { padding: 12px 0; border-top: 1px solid var(--line); }
+.insight h4 { margin: 0 0 4px; font-size: 15px; }
+.insight p { margin: 0; font-size: 14.5px; }
+
+.watch { margin: 0; padding-left: 18px; }
+.watch li { margin-bottom: 9px; }
+
+table { width: 100%; border-collapse: collapse; margin: 12px 0 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+th { background: var(--wash); font-size: 13px; }
+
+footer {
+  margin-top: 38px; padding-top: 14px; border-top: 1px solid var(--line);
+  font-size: 12px; color: var(--muted);
+}
+
+@page { size: A4; margin: 14mm; }
+.card, .term, .step, .insight, .conclusion, blockquote, table { break-inside: avoid; page-break-inside: avoid; }
+h1, h2, h3, h4 { break-after: avoid; page-break-after: avoid; }
+@media print {
+  .note { max-width: none; padding: 0; font-size: 10.5pt; }
+  section { margin-bottom: 22px; }
+  a { text-decoration: underline; }
+}
+</style>
+</head>
+<body>
+<div class="note">
+
+  <header>
+    <div class="label">STUDY NOTE · AI 금융</div>
+    <h1>젠슨황의 700조 칩 담보 증권 — 구조는 MBS와 같고, 담보만 다르다</h1>
+    <div class="meta">언더스탠딩 : 세상의 모든 지식 · 백종훈 기자 · 39분 02초 · <a href="https://www.youtube.com/watch?v=G1kGMnCfxVQ">원본 영상</a></div>
+  </header>
+
+  <div class="conclusion">
+    <span class="tag">한 줄 결론</span>
+    엔비디아는 이제 칩 살 돈을 직접 빌려주는 대신, 월가 여섯 곳과 함께 <b>칩을 담보로 증권을 만들어 연기금·보험사 돈을 끌어오는 구조</b>를 짰다. 뼈대는 주택저당증권(MBS)과 똑같은데, 담보가 집이 아니라 수명 3~5년짜리 칩이라는 점이 다르다.
+  </div>
+
+  <section>
+    <h2><span class="num">01</span> 출발점 — 직접 빌려주기에서 '구조를 만들고 보증하기'로</h2>
+    <p class="sub">영상의 프레임 — 엔비디아를 현대차로 놓고 보면 무엇이 바뀌었나 <time>0:16–6:55</time></p>
+    <div class="split">
+      <div class="card">
+        <h4>종전 방식</h4>
+        <p>현대차가 직접 돈을 빌려줘 차를 사게 한다. 엔비디아도 칩을 팔면서 지분 투자를 하거나 보증을 서 줬다. 오픈AI의 오하이오 데이터센터에는 150조짜리 보증을 서 주기도 했다.</p>
+      </div>
+      <div class="card">
+        <h4>이번 방식</h4>
+        <p>현대차가 롯데렌터카 같은 회사에 투자하면서 "너희 돈으로 자동차를 좀 빌려주라"고 하는 것. 자금 지원 구조를 만들고, 그 구조에 보증을 서는 쪽으로 틀었다.</p>
+      </div>
+    </div>
+    <p>월스트리트저널 11일자 기사로 알려졌다. 월가 금융회사와 엔비디아가 힘을 합쳐 '이색적인(exotic) 자금 조달 라인'을 꾸렸다는 내용이다. 참여사는 블랙스톤·블랙록·KKR·브룩필드·골드만삭스·아폴로 여섯 곳이고, 목표 금액은 700조원이다. 아직 모아진 돈이 아니라 목표치다.</p>
+    <blockquote>"직접 뭔가 지원을 하는 거에서 어떤 자금 지원 구조를 만들고 그 구조에 보증을 해 주는 쪽으로 약간 틀어서 구조를 짠 거라고 할 수 있습니다."</blockquote>
+  </section>
+
+  <section>
+    <h2><span class="num">02</span> 용어 사전</h2>
+    <p class="sub">영상에 등장한 개념을 쉬운 말로</p>
+
+    <div class="term">
+      <h4>특수 목적 회사 <em>SPC</em></h4>
+      <p>월가 금융사 여섯 곳이 세운 페이퍼 컴퍼니. 엔비디아가 칩을 파는 상대가 데이터센터 업체가 아니라 바로 이곳이다. 칩의 <b>소유권</b>이 여기에 남는 것이 핵심이다.</p>
+      <p class="aside"><b>비유</b> — 에어비앤비로 치면 집을 사서 갖고 있는 집주인. 신생 클라우드 업체는 그 집을 월세로 빌려 에어비앤비를 돌리는 운영자, AI 서비스 업체는 방을 며칠 쓰는 여행객이다.</p>
+    </div>
+
+    <div class="term">
+      <h4>칩 담보 증권</h4>
+      <p>SPC가 데이터센터에 칩·메모리를 포함한 AI 시설 세트를 빌려주고 받는 사용료 — 아마 월 단위가 될 현금 흐름 — 를 묶어 만든 증권. 일정한 현금이 꾸준히 들어오는 상품을 선호하는 보험사·연기금에 판다.</p>
+      <p class="aside"><b>포인트</b> — 자산은 칩, 이자에 해당하는 것은 사용료다. 대출이 아니라 임대료가 현금 흐름의 원천이다.</p>
+    </div>
+
+    <div class="term">
+      <h4>주택저당증권 <em>MBS</em></h4>
+      <p>주택담보대출을 은행이 신탁 기관에 팔고 그것을 증권으로 만들어, 대출 이자를 증권 보유자에게 현금 흐름으로 주는 상품. 1970~80년대부터 운영됐고 페니메이·프레디맥이 보증(신용 보강)을 섰다.</p>
+      <p class="aside"><b>쉽게</b> — 은행에 장기간 잠겨 있을 대출을 잘게 쪼개 계속 돌리면서 신용을 창출하는 장치. 서브프라임 사태만 아니었으면 미국 금융계의 히트 상품이었다.</p>
+    </div>
+
+    <div class="term">
+      <h4>신용 보강 (손실 보증)</h4>
+      <p>엔비디아가 SPC와 월가 금융사에 서 주는 약정. 대여료를 못 받거나 화재 등으로 담보 가치가 훼손되면 <b>총 금융의 25%까지</b> 손실을 보전해 준다.</p>
+      <p class="aside"><b>포인트</b> — MBS에서 페니메이·프레디맥이 하던 역할을 이 구조에서는 칩을 파는 당사자가 맡는다.</p>
+    </div>
+
+    <div class="term">
+      <h4>하이퍼스케일러와 신생 클라우드 업체</h4>
+      <p>앞은 아마존·마이크로소프트·구글 같은 빅테크, 뒤는 코어위브·네비오스처럼 최근 미국 증시에 상장한 클라우드 업체다. 이 금융을 먼저 쓸 곳은 후자로 전망된다.</p>
+      <p class="aside"><b>읽는 법</b> — 매출은 양쪽 다 연 50% 이상 성장 중이다. 문제는 매출이 아니라 시설 투자 부담이다.</p>
+    </div>
+
+    <div class="term">
+      <h4>순환 금융</h4>
+      <p>칩을 파는 쪽이 칩 살 돈까지 마련해 주는 구조를 가리키는 비판. 엔비디아가 돈을 대 데이터센터가 엔비디아 칩을 사는 것에 이미 비판이 많았는데, 이번 구조도 방법만 옆으로 돌린 것 아니냐는 지적이 나온다.</p>
+      <p class="aside"><b>비유</b> — 화자의 표현으로는 자금을 "빙빙 돌리는" 것이다.</p>
+    </div>
+
+    <div class="term">
+      <h4>감가상각 기간 논쟁</h4>
+      <p>칩 수명을 몇 년으로 잡아 비용을 나눠 반영하느냐의 문제. 길게 잡으면 연간 비용이 적게 잡히고, 그만큼 지금 실적이 좋아 보인다.</p>
+      <p class="aside"><b>포인트</b> — 마이클 버리는 클라우드 기업들이 실제보다 기간을 길게 잡아 "사실상의 분식"을 하고 있다고 주장한다. 영상에서도 검증된 것이 아니라 주장이라고 분명히 선을 긋는다.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">03</span> 영상의 논리 흐름</h2>
+    <p class="sub">"왜 이렇게 복잡하게 하나"에서 "그래서 뭐가 걱정인가"까지 6단계</p>
+
+    <div class="step">
+      <div class="marker">1</div>
+      <div class="body">
+        <h4>칩 살 돈이 마르고 있다 <time>8:27–10:41</time></h4>
+        <p>신생 데이터센터 업체는 매출이 연 50% 넘게 크는데도 시설 투자 때문에 적자다. 그중 가장 큰 코어위브는 1분기에 1억 4천만 달러 영업손실을 냈다. 대출을 무한정 늘리기 어렵다. 빅테크도 사정이 넉넉하지 않다 — 순익의 대부분이 설비 투자로 나가 현금 흐름으로는 10% 수준만 남는다는 것이 화자의 설명이다. <em>(순익·FCF 절대 금액은 자막 수치 불명확)</em></p>
+        <blockquote>"버는 족족 현금이 그냥 거의 말할 정도로 어 설비 투자를 하고 있다는 거죠."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">2</div>
+      <div class="body">
+        <h4>그래서 돈을 밖에서 끌어온다 <time>4:28–7:29</time></h4>
+        <p>엔비디아가 SPC에 칩을 판다 → SPC가 데이터센터에 AI 시설을 빌려준다 → 데이터센터는 필요하면 오픈AI·앤스로픽 같은 곳에 다시 빌려준다(전대) → 사용료라는 현금 흐름을 증권으로 만들어 보험사·연기금에 판다. 엔비디아가 자기 돈을 쏘는 것보다 부담이 훨씬 덜하고, 새 투자자를 데려올 수 있다.</p>
+        <blockquote>"자기 돈 쏴 주는 거보다는 부담이 훨씬 덜한 거예요. 새로운 돈 어 투자자들을 모아올 수 있으니까."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">3</div>
+      <div class="body">
+        <h4>이 뼈대는 MBS와 같다 <time>13:10–15:33</time></h4>
+        <p>꾸준히 현금이 들어오는 자산을 증권으로 만들어 널리 유통시키고, 금융회사에 자금이 잠기지 않게 계속 돌린다. 전문가들 사이에서 "MBS와 비슷하다"는 말이 나오는 이유다. 여섯 곳 중에는 80년대에 MBS를 히트시킨 래리 핑크의 블랙록이 들어 있다.</p>
+        <blockquote>"MBS처럼 키우려는 거 아니냐."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">4</div>
+      <div class="body">
+        <h4>그런데 담보가 다르다 — 집이 아니라 칩이다 <time>15:35–18:29</time></h4>
+        <p>집은 엄청난 허리케인이 오지 않는 한 담보 가치가 유지되고, 최소한 땅이라도 남는다. 칩은 신제품이 나오면 구제품 가치가 떨어지고 서버 고열 탓에 수명도 짧다. 수명을 몇 년으로 보느냐에 따라 이 증권의 안전성이 통째로 달라진다.</p>
+        <blockquote>"부동산은 최소한 땅이라도 남지 이 사람아."</blockquote>
+        <table>
+          <tr><th>주체</th><th>칩 수명을 보는 눈</th></tr>
+          <tr><td>맥킨지 보고서</td><td>블랙웰 계열 B200 기준, 5년이면 담보 가치가 반 이하로 떨어진다</td></tr>
+          <tr><td>마이클 버리</td><td>AI 설비의 사실상 교체 주기는 3년</td></tr>
+          <tr><td>파이낸셜 타임스</td><td>기존 AI 시설 대출도 5년 정도 — 5년 이하로 잡으면 큰 무리 없다</td></tr>
+          <tr><td>젠슨 황</td><td>2020년 암페어 계열 칩이 6년 이상 현역, 경제적 수명은 10년까지 본다</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">5</div>
+      <div class="body">
+        <h4>남은 걱정 네 가지 <time>18:45–23:23</time>, <time>33:39–34:43</time></h4>
+        <p><b>금리</b> — 30년물 국채 금리가 5.2, 5.3을 넘었다는 뉴스가 연일 나온다. 장기 금리가 내려오지 않으면 연기금이 더 높은 수익률을 요구하고, 그만큼 사용료를 올려야 한다. <b>집중도</b> — MBS는 다수 주택 보유자에게 위험이 분산되지만, 여기서는 유명한 클라우드 업체 하나가 자빠지면 증권 전체가 흔들린다. <b>은폐</b> — 직접 대출을 받으면 신용 평가와 등급으로 드러날 재무 상태가, 이 구조에서는 덜 표가 난다는 우려. <b>중국</b> — 중국 AI가 성능은 비슷한데 값이 크게 싸지면 수요가 미국 밖으로 옮겨갈 수 있다. <em>(가격 배수는 자막 수치 불명확)</em></p>
+        <blockquote>"AI 산업이 클 때는 괜찮지만 정체되면 위험하지 않을까라는 얘기가 나오고요."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">6</div>
+      <div class="body">
+        <h4>다만 아직 아무 일도 일어나지 않았다 <time>23:23–24:21</time></h4>
+        <p>매출은 양쪽 다 연 50% 이상 성장 중이라 지금 문제가 되는 것은 아니다. 11일에 발표됐고 <b>1호 이용자가 아직 나오지 않았다.</b> 사용료도 공식 공개된 것이 아니고 구조도 바뀔 수 있다. 우려는 모두 가정이라는 단서가 영상 내내 붙는다.</p>
+        <blockquote>"1호 어 이용자가 아직 나오지 않은 상태이기 때문에 (…) 그런 점을 유의해서 앞으로 어떻게 운영해 가는지 (…) 살펴볼 필요가 있을 것 같습니다."</blockquote>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">04</span> 인사이트</h2>
+    <p class="sub">이 영상 밖에서도 쓰는 원칙으로</p>
+
+    <div class="insight">
+      <h4>① 파는 쪽이 살 돈까지 마련해 주면, 그 수요는 시장이 만든 것이 아니다</h4>
+      <p>수요가 진짜인지 아닌지는 매출 증가율이 아니라 "그 돈이 어디서 왔나"로 가른다. 공급자가 자금줄까지 설계하기 시작했다면, 그 산업의 성장률에는 자기가 만든 몫이 섞여 있다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>② 금융 구조는 베낄 수 있어도 담보의 물성은 베낄 수 없다</h4>
+      <p>증권화라는 뼈대는 어디에나 붙일 수 있다. 하지만 상품의 안전성을 결정하는 것은 구조가 아니라 담보가 얼마나 오래 버티느냐다. 검증된 구조를 새 자산에 옮길 때 물어야 할 것은 "구조가 되나"가 아니라 "이 담보가 그 구조를 견디나"다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>③ 위험은 분산에서 줄고 집중에서 터진다</h4>
+      <p>수많은 가계가 조금씩 지는 위험과, 소수 업체가 통째로 지는 위험은 이름만 같은 다른 위험이다. 같은 증권화라도 채무자 수가 몇이냐를 먼저 세어 보면 상품의 성격이 절반은 보인다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>④ 회계의 가정은 숫자가 아니라 판단이다</h4>
+      <p>수명을 3년으로 보느냐 10년으로 보느냐에 따라 같은 회사의 같은 해 실적이 달라진다. 실적을 읽을 때 결과 숫자보다 그 숫자를 만든 가정 — 상각 기간, 내용연수, 할인율 — 을 먼저 확인해야 하는 이유다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>⑤ 판을 짜는 힘은 번 돈이 아니라 안 나눠준 돈에서 나온다</h4>
+      <p>영상은 삼성·하이닉스와 엔비디아를 이 기준으로 갈라 본다. 잉여 현금을 주주에게 돌려주기로 약속한 쪽은 이런 보증을 설 여력이 없고, 쟁여둔 쪽은 생태계 전체의 자금 구조를 설계한다. 주주 환원과 판을 짜는 힘은 같은 현금을 두고 다툰다.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">05</span> 앞으로 지켜볼 것</h2>
+    <ul class="watch">
+      <li><b>1호 이용자와 실제 사용료</b> — 신생 업체는 시설 총가액의 약 9%, 빅테크가 들어온다면 6~7% 선이라는 업계 전망이 나와 있다. 코어위브가 이번 달 26억 달러를 빌릴 때 금리가 9%쯤이었으니, 그보다 유리한지가 이 구조를 쓸 이유가 된다.</li>
+      <li><b>미국 30년물 국채 금리</b> — 5.2, 5.3을 넘어선 상태. 장기 금리가 내려오지 않으면 사용료 인상 요구로 이어진다는 것이 영상이 인용한 진단이다.</li>
+      <li><b>칩 세대 교체 속도</b> — 블랙웰 다음 루빈, 내후년 파인만으로 이어지는 2년 주기가 지금은 구제품 가치를 받쳐 주고 있다. 예상 못 한 시점에 신제품이 나오거나 엔비디아 독점이 깨지면 담보 가치가 급락할 수 있다.</li>
+      <li><b>중국 AI 모델의 성능과 가격</b> — 가중치를 공개하는 방식이라 데이터센터로 바로 내려받는다. 성능이 비슷해지고 값이 크게 싸지는 순간이 분기점으로 지목된다.</li>
+      <li><b>클라우드 업체의 연체</b> — 이 구조가 서브프라임과 같아지는 지점은 트랜치를 나눠 파생 상품을 만든 뒤 연체가 시작되는 때라고 영상은 짚는다.</li>
+      <li><b>메모리 업체로의 확산</b> — 엔비디아가 삼성·하이닉스에도 같은 역할을 요구할 수 있다는 관측이 영상에서 나온다.</li>
+    </ul>
+  </section>
+
+  <footer>
+    유튜브 자동 생성 자막 전문을 바탕으로 정리 (미측정 기본값 2.2초 보정). 타임스탬프는 자막 기준이라 실제 영상과 다소 어긋날 수 있다. 발언자와 인용된 전문가들의 견해이며 투자 판단의 근거가 아닌 학습 자료입니다.
+  </footer>
+</div>
+</body>
+</html>
