@@ -11,10 +11,11 @@
 출력 (기본 .work/<video_id>/):
     transcript.txt   전문 — glossary / outliner 에이전트용
     part-01.txt ...  구간별 자막, 앞뒤 --overlap 초 겹침 — section-note 에이전트용
-    meta.json        제목·저자·길이·구간수·자막종류
+    meta.json        제목·저자·업로드일(KST)·길이·구간수·자막종류
 """
 
 import argparse, json, math, re, sys, urllib.request
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 CHUNK = 15 * 60          # 격자 폴백의 구간 길이(초). --segments 가 없을 때만 쓰인다
@@ -126,6 +127,31 @@ def oembed(vid):
         return vid, ""          # 제목을 못 얻어도 자막 처리는 계속한다
 
 
+RE_UPLOAD = re.compile(r'"uploadDate":"([^"]+)"')
+KST = timezone(timedelta(hours=9))
+
+
+def to_kst_date(iso):
+    """업로드 시각(오프셋 포함)을 KST 날짜로. 시각은 버린다.
+
+    ponytail: 채널이 대부분 한국이라 KST 로 고정한다. 미국 채널의 날짜가
+    하루 밀려 보이면 그때 기준 시간대를 인자로 뺄 것."""
+    return datetime.fromisoformat(iso.replace("Z", "+00:00")).astimezone(KST).strftime("%Y-%m-%d")
+
+
+def upload_date(vid):
+    """watch 페이지에서 업로드일을 긁는다. oembed 는 날짜를 안 준다."""
+    req = urllib.request.Request(
+        f"https://www.youtube.com/watch?v={vid}",
+        headers={"User-Agent": "Mozilla/5.0", "Accept-Language": "ko"})
+    try:
+        with urllib.request.urlopen(req, timeout=15) as r:
+            m = RE_UPLOAD.search(r.read().decode("utf-8", "replace"))
+        return to_kst_date(m.group(1)) if m else ""
+    except Exception:
+        return ""               # 날짜를 못 얻어도 자막 처리는 계속한다
+
+
 def slug(title):
     s = re.sub(r"[^\w가-힣ㄱ-ㅎㅏ-ㅣ\s-]", "", title).strip()
     return re.sub(r"\s+", "-", s)[:60] or "untitled"
@@ -216,6 +242,7 @@ def main():
 
     meta = {
         "video_id": vid, "title": title, "author": author,
+        "upload_date": upload_date(vid),
         "url": f"https://www.youtube.com/watch?v={vid}",
         "duration": hhmmss(lines[-1][0]),
         "parts": len(parts),
@@ -241,6 +268,9 @@ def main():
 
 
 def selftest():
+    assert to_kst_date("2026-08-21T23:00:02-07:00") == "2026-08-22"   # PT 밤 → KST 다음 날
+    assert to_kst_date("2026-08-26T00:30:00Z") == "2026-08-26"
+    assert RE_UPLOAD.search('x"uploadDate":"2026-01-02T03:04:05Z",y').group(1).startswith("2026-01-02")
     assert video_id("https://www.youtube.com/watch?v=aircAruvnKk") == "aircAruvnKk"
     assert video_id("https://youtu.be/aircAruvnKk?t=30") == "aircAruvnKk"
     assert video_id("aircAruvnKk") == "aircAruvnKk"

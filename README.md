@@ -5,7 +5,7 @@
 - **`news-briefing-digest`** — 꼭지가 여럿인 뉴스 브리핑(조간·모닝루틴·마켓 브리핑)을 아침에 훑는 다이제스트로
 - **`youtube-study-note`** — 단일 주제 해설·강의를 다시 안 봐도 되는 학습 자료로
 
-산출물은 `notes/<폴더>/{yyMMdd}_<slug>.html` 이다 (날짜는 영상 방송일). 폴더는 셋뿐이다 — 모닝루틴 `notes/morning-routine/`, 투자 노트 `notes/invest/`, 개인 공부용 `notes/self-study/`. 브라우저에서 인쇄(Ctrl/Cmd+P) → PDF 로 저장하면 A4 한 문서가 된다.
+산출물은 `notes/<폴더>/{yyMMdd}_<slug>.html` 이다 (날짜는 노트를 만든 날, 영상 방송일이 아니다). 폴더는 셋뿐이다 — 모닝루틴 `notes/morning-routine/`, 투자 노트 `notes/invest/`, 개인 공부용 `notes/self-study/`. 브라우저에서 인쇄(Ctrl/Cmd+P) → PDF 로 저장하면 A4 한 문서가 된다.
 
 ## 설치
 

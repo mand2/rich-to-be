@@ -1,6 +1,6 @@
 # rich-to-be
 
-유튜브 영상을 **한 장짜리 HTML 문서**로 정리하는 Claude Code 스킬 두 개. 리포의 산출물은 `notes/<폴더>/{yyMMdd}_<slug>.html` 이다 (날짜는 영상 방송일). **폴더는 모닝루틴 `notes/morning-routine/` · 투자 노트 `notes/invest/` · 개인 공부용 `notes/self-study/` 셋뿐이다.** 스터디 노트 스킬은 투자 노트인지 개인 공부용인지 사용자에게 한 번 묻는다.
+유튜브 영상을 **한 장짜리 HTML 문서**로 정리하는 Claude Code 스킬 두 개. 리포의 산출물은 `notes/<폴더>/{yyMMdd}_<slug>.html` 이다 (날짜는 노트를 만든 날, 영상 방송일이 아니다). **폴더는 모닝루틴 `notes/morning-routine/` · 투자 노트 `notes/invest/` · 개인 공부용 `notes/self-study/` 셋뿐이다.** 스터디 노트 스킬은 투자 노트인지 개인 공부용인지 사용자에게 한 번 묻는다.
 
 | 스킬 | 대상 | 만드는 것 |
 |---|---|---|
