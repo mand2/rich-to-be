@@ -17,5 +17,20 @@
       "Write(notes/**)",
       "Edit(notes/**)"
     ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "scripts/commit-note.sh",
+            "timeout": 60,
+            "statusMessage": "노트 커밋·푸시"
+          }
+        ]
+      }
+    ]
   }
 }

@@ -36,6 +36,10 @@ Python 3.11+ 면 된다. `.venv` 경로는 고정이다 — 스킬이 `.venv/bin
 .venv/bin/python scripts/slack.py <노트.html>           # 슬랙 채널에 링크 보내기 (.env 는 .env.example 참고)
 ```
 
+채널엔 `<파일명> 정리` 만 뜨고 Pages 링크는 그 메시지의 **스레드 답글**로 들어간다 — 채널에 링크 프리뷰가 쌓이지 않는다. 여러 개를 한 번에 보내면 전부 첫 메시지의 스레드로 모인다.
+
+슬랙은 **평소엔 손으로 안 돌린다** — 푸시하면 CI 가 보낸다(아래). 직접 돌리는 건 CI 가 건너뛴 경우(브랜치 첫 푸시·force push)뿐이다.
+
 ## 발행
 
 `notes/` 는 GitHub Pages 로 나간다. 노트를 추가·삭제했으면 목록을 손으로 고치지 말고 스크립트를 돌린다.
@@ -45,6 +49,15 @@ Python 3.11+ 면 된다. `.venv` 경로는 고정이다 — 스킬이 `.venv/bin
 ```
 
 main 에 푸시하면 GitHub Actions(`.github/workflows/pages.yml`)가 `notes/` 만 아티팩트로 올려 발행한다. `scripts/` 나 `CLAUDE.md` 는 사이트에 올라가지 않는다.
+
+발행이 끝나면 같은 워크플로의 `slack` 잡이 **그 푸시에서 새로 추가된**(`--diff-filter=A`) `morning-routine` · `invest` 노트만 골라 `slack.py` 로 링크를 보낸다. self-study 는 안 보낸다. 발행 잡과 분리돼 있어서 슬랙만 `gh run rerun --failed` 로 다시 돌릴 수 있다.
+
+리포 시크릿 두 개가 필요하다 (Settings → Secrets and variables → Actions). 로컬 `.env` 와 같은 값이고, 봇을 채널에 초대해 둬야 한다.
+
+| 시크릿 | 값 |
+|---|---|
+| `SLACK_BOT_TOKEN` | `xoxb-...` — scope `chat:write` |
+| `SLACK_CHANNEL` | `C0XXXXXXX` |
 
 ## 한계
 

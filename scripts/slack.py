@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""발행된 노트 링크를 슬랙 채널에 올린다. 파일당 "<파일명> 정리 >>> <링크>" 한 줄. 외부 의존성 0 (urllib 만 쓴다).
+"""발행된 노트 링크를 슬랙 채널에 올린다. 외부 의존성 0 (urllib 만 쓴다).
+
+채널엔 "<파일명> 정리" 만 뜨고 Pages 링크는 그 메시지의 스레드 답글로 들어간다 — 채널에 링크 프리뷰가 쌓이지 않는다.
+한 번에 여러 개를 보내면 첫 메시지가 스레드 부모가 되고 나머지는 전부 그 스레드에 달린다.
 
 리포 루트 .env 에 두 줄 (환경변수로 이미 있으면 그쪽이 이긴다). .env.example 참고:
 
@@ -58,10 +61,17 @@ def note_url(path, base=BASE_URL):
     return base.rstrip("/") + "/" + "/".join(urllib.parse.quote(p) for p in rel)
 
 
-def post(path, token, channel, base=BASE_URL):
+def post(path, token, channel, base=BASE_URL, thread_ts=None):
+    """제목을 올리고 링크는 그 스레드 답글로 넣는다. thread_ts 가 있으면 그 스레드에 이어 단다.
+
+    반환은 (링크, 스레드 부모 ts) — 다음 파일에 그대로 넘기면 같은 스레드로 모인다.
+    """
     url = note_url(path, base)
-    call("chat.postMessage", token, channel=channel, text=f"{Path(path).stem} 정리 >>> {url}")
-    return url
+    body = call("chat.postMessage", token, channel=channel, text=f"{Path(path).stem} 정리",
+                **({"thread_ts": thread_ts} if thread_ts else {}))
+    root = thread_ts or body["ts"]
+    call("chat.postMessage", token, channel=channel, text=url, thread_ts=root)
+    return url, root
 
 
 def selftest():
@@ -72,6 +82,22 @@ def selftest():
     with tempfile.NamedTemporaryFile("w", suffix=".env", delete=False) as f:
         f.write('# 주석\nSLACK_BOT_TOKEN="xoxb-1"\n\nSLACK_CHANNEL = C0X \nBROKEN\n')
     assert dotenv(Path(f.name)) == {"SLACK_BOT_TOKEN": "xoxb-1", "SLACK_CHANNEL": "C0X"}
+
+    global call
+    real, sent = call, []
+    call = lambda m, tok, **kw: (sent.append(kw), {"ok": True, "ts": f"t{len(sent)}"})[1]
+    try:
+        _, root = post("notes/invest/a.html", "x", "C0X", "http://e.com")
+        assert root == "t1", root
+        _, root2 = post("notes/invest/b.html", "x", "C0X", "http://e.com", root)
+        assert root2 == root
+    finally:
+        call = real
+    # 제목은 채널(첫 건)·같은 스레드(둘째 건), 링크는 늘 스레드 답글
+    assert [(s["text"], s.get("thread_ts")) for s in sent] == [
+        ("a 정리", None), ("http://e.com/invest/a.html", "t1"),
+        ("b 정리", "t1"), ("http://e.com/invest/b.html", "t1"),
+    ], sent
     print("ok")
 
 
@@ -89,8 +115,10 @@ def main():
     a.channel = a.channel or env.get("SLACK_CHANNEL")
     if not (a.paths and token and a.channel):
         sys.exit(".env 의 SLACK_BOT_TOKEN / SLACK_CHANNEL(--channel) 과 파일 경로가 있어야 한다")
+    ts = None
     for p in a.paths:
-        print(f"{p} -> {post(p, token, a.channel, a.base_url)}")
+        url, ts = post(p, token, a.channel, a.base_url, ts)   # 첫 메시지가 스레드 부모
+        print(f"{p} -> {url}")
 
 
 if __name__ == "__main__":
