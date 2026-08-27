@@ -10,10 +10,10 @@ cd "$root" || exit 0
 files=$(git -c core.quotePath=false status --porcelain -uall -- 'notes/*/*.html')
 [ -z "$files" ] && exit 0
 
-# 목록이 노트와 어긋나면 발행이 깨지므로 index 를 다시 만들어 같은 커밋에 넣는다
-.venv/bin/python scripts/build-notes-index.py >/dev/null
-git add -A notes/ || exit 0
-git diff --cached --quiet -- notes/ && exit 0
+# 노트 파일만 담는다. notes/index.html 은 발행 때 Actions 가 채우므로 커밋하지 않는다
+# — 로컬에서 build-notes-index.py 를 돌려 index 가 더러워져도 여기서 딸려 들어가지 않는다.
+git add -A -- 'notes/*/*.html' || exit 0
+git diff --cached --quiet -- 'notes/*/*.html' && exit 0
 
 n=$(printf '%s\n' "$files" | wc -l | tr -d ' ')
 one=$(printf '%s\n' "$files" | head -1 | cut -c4-)
@@ -23,5 +23,5 @@ else
   msg="notes: ${n}건 갱신"
 fi
 
-git commit -q -m "$msg" -- notes/ || exit 0
+git commit -q -m "$msg" -- 'notes/*/*.html' || exit 0
 git push -q || echo "push 실패: 커밋은 됐지만 푸시 안 됨"

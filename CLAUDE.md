@@ -44,7 +44,7 @@ transcript.py --outline-only (자동자막이면 2.2초 자동 보정) → 본�
 
 **GitHub Actions 가 `notes/` 폴더만 아티팩트로 올려 발행한다** (`.github/workflows/pages.yml`). Pages Source 는 GitHub Actions 이고 Jekyll 은 쓰지 않는다.
 
-**목록을 손으로 적지 마라.** 노트를 추가·삭제했으면 `scripts/build-notes-index.py` 를 돌리고 결과를 커밋한다. 무엇을 어디서 파싱하는지는 그 스크립트가, 태그를 적는 `META` 는 `notes/index.html` 이 각각 문서다. 두 스킬 템플릿의 `conclusion` · `top3` · `meta` class 를 바꾸면 스크립트도 같이 고친다 — 못 찾아도 빌드는 안 깨지고 설명만 빈다.
+**목록은 커밋하지 않는다.** `notes/index.html` 의 `notes-index` 블록은 비워 둔 채로 두고, 발행할 때 Actions 가 `scripts/build-notes-index.py` 로 채운다. 로컬에서 미리 보고 싶으면 직접 돌리되 그 결과는 커밋하지 마라 — 커밋 훅은 `notes/*/*.html` 만 담는다. 무엇을 어디서 파싱하는지는 그 스크립트가, 태그를 적는 `META` 는 `notes/index.html` 이 각각 문서다. 두 스킬 템플릿의 `conclusion` · `top3` · `meta` class 를 바꾸면 스크립트도 같이 고친다 — 못 찾아도 빌드는 안 깨지고 설명만 빈다.
 
 ## 절대 지키는 것
 
