@@ -28,7 +28,7 @@ Python은 **반드시 `.venv/bin/python`** 을 쓴다. `youtube-transcript-api` 
 | `transcript.py` | 자막 받기. `.work/<video_id>/` 에 `transcript.txt` 와 `meta.json` 을 만든다 |
 | `caption-lag.md` | 자동자막 지연 보정 절차 (기본 2.2초 자동 적용, 어긋날 때만 `--probe` → `--lag`) |
 | `slack.py` | 발행된 노트 링크를 슬랙 채널에 전송. `.env` 에 `SLACK_BOT_TOKEN`(chat:write) + `SLACK_CHANNEL`, 봇을 채널에 초대해 둘 것. 채널엔 "<파일명> 정리" 만 올리고 **Pages 링크는 그 메시지의 스레드 답글**로 넣는다 (여러 개면 전부 첫 메시지 스레드로). **평소엔 손으로 안 돌린다** — 푸시하면 `pages.yml` 의 `slack` 잡이 새로 추가된 morning-routine · invest 노트만 골라 호출하고, 베이스 URL 을 `NOTES_BASE_URL` 로 넘긴다. 리포 시크릿에 같은 두 값이 있어야 한다 |
-| `build-notes-index.py` | `notes/index.html` 의 목록 블록을 채운다. 노트의 `<h1>` 과 한 줄 결론·헤드라인을 파싱한다 |
+| `build-notes-index.py` | 목록 데이터 `notes/notes.js` 를 만든다 (`index.html` 이 `<script src>` 로 읽는다). 노트의 `<h1>` 과 한 줄 결론·헤드라인을 파싱한다 |
 
 ## 파이프라인
 
@@ -44,7 +44,7 @@ transcript.py --outline-only (자동자막이면 2.2초 자동 보정) → 본�
 
 **GitHub Actions 가 `notes/` 폴더만 아티팩트로 올려 발행한다** (`.github/workflows/pages.yml`). Pages Source 는 GitHub Actions 이고 Jekyll 은 쓰지 않는다.
 
-**목록은 커밋하지 않는다.** `notes/index.html` 의 `notes-index` 블록은 비워 둔 채로 두고, 발행할 때 Actions 가 `scripts/build-notes-index.py` 로 채운다. 로컬에서 미리 보고 싶으면 직접 돌리되 그 결과는 커밋하지 마라 — 커밋 훅은 `notes/*/*.html` 만 담는다. 무엇을 어디서 파싱하는지는 그 스크립트가, 태그를 적는 `META` 는 `notes/index.html` 이 각각 문서다. 두 스킬 템플릿의 `conclusion` · `top3` · `meta` class 를 바꾸면 스크립트도 같이 고친다 — 못 찾아도 빌드는 안 깨지고 설명만 빈다.
+**목록은 커밋하지 않는다.** 생성물은 `notes/notes.js` 하나뿐이고 gitignore 대상이다 — 발행할 때 Actions 가 `scripts/build-notes-index.py` 로 만든다. `index.html` 은 손으로 고치는 파일이라 노트를 써도 안 바뀐다. 로컬에서 목록을 보고 싶으면 스크립트를 직접 돌려라. 무엇을 어디서 파싱하는지는 그 스크립트가, 태그를 적는 `META` 는 `notes/index.html` 이 각각 문서다. 두 스킬 템플릿의 `conclusion` · `top3` · `meta` class 를 바꾸면 스크립트도 같이 고친다 — 못 찾아도 빌드는 안 깨지고 설명만 빈다.
 
 ## 절대 지키는 것
 

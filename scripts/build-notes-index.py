@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""notes/ 안의 노트 HTML 을 훑어 notes/index.html 의 목록 블록을 채운다.
+"""notes/ 안의 노트 HTML 을 훑어 notes/notes.js 를 만든다. index.html 이 그걸 읽는다.
 
 GitHub Pages 워크플로(.github/workflows/pages.yml)가 빌드 때 돌린다.
-손으로 돌려도 된다 — 결과를 커밋하면 로컬에서 열어도 목록이 보인다.
+손으로 돌려도 된다 — 로컬에서 index.html 을 열어 보고 싶을 때. 결과는 커밋하지 않는다 (.gitignore).
 
     scripts/build-notes-index.py
     scripts/build-notes-index.py --selftest
@@ -14,8 +14,6 @@ import sys
 from pathlib import Path
 
 NOTES = Path(__file__).resolve().parent.parent / "notes"
-START = "<!-- notes-index:start"
-END = "<!-- notes-index:end -->"
 DESC_MAX = 140
 
 # ponytail: 두 스킬의 HTML 템플릿 class 이름에 기댄다 (conclusion / top3 / meta).
@@ -77,15 +75,14 @@ def collect():
 
 
 def write_index(entries):
-    index = NOTES / "index.html"
-    src = index.read_text(encoding="utf-8")
-    a, b = src.index(START), src.index(END)
-    block = '%s — scripts/build-notes-index.py 가 채운다. 손으로 고치지 마세요. -->\n<script type="application/json" id="note-files">\n%s\n</script>\n' % (
-        START,
-        json.dumps(entries, ensure_ascii=False, indent=1),
+    """index.html 은 건드리지 않는다 — 생성물은 이 파일 하나뿐이라 커밋에서 통째로 빠진다."""
+    out = NOTES / "notes.js"
+    out.write_text(
+        "// scripts/build-notes-index.py 가 만든다. 손으로 고치지 마세요.\nconst NOTE_FILES = %s;\n"
+        % json.dumps(entries, ensure_ascii=False, indent=1),
+        encoding="utf-8",
     )
-    index.write_text(src[:a] + block + src[b:], encoding="utf-8")
-    return index
+    return out
 
 
 def selftest():

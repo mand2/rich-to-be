@@ -7,3 +7,5 @@ __pycache__/
 *.pem
 *.key
 notes/self-study/**
+notes/notes.js
+

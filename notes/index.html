@@ -247,20 +247,15 @@ body{
 
 </div>
 
-<!-- notes-index:start — 목록은 발행할 때 Actions 가 scripts/build-notes-index.py 로 채운다.
-     그래서 여기는 항상 비어 있다 — 커밋하지 않는다. 로컬에서 보고 싶으면 스크립트를 직접 돌려라. -->
-<script type="application/json" id="note-files">
-[]
-</script>
-<!-- notes-index:end -->
+<!-- 목록 데이터. scripts/build-notes-index.py 가 만들고 커밋하지 않는다 (발행 때 Actions 가 만든다).
+     type="module" 이 아니라 평범한 script — file:// 로 열어도 로드된다. -->
+<script src="notes.js"></script>
 
 <script>
 const DOW = ["일","월","화","수","목","금","토"];
 
-function noteFiles() {
-  try { return JSON.parse(document.getElementById("note-files").textContent); }
-  catch (e) { return []; }   // 빌드 전이면 빈 목록 — 조용히 옛 목록을 보여주는 것보다 낫다
-}
+// 빌드 전이면 notes.js 가 없다 → 빈 목록. 조용히 옛 목록을 보여주는 것보다 낫다
+const NOTES_RAW = typeof NOTE_FILES === "undefined" ? [] : NOTE_FILES;
 
 // ponytail: 파일명 규칙 {yyMMdd}_<slug>.html 에 의존한다. 세기는 20xx 고정 —
 // 규칙을 벗어난 파일은 버리지 않고 '미분류'로 맨 뒤에 붙인다.
@@ -277,7 +272,7 @@ function fromPath(e) {
   }, e, META[rel] || {});   // 우선순위: META > 노트에서 파싱 > 파일명
 }
 
-const NOTES = noteFiles().map(fromPath);
+const NOTES = NOTES_RAW.map(fromPath);
 
 let activeKinds = new Set();
 let newestFirst = true;
