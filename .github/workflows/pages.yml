@@ -12,9 +12,12 @@ permissions:
   pages: write
   id-token: write
 
+# ponytail: 취소하지 않고 줄 세운다. cancel-in-progress: true 였을 때
+# 6초 간격 푸시의 앞 런이 통째로 죽어 그 런의 slack 잡이 사라졌고,
+# 뒤 런의 A-diff 엔 새 노트가 없어 아무것도 안 보내고 초록불로 끝났다 (2026-08-27).
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   deploy:
