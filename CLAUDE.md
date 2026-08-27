@@ -17,7 +17,7 @@ Python은 **반드시 `.venv/bin/python`** 을 쓴다. `youtube-transcript-api` 
 .venv/bin/python scripts/transcript.py --selftest
 ```
 
-의존성을 추가하면 `.venv/bin/pip install` 로 넣는다. `.venv` 와 `.work/` 는 gitignore 대상이고, `notes/` 는 **산출물이므로 커밋한다.**
+의존성을 추가하면 `.venv/bin/pip install` 로 넣는다. `.venv` 와 `.work/` 는 gitignore 대상이고, `notes/` 는 **산출물이므로 커밋한다** — 단 `notes/self-study/**` 는 gitignore 라 커밋도 발행도 되지 않는다.
 
 ## 공용 스크립트 (`scripts/`)
 
@@ -33,7 +33,7 @@ Python은 **반드시 `.venv/bin/python`** 을 쓴다. `youtube-transcript-api` 
 ## 파이프라인
 
 ```
-transcript.py --outline-only (자동자막이면 2.2초 자동 보정) → 본문 작성 → notes/{yyMMdd}_<slug>.html
+transcript.py --outline-only (자동자막이면 2.2초 자동 보정) → 본문 작성 → notes/<폴더>/{yyMMdd}_<slug>.html
 ```
 
 **노트 파일은 Write 툴로 만들고 Edit 툴로 고친다. Bash 리다이렉트(`cat > ...`)로 쓰지 마라.** `.claude/settings.json` 의 `PostToolUse(Write|Edit)` 훅이 `scripts/commit-note.sh` 를 불러 커밋·인덱스 재빌드·푸시까지 하는데, Bash 로 쓰면 훅이 매칭될 툴 호출이 없어서 **발행이 조용히 멈춘다.** `.work/` 나 스크래치 파일은 Bash 로 써도 된다.

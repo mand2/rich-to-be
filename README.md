@@ -42,10 +42,12 @@ Python 3.11+ 면 된다. `.venv` 경로는 고정이다 — 스킬이 `.venv/bin
 
 ## 발행
 
-`notes/` 는 GitHub Pages 로 나간다. 노트를 추가·삭제했으면 목록을 손으로 고치지 말고 스크립트를 돌린다.
+`notes/` 는 GitHub Pages 로 나간다. `notes/self-study/` 는 gitignore 라 커밋도 발행도 안 된다.
+
+목록(`notes/index.html`)은 손으로 고치는 파일이고, 거기 들어가는 데이터 `notes/notes.js` 는 발행할 때 Actions 가 만든다 — gitignore 대상이라 커밋하지 않는다. 로컬에서 목록을 열어 보고 싶을 때만 직접 돌린다.
 
 ```sh
-.venv/bin/python scripts/build-notes-index.py   # notes/index.html 목록 갱신
+.venv/bin/python scripts/build-notes-index.py   # notes/notes.js 생성 (커밋 안 함)
 ```
 
 main 에 푸시하면 GitHub Actions(`.github/workflows/pages.yml`)가 `notes/` 만 아티팩트로 올려 발행한다. `scripts/` 나 `CLAUDE.md` 는 사이트에 올라가지 않는다.
@@ -63,6 +65,6 @@ main 에 푸시하면 GitHub Actions(`.github/workflows/pages.yml`)가 `notes/` 
 
 - **한국어/영어 자막이 있는 영상만** 된다. 자막이 없으면 아무것도 못 한다.
 - 자동생성 자막의 지연 보정값은 사람이 영상과 대조해야 정확하다. 기본값 2.2초는 측정값이 아니다. 어긋나 보이면 `--probe` 로 확인하고 `--lag` 로 다시 받는다.
-- `notes/` 의 기존 노트는 예시로 커밋돼 있다. 본인 리포로 쓸 거면 지우고 `build-notes-index.py` 를 다시 돌려라.
+- `notes/` 의 기존 노트는 예시로 커밋돼 있다. 본인 리포로 쓸 거면 지우면 된다 — 목록은 발행 때 다시 만들어진다.
 
 자세한 개발 규칙은 `CLAUDE.md` 에 있다. 폐기된 대안(NotebookLM 자동화, yt-dlp, YouTube Data API v3)의 검토 기록은 git 이력에 있다.

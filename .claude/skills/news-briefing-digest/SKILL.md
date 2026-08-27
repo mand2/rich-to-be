@@ -87,7 +87,7 @@ description: 여러 꼭지를 훑는 뉴스 브리핑 영상(조간신문 읽기
 
 HTML 아티팩트 한 페이지. 레이아웃과 CSS는 `references/layout.md`를 **작성 전에 읽는다.** 스터디 노트와 달리 이 문서는 밀도가 높고 스캔용이라 레이아웃 규칙이 다르다.
 
-파일명은 `notes/{yyMMdd}_<슬러그>.html` 이다 — 날짜는 영상 방송일, 모르면 오늘 날짜.
+파일명은 `notes/<폴더>/{yyMMdd}_<슬러그>.html` 이다 — 날짜는 영상 방송일, 모르면 오늘 날짜.
 
 **모닝루틴 영상이면 `notes/morning-routine/`, 투자 관련이면 `notes/invest/`, 그 외에는 `notes/self-study/` 아래에 쌓는다.** 예: `notes/morning-routine/260826_한경-모닝루틴.html`
 
