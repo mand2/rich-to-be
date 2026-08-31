@@ -38,6 +38,8 @@ transcript.py (자동자막이면 2.2초 자동 보정) → 본문 작성 → no
 
 **노트 파일은 Write 툴로 만들고 Edit 툴로 고친다. Bash 리다이렉트(`cat > ...`)로 쓰지 마라.** `.claude/settings.json` 의 `PostToolUse(Write|Edit)` 훅이 `scripts/commit-note.sh` 를 불러 커밋·푸시까지 하는데, Bash 로 쓰면 훅이 매칭될 툴 호출이 없어서 **발행이 조용히 멈춘다.** `.work/` 나 스크래치 파일은 Bash 로 써도 된다.
 
+두 노트 스킬은 `.claude/skill-worktree.sh` 가 격리 worktree 로 몬다. **입구가 둘이라 훅도 둘에 걸린다** — `Skill` 툴 호출은 `PreToolUse`, `/스킬명` 슬래시 커맨드는 툴 호출이 없어 `UserPromptSubmit` 으로만 온다. 한쪽만 걸면 다른 쪽이 main 에서 그대로 돈다. 배선은 gitignore 되는 `.claude/settings.local.json` 에 있으니 클론한 곳에선 직접 넣어야 한다.
+
 `commit-note.sh` 는 어디서 도는지에 따라 갈린다 — main 워크트리면 바로 푸시, `worktree-agent-*`(slack 병렬 에이전트) 면 커밋만, 그 밖의 워크트리면 브랜치를 올리고 PR 을 연다. 머지된 워크트리·브랜치는 `scripts/prune-note-worktrees.sh` 가 세션 시작 때 치우고, 리모트 브랜치는 GitHub 의 `delete_branch_on_merge` 가 지운다. 두 스크립트 다 옆에 `*.test.sh` 가 있다.
 
 **노트 한 건은 전 과정을 메인 세션이 한다. 에이전트를 띄우지 않는다.** 자막 대조 검수 절은 두 스킬에서 제거됐다 — 되살릴 거면 git 이력에서 꺼내야 한다.
