@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="slack-thread" content="1787897791.593189">
+<title>레이 달리오 — 부는 쓸 수 없다, 그래서 버블은 터진다</title>
+<style>
+:root {
+  --accent: #1d4ed8;
+  --ink: #16181d;
+  --muted: #6b7280;
+  --line: #e5e3de;
+  --wash: #f7f6f3;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: #fff; }
+.note {
+  max-width: 720px; margin: 0 auto; padding: 32px 28px;
+  font-family: Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  color: var(--ink); font-size: 15px; line-height: 1.72;
+  word-break: keep-all;
+}
+
+header { border-bottom: 2px solid var(--ink); padding-bottom: 18px; margin-bottom: 26px; }
+.label { font-size: 11px; letter-spacing: .14em; color: var(--accent); font-weight: 700; }
+h1 { font-size: 27px; line-height: 1.3; margin: 10px 0 12px; letter-spacing: -.02em; }
+.meta { font-size: 12.5px; color: var(--muted); }
+.meta a { color: var(--muted); }
+
+.conclusion {
+  border-left: 3px solid var(--accent); background: var(--wash);
+  padding: 16px 18px; margin-bottom: 34px; font-size: 15.5px;
+}
+.tag {
+  display: block; font-size: 11px; font-weight: 700; letter-spacing: .1em;
+  color: var(--accent); margin-bottom: 6px;
+}
+
+section { margin-bottom: 34px; }
+h2 { font-size: 19px; margin: 0 0 4px; letter-spacing: -.01em; }
+.num {
+  display: inline-block; min-width: 26px; height: 22px; margin-right: 8px;
+  background: var(--accent); color: #fff; font-size: 12px; font-weight: 700;
+  text-align: center; line-height: 22px; border-radius: 3px;
+}
+.sub { font-size: 13px; color: var(--muted); margin: 0 0 16px; }
+time { font-variant-numeric: tabular-nums; font-size: 12px; color: var(--accent); font-weight: 600; }
+
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.card { border: 1px solid var(--line); border-radius: 5px; padding: 14px 16px; }
+.card h4 { margin: 0 0 8px; font-size: 14.5px; }
+.card p { margin: 0; font-size: 14px; }
+
+.term { border-top: 1px solid var(--line); padding: 13px 0; }
+.term h4 { margin: 0 0 5px; font-size: 15px; }
+.term h4 em { font-style: normal; font-weight: 400; font-size: 12.5px; color: var(--muted); }
+.term p { margin: 0; }
+.aside {
+  margin-top: 7px !important; background: var(--wash); padding: 8px 11px;
+  border-radius: 4px; font-size: 13.5px; color: #3f4450;
+}
+.aside b { color: var(--accent); font-weight: 700; }
+
+.step { display: flex; gap: 14px; padding: 15px 0; border-top: 1px solid var(--line); }
+.marker {
+  flex: 0 0 26px; height: 26px; border-radius: 50%; background: var(--ink); color: #fff;
+  font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+}
+.step .body { flex: 1; }
+.step h4 { margin: 0 0 6px; font-size: 15px; display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.step p { margin: 0 0 8px; }
+.step p:last-child { margin-bottom: 0; }
+blockquote {
+  margin: 9px 0 0; padding-left: 12px; border-left: 2px solid var(--line);
+  color: #3f4450; font-size: 14px;
+}
+blockquote .tr { display: block; margin-top: 3px; font-size: 13px; color: var(--muted); }
+
+.insight { padding: 12px 0; border-top: 1px solid var(--line); }
+.insight h4 { margin: 0 0 4px; font-size: 15px; }
+.insight p { margin: 0; font-size: 14.5px; }
+
+.watch { margin: 0; padding-left: 18px; }
+.watch li { margin-bottom: 9px; }
+
+footer {
+  margin-top: 38px; padding-top: 14px; border-top: 1px solid var(--line);
+  font-size: 12px; color: var(--muted);
+}
+
+@page { size: A4; margin: 14mm; }
+.card, .term, .step, .insight, .conclusion, blockquote { break-inside: avoid; page-break-inside: avoid; }
+h1, h2, h3, h4 { break-after: avoid; page-break-after: avoid; }
+@media print {
+  .note { max-width: none; padding: 0; font-size: 10.5pt; }
+  section { margin-bottom: 22px; }
+}
+</style>
+</head>
+<body>
+<div class="note">
+
+  <header>
+    <div class="label">STUDY NOTE · 버블과 빅 사이클</div>
+    <h1>레이 달리오 — 부(富)는 쓸 수 없다, 그래서 버블은 터진다</h1>
+    <div class="meta">The Diary Of A CEO · 2026.7.30 · 1시간 30분 11초 · <a href="https://www.youtube.com/watch?v=Bu0xNDLNORU">원본 영상</a></div>
+  </header>
+
+  <div class="conclusion">
+    <span class="tag">한 줄 결론</span>
+    버블이 터지는 이유는 심리가 아니라 기계적이다 — <b>부(wealth)는 쓸 수 없고 돈(money)만 쓸 수 있기 때문</b>에, 금리 인상이나 세금처럼 현금이 필요해지는 사건이 오면 사람들은 자산을 팔아야 하고, 올라갈 때 담보를 불려 주던 복리가 그대로 거꾸로 돈다. 지금은 그 버블의 고전적 징후가 다 나와 있는 동시에, 부채·빈부격차·지정학이 함께 무너지는 80년짜리 빅 사이클의 후반부다. 그래서 개인의 답은 타이밍이 아니라 <b>분산</b>이고, 커리어의 답은 특정 직업이 아니라 <b>적응력</b>이다.
+  </div>
+
+  <section>
+    <h2><span class="num">01</span> 출발점 — 부는 쓸 수 없다</h2>
+    <p class="sub">화자가 모든 설명을 걸어 두는 한 문장 <time>5:06</time></p>
+    <p>달리오는 버블을 "가격이 많이 오르고, 기업이 아주 잘되고, 그다음 무너지는 것"이라고 정의하면서 곧바로 기계 장치를 하나 깐다. 사람들이 새 기술에 열광해 돈을 빌려 베팅하고, <b>가격이 중요하다는 사실을 잊는다</b>. 그런데 그렇게 불어난 것은 부(wealth)이지 돈(money)이 아니다.</p>
+    <blockquote>"Wealth is not the same as money. So, you see a lot of people getting wealthy, but you can't spend the wealth. You have to sell the wealth to get money."
+      <span class="tr">부는 돈과 다르다. 사람들이 부자가 되는 건 보이지만, 그 부는 쓸 수가 없다. 돈을 만들려면 부를 팔아야 한다.</span>
+    </blockquote>
+    <p>진행자가 이 구조를 숫자로 되풀이해 보이자 달리오는 "You got it"이라고 확인한다. 그 예시가 이 영상 전체의 축소판이다. <time>7:10–8:31</time></p>
+    <div class="split">
+      <div class="card"><h4>올라갈 때 (진행자의 예시)</h4><p>AI 기업 주식 한 주를 100달러에 산다. 순자산이 100달러가 되니 은행이 그걸 담보로 50%인 50달러를 빌려준다. 부가 커질수록 담보가 커지고, 담보가 커질수록 더 빌릴 수 있다 — <b>올라가는 길에서 복리로 불어난다</b>.</p></div>
+      <div class="card"><h4>내려갈 때 (같은 장치, 역방향)</h4><p>전쟁이든 무엇이든 사건이 터져 모두가 자산을 판다. 100달러짜리가 25달러가 되는데 은행 빚은 50달러 그대로다. 25달러 구멍이 나니 급히 팔아야 하고, 모두가 팔면 가격이 더 떨어지고, 식당에 안 가니 남의 소득이 줄어든다.</p></div>
+    </div>
+    <p>달리오는 여기에 "그리고 이건 <b>일어날 수밖에 없다</b>"고 덧붙인다. 거대한 변화의 한복판에서는 알려진 것이 거의 없어서, AI를 만드는 쪽도 돈이 얼마나 들어올지 정확할 수 없다. 그러면 선택지는 둘뿐이다 — 충분히 투자하지 않아 경쟁자에게 뒤처지거나, 엄청난 금액을 투자하되 정확할 수 없거나. <time>8:35–9:06</time></p>
+  </section>
+
+  <section>
+    <h2><span class="num">02</span> 용어 사전</h2>
+    <p class="sub">대담에서 설명 없이 지나간 개념들</p>
+
+    <div class="term">
+      <h4>빅 사이클 <em>the big cycle</em></h4>
+      <p>돈(부채), 국내 정치 갈등, 국가 간 갈등 이 셋이 <b>같은 시기에 함께</b> 무너지는 큰 주기. 화자는 평균 약 80년, 사람의 한 생애 정도 길이라고 말하고, 지난번 마디를 1945년으로 잡는다. 그 안에는 통화 질서·국내 정치 질서·지정학 질서가 들어 있다.</p>
+      <p class="aside"><b>비유</b> — 화자는 이걸 건강에 빗댄다. "기대수명이 평균 몇 년이냐"는 물어볼 수 있지만 사람마다 다르니, 햇수보다 <b>당신의 상태(condition)</b>를 보라는 것. 부채 수준, 교육 수준, 경쟁력은 신체검사처럼 숫자로 잴 수 있다. <time>1:13:29–1:15:08</time></p>
+    </div>
+
+    <div class="term">
+      <h4>작은 사이클 <em>the short cycle</em></h4>
+      <p>빅 사이클 안에서 반복되는 경기 순환. 불황 → 완화적 통화정책 → 호황 → 버블 → 여유 생산능력 소진 → 인플레 → 긴축 → 다시 불황. 화자는 불황에서 다음 불황까지 평균 약 6년, 편차 ±3년 정도로 본다. <time>38:25–41:11</time></p>
+      <p class="aside"><b>포인트</b> — 이 두 사이클 밑에 세 번째 선이 하나 더 있다. 기술과 학습의 우상향 직선이다. "배운 것을 잊지는 않기 때문에" 이 선은 붐과 버스트와 무관하게 계속 올라간다.</p>
+    </div>
+
+    <div class="term">
+      <h4>약한 손 / 강한 손 <em>weak hands / strong hands</em></h4>
+      <p>지금 그 자산을 누가 들고 있는가. 지식이 부족한 투자자가 큰돈을, 특히 <b>레버리지를 써서</b> 넣고 있으면 약한 손이다. 화자는 레버리지 ETF를 예로 들며 그건 투자가 아니라 "주사위 던지기(crap shooting)"라고 표현한다.</p>
+      <p class="aside"><b>포인트</b> — 화자는 버블이 예/아니오의 문제가 아니라 <b>정도의 문제</b>라고 못 박는다. "버블에 있냐 없냐가 아니라 degree thing이다." <time>14:31–15:23</time></p>
+    </div>
+
+    <div class="term">
+      <h4>주식의 공급 <em>issuance of stock</em></h4>
+      <p>버블을 논할 때 보통 수요만 보지만, 반대편에 공급이 있다. 주식을 원하는 시장이 있으면 주식이 생산된다.</p>
+      <p class="aside"><b>비유</b> — "주식보다 만들기 쉬운 건 거의 없다." 오늘 회사를 만들어 상장하겠다고 청중에게 말하면 그게 곧 주식 생산이다. <time>13:27–14:29</time></p>
+    </div>
+
+    <div class="term">
+      <h4>경성화폐 <em>hard money</em></h4>
+      <p>찍어낼 수 없는 종류의 돈. 화자는 금과 비트코인 둘 다 이 범주에 넣되, 대부분의 사람에게 포트폴리오의 5~15% 정도가 적당하다고 말하며 그 자리에 금을 선호한다고 밝힌다. 비트코인은 약 1%를 보유 중이라고 한다.</p>
+      <p class="aside"><b>포인트</b> — 금을 두고 인용한 표현: "다른 누군가의 부채(liability)가 아닌 유일한 금융자산." 나머지 자산은 누군가가 당신에게 무언가를 줘야 성립한다. <time>28:19–28:54</time></p>
+    </div>
+
+    <div class="term">
+      <h4>부유세 <em>wealth tax</em></h4>
+      <p>화자는 이걸 도덕 문제가 아니라 <b>메커니즘 문제</b>로만 다룬다. 세금을 내려면 부를 팔아야 하고, 그게 바로 버블을 터뜨리는 종류의 사건이라는 것. 행정적으로도 쉽게 평가되지 않는 자산을 어떻게 평가할 것이냐가 남는다.</p>
+      <p class="aside"><b>포인트</b> — 화자는 부유세는 새로운 것이지만, 사람들이 떠나면 뒤따르는 조치들(소급 과세, 자본 통제, 출국세)은 <b>전에도 다 있었던 일</b>이라고 말한다. <time>1:11:47–1:13:29</time></p>
+    </div>
+
+    <div class="term">
+      <h4>채무 재구조화 <em>restructuring the debt</em></h4>
+      <p>돈이 부족해진 나라가 쓰는 조합. 중앙은행이 돈을 찍어 인플레이션을 만들고, 동시에 부채의 조건을 바꾼다 — 화자가 든 예는 만기를 늘리는 것이다.</p>
+      <p class="aside"><b>읽는 법</b> — 화자가 영국을 두고 요약한 상태 진단: 과다 채무, 낮은 생산성, 선택지 소진. <time>1:04:05–1:06:04</time></p>
+    </div>
+
+    <div class="term">
+      <h4>룰 기반 질서 <em>rules-based order</em></h4>
+      <p>2차 대전 이후 미국에서 나온 통치 구상 — 대표를 두고 유엔 같은 데서 규칙으로 분쟁을 푼다. 화자는 이걸 "좋은 이론"이라 부르면서 곧바로 질문을 던진다.</p>
+      <p class="aside"><b>포인트</b> — "규칙과 힘이 충돌하면 무엇이 이기는가?" 화자의 답은 그래서 본성상 지배적 힘 쪽으로 기운다는 것이다. <time>1:16:16–1:16:50</time></p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">03</span> 쟁점별 입장</h2>
+    <p class="sub">진행자의 질문 여덟 개와 답. 화자 표기 — <b>달리오</b>는 게스트, <b>진행자</b>는 스티븐 바틀릿</p>
+
+    <div class="step">
+      <div class="marker">1</div>
+      <div class="body">
+        <h4>지금이 AI 버블인가 <time>3:21–3:36</time></h4>
+        <p>진행자가 이전 게스트인 투자자 제러미 그랜섬(Jeremy Grantham)의 발언을 클립으로 튼다. 데이터를 보면 고점이 아주 가까운 것이 역사와 부합하며, 모든 것이 정렬돼 있다는 내용이다.</p>
+        <blockquote>"This is I think the biggest investment bubble in American history." <span class="tr">— 제러미 그랜섬(삽입 클립): 이건 미국 역사상 가장 큰 투자 버블이라고 생각한다.</span></blockquote>
+        <p>달리오의 답은 두 글자였다. 다만 그는 결론으로 점프하기보다 <b>인과 관계를 이해시키고 싶다</b>고 곧바로 덧붙인다 — 이 대담 전체의 화법이 여기서 정해진다.</p>
+        <blockquote>"He's right. I don't want to jump to conclusions as much as I want to explain reasonings that lead up to conclusions."
+          <span class="tr">그의 말이 맞다. 나는 결론으로 건너뛰기보다 결론에 이르는 논리를 설명하고 싶다.</span>
+        </blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">2</div>
+      <div class="body">
+        <h4>무엇이 버블을 터뜨리는가 <time>12:45–14:29</time></h4>
+        <p>진행자가 "블랙 스완 같은 게 있냐"고 묻자 달리오는 버블과 <b>버블을 찌르는 것</b>을 구분한다. 초기의 바늘은 대개 "내가 부를 팔아 돈을 만들어야 하게 만드는 것"이고, 그건 보통 금리 인상이다. 부유세처럼 현금을 요구하는 것도 같은 범주다. 금리가 오르면 부채를 들고 있어 얻는 돈이 주식 투자로 얻는 돈보다 커지는 지점이 온다.</p>
+        <p>여기에 그가 하나를 더 붙인다. 수요만 보지 말고 <b>공급</b>을 보라는 것. 진행자가 자기 친구 사례를 든다 — AI 회사를 하는 그 친구는 "버블 같으니 지금 크게 조달해 두고, 시장이 내려오면 힘들어진 경쟁사를 사겠다"며 수억 달러를 쉽게 모았다. 달리오의 반응은 도덕적 평가가 아니라 기계적 관찰이었다.</p>
+        <blockquote>"And what that does just following it through on what we said a minute ago is that increases the supply of AI stock."
+          <span class="tr">그리고 그 행동이 방금 말한 흐름을 그대로 따라가면, AI 주식의 공급을 늘린다.</span>
+        </blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">3</div>
+      <div class="body">
+        <h4>그럼 개인은 어떻게 대비하나 <time>17:00–23:32</time></h4>
+        <p>첫 답은 하지 말아야 할 것이다. <b>미래는 매우 알 수 없고, 타이밍을 재려 해서는 안 된다.</b> 정교한 투자자조차 버블의 타이밍을 잡는 데는 진짜 어려움을 겪는다. 그래서 항상 중요한 것은 분산이다.</p>
+        <p>이어서 그는 현금이 가장 안전하다는 감각을 정면으로 뒤집는다. 예금이든 MMF든 이자를 받는 단기 예치 형태 전부가 여기 들어간다. 인플레이션(그는 당시 수준을 3.5~4% 정도라고 말한다)이 갉아먹고, 그 위에 세금까지 낸다 — 인플레 대비로는 벌지 않았는데도.</p>
+        <blockquote>"People think that that's the safest. It's not, it's the worst investment over a long period of time because inflation will eat it away."
+          <span class="tr">사람들은 그게 가장 안전하다고 생각한다. 아니다. 장기적으로는 최악의 투자다. 인플레이션이 갉아먹기 때문이다.</span>
+        </blockquote>
+        <p>선택지를 늘어놓으면 현금·주식·금·채권·집·비트코인이다. 주식은 이 큰 사이클에서 60~70%씩 떨어진다. 금은 나머지가 대체로 나쁠 때 잘되는 성질이 있어 분산 효과가 크다(그는 금이 1971년까지는 돈이었고 여전히 두 번째로 큰 준비통화라는 점을 든다). 집은 <b>당신의 환경</b>이고 강제 저축을 만들며 세제상 유리하다. 분산의 효과에 대한 그의 표현은 정확하다.</p>
+        <blockquote>"You won't reduce your return, but you will reduce your risk."
+          <span class="tr">수익률을 낮추지 않으면서 위험은 낮춘다.</span>
+        </blockquote>
+        <p>그리고 이 모든 것 앞에 놓이는 질문이 하나 있다. 돈이 들어오지 않아도 <b>몇 년을 살 수 있는가</b>. 그가 돈이 없던 시절부터 세어 온 것이 그것이고, 그 숫자를 안전하게 만든 다음에 70% 빠질 수 있는 한 곳에 몰아넣지 않는 방법을 고민하라는 것이다. "That's my main headline."</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">4</div>
+      <div class="body">
+        <h4>비트코인 vs 금 <time>28:19–30:24</time></h4>
+        <p>둘 다 찍어낼 수 없는 돈이라는 점에서 같은 범주지만, 달리오가 금 쪽에 서는 이유는 <b>기술과 권력에 노출되는 정도</b>다. 양자컴퓨팅 같은 기술이 해칠 수 있고, 정부가 들여다보고 과세할 수 있다. 디지털 통화도 비슷하다고 본다. 그래서 중앙은행은 의미 있는 규모로 보유하지 않을 것이라고 말한다 — 거래가 사적이고 자기 통제 아래 있기를 원하기 때문이다.</p>
+        <p>갈등의 시대라는 조건이 여기 붙는다. 러시아의 경우 다른 자산들은 몰수당했지만 금은 그러지 못했다는 것이 그가 든 사례다.</p>
+        <blockquote>"You cannot crack it with technology. You can hold it, you own it."
+          <span class="tr">기술로 깰 수 없다. 손에 쥘 수 있고, 내 것이다.</span>
+        </blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">5</div>
+      <div class="body">
+        <h4>AI는 일자리를 어떻게 바꾸는가 <time>30:24–38:09</time></h4>
+        <p>달리오는 인간의 몸을 좌표로 쓴다. 농경 시대에는 인간이 밭의 소 같았고 트랙터가 그걸 대체했다. 인쇄기가 배움을 열고 산업혁명이 공장의 육체 노동을 대체했다. 그가 보는 방식은 그 대체가 <b>몸에서 시작해 위로 올라오는 것</b>이다.</p>
+        <blockquote>"The way I look at it is I look at the human body and I see like it's replacing the body... and then it replaces some aspects of the mind that you can computerize. And it's coming up and up, and it's replacing higher and higher levels of thinking and reasoning."
+          <span class="tr">내가 보는 방식은 인체를 놓고 보는 것이다. 몸을 대체하고 있고 … 그다음 전산화할 수 있는 정신의 일부를 대체한다. 그리고 점점 위로 올라오면서 더 높은 수준의 사고와 추론을 대체한다.</span>
+        </blockquote>
+        <p>수혜자는 노동자를 대체하는 아이디어를 가진 자본가 쪽이라고 그는 말한다. 매출에서 노동자에게 가는 몫은 내려가고 소유자에게 가는 몫은 올라간다. 실물 지표로 그가 든 것은 하나다 — <b>경제가 비교적 좋은데도 대졸자의 취업 난이도가 크게 올랐다</b>. 많은 기업에서 대졸자를 뽑아 훈련시키는 것이 성가신 일이 되고, 그 업무의 상당수는 AI로 훨씬 빨리 처리된다.</p>
+        <p>진행자가 우버의 다라(Dara)와 나눈 대담을 인용하며 속도가 과거와 다르지 않냐고 묻는다(삽입 클립에서 다라는 20년 뒤 900만 명이 2000만 대의 AAV가 될 수 있다고 상상하면서도, 규제·차량·센서 스택을 실제로 만들어야 하는 물리 세계라 시간이 있다고 말한다). 달리오의 답은 두 힘을 분리하라는 것이었다.</p>
+        <blockquote>"The unemployment rate is very heavily affected by that bubble bursting."
+          <span class="tr">실업률은 그 버블이 터지는 것에 아주 크게 영향받는다.</span>
+        </blockquote>
+        <p>즉 기술이 노동을 대체하는 진화적 흐름은 여러 해에 걸쳐 연속적으로 진행되지만, 실업률의 <b>급등</b>은 버블이 터지고 현금이 급해진 회사들이 "성장은 잊고 생존하자"며 팀 단위로 해고할 때 나온다. 두 개는 같은 것이 아니고, 하필 같이 온다.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">6</div>
+      <div class="body">
+        <h4>16살 아이에게 뭐라고 말할 것인가 <time>48:33–55:07</time></h4>
+        <p>달리오는 먼저 질문의 전제를 흔든다. 가장 높은 소득이 가장 좋은 것이라고 가정하지 않겠다는 것 — 기본 수준을 넘어서면 돈의 양과 행복 사이의 상관은 아주 낮다고 그는 말한다. 자기 것으로 든 예는 자연 속에 있는 걸 좋아하는데 그건 거의 돈이 들지 않는다는 것이었다. 목표는 <b>패닉하지 않아도 되는 수준 위로 올라가는 것</b>이다.</p>
+        <blockquote>"Make your work and your passion the same thing, and don't forget about the money part."
+          <span class="tr">일과 열정을 같은 것으로 만들어라. 그리고 돈 부분을 잊지 마라.</span>
+        </blockquote>
+        <p>직업을 특정해 달라는 요구는 끝까지 거절한다. 그가 대신 놓는 기준은 적응력이다.</p>
+        <blockquote>"History has shown that it's not the most intelligent people or the most intelligent species that are the most successful... It is those species and people who are also most adaptable."
+          <span class="tr">역사가 보여 준 것은 가장 지능이 높은 사람이나 종이 가장 성공하는 게 아니라는 것이다 … 가장 잘 적응하는 종과 사람이다.</span>
+        </blockquote>
+        <p>그가 든 예가 뾰족하다. 한때는 "코딩은 할 줄 알아야 한다"였는데 Claude Code가 나오자 코딩하던 사람들이 자기 일자리를 걱정하게 됐다는 것. 그래서 답은 특정 기술이 아니라 <b>자기 본성(nature)을 아는 것</b>과 도구를 최대한 써서 아는 것을 늘리는 일이다. 브리지워터를 지을 때 사람의 성격이 그 자리에 맞는지가 매우 중요했고, 그래서 만든 성격 진단을 무료로 공개했다고 한다(약 30분, Principles You).</p>
+        <blockquote>"Just get over the fact that you don't know what the future's going to be like."
+          <span class="tr">미래가 어떨지 모른다는 사실을 그냥 받아들여라.</span>
+        </blockquote>
+        <p>그 앞 대목에서 진행자가 덧붙인 관찰도 같은 방향이다 — 같은 기술이라도 어느 산업에 파느냐에 따라 시간당 값이 완전히 다르다(우버 기사를 하느냐 레이 달리오의 기사를 하느냐는 넓게 보면 같은 운전 기술이다). 달리오는 여기에 자기 "법칙"을 얹는다. 그림이든 가구든 옷이든 사람의 시간이든, <b>맨 위에 있는 것은 평균의 몇 배</b>를 받는다. 그래서 시간·노력·기량을 10% 더 투입해 위로 가면 두 배를 받는다는 것이다. <time>26:54–27:44</time></p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">7</div>
+      <div class="body">
+        <h4>빈부격차, 부유세, 그리고 영국 <time>41:44–1:08:59</time></h4>
+        <p>자본주의는 소득과 부의 큰 차이를 만들고, 그 차이는 <b>기회의 차이</b>로 이어진다고 그는 말한다 — 부유한 사람은 자녀를 잘 교육시킬 수 있기 때문이다(그래서 광범위한 양질의 교육이 필요하다는 것이 그의 결론이다). 산업혁명이 도금시대(Gilded Age)로 이어지고, 도금시대가 강도귀족(robber barons)으로 이어진다. 그가 지금을 도금시대와 겹쳐 보는 대목이다.</p>
+        <p>자기 사례로 든 숫자가 있다. 코네티컷은 1인당 소득 기준 두 번째로 부유한 주인데, 고등학생의 22%가 중퇴했거나 결석률 25% 초과로 낙제 중이고, 그 결과 갱·총격·마약과 수감으로 이어져 <b>수감 비용이 교육 예산보다 커졌다</b>. <time>56:17–56:55</time></p>
+        <blockquote>"If you go below those levels, the society will pay terribly for it because those people will be liabilities, not assets of the society."
+          <span class="tr">그 선 아래로 내려가면 사회가 혹독한 대가를 치른다. 그 사람들이 사회의 자산이 아니라 부채가 되기 때문이다.</span>
+        </blockquote>
+        <p>그가 드는 반례는 싱가포르와 일부 스칸디나비아 국가다 — 좋은 교육, 적절한 주거, 적절한 의료라는 바닥(floor)이 모두에게 있는 사회. 자본주의가 불평등으로 이어지느냐는 질문에 그는 "그렇다"고 답한 뒤 곧바로 "하지만 그럴 필요는 없다"고 덧붙인다.</p>
+        <p>부유세에 대해서는 도덕이 아니라 두 가지 부작용만 짚는다. 첫째, 세금을 내려면 부를 팔아야 하므로 버블을 터뜨리는 방아쇠가 될 수 있다. 둘째, 부는 대부분 투자로 들어가는 것이라 투자를 줄인다 — 그러니 교육처럼 <b>생산성을 올리는 것</b>과 반드시 함께 해야지, 단순 이전지출로 소비만 늘리면 사회의 생산성을 스스로 깎는다. (진행자가 소개한 영국의 논쟁안은 순자산 1000만 초과에 2% 부유세이고, 약 70%가 지지하며 "200억 달러 정도"를 걷을 거라고 하던데 — 통화 단위와 규모는 진행자 본인도 확신 없이 인용한 수치다.) 화자의 답: 최상위층에 100% 과세를 해도 인구 비중이 워낙 작아 충분한 돈이 나오지 않고, 사람들이 떠나면 소급 과세와 자본 통제·출국세가 뒤따른다. 전부 전에 있었던 일이다.</p>
+        <p>영국을 두고는 "고전적인 사이클"이라고 진단한다 — 과다 채무, 낮은 생산성, 선택지 소진. 세금을 올리자니 갈등과 이탈이고, 복지를 깎자니 이미 고통받는 쪽이고, 그러면 적자를 무엇으로 메우느냐로 돌아온다. 그 결과가 7년 중 6년의 총리 교체다.</p>
+        <blockquote>"Somebody else comes in and they got their promise. And the promise doesn't pan out... so you bring new people in and then you throw them out."
+          <span class="tr">누군가 새로 들어와 약속을 한다. 약속은 지켜지지 않는다 … 그래서 새 사람을 데려오고, 또 내쫓는다.</span>
+        </blockquote>
+        <p>그가 내놓는 처방은 <b>강한 중도</b>다. 좌우 극단이 서로 전쟁을 하는 한 상황은 나빠지고, 양당의 경제를 아는 사람들로 초당적 위원회를 꾸려 작고 어려운 계획을 만들어야 한다는 것 — 헌법이 그렇게 만들어졌다는 것이 그가 드는 선례다. 다만 그는 스스로 "매우 어렵고 가능성이 낮은 길(very long shot)"이라고 말한다. 조건은 하나다: <b>고통이 나눠지는 방식</b>이어야 한다. 그리고 21살 창업자라면 어디에 회사를 세우겠냐는 질문에는 "국경 없이 존재하겠다"고 답한다 — 교육·시민성·활력이 있는, 거의 르네상스 도시국가 같은 곳들을 찾되 한 곳에만 있지는 말라는 것. <time>1:09:12–1:10:06</time></p>
+        <blockquote>"There's a Hong Kong expression. I think that a smart rabbit has three holes."
+          <span class="tr">홍콩 속담이 있다. 영리한 토끼는 굴을 세 개 판다.</span>
+        </blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">8</div>
+      <div class="body">
+        <h4>지정학 — 이란이 드러낸 것 <time>1:16:50–1:27:18</time></h4>
+        <p>지금 어디쯤이냐는 질문에 그는 미국·영국 등 여러 나라가 <b>사이클 후반</b>에 있다고 답한다. 과다 채무와 힘의 상실. 진행자가 "쇠퇴기냐"고 되묻자 "그걸 쇠퇴라고 부르겠다"고 한다.</p>
+        <p>다음 질서에 지배 강대국이 하나냐 둘이냐는 질문에는, 1차 대전 이전에는 세계가 하나가 아니어서 지역마다 강한 나라가 공존할 수 있었다는 점을 짚는다. 하나의 세계가 되면 의견 충돌을 푸는 방법이 결국 힘이 된다. 그가 가장 유익할 것으로 보는 결과는 <b>더 지역화되는 것</b>이다 — 아메리카 권역과 중국 주변 APAC 권역. 중국은 문화적 이유로 다른 나라를 점령·통제할 의사가 없고, 목표는 차단당하지 않고 해를 입지 않으며 자기 방식(그가 유교의 연장이라 부르는 하향식 통제 체제)으로 경쟁력을 갖는 것이라고 본다. 대만 문제는 군사적이기보다 <b>압력에 의한 통일</b> 쪽으로 다뤄질 가능성이 크다고 말한다.</p>
+        <p>이란과 호르무즈 해협에 대해서는 판정이 짧다. 진행자가 "큰 실수처럼 들린다"고 하자 달리오는 "그렇다, 큰 실수였다"고 답한다. 다만 그가 강조하는 것은 실수 자체가 아니라 그것이 <b>드러낸 것</b>이다. 미국 국민이 유가와 인명 손실을 걱정하고 빨리 끝나기를 원하는 한 그런 식으로 전쟁을 할 수 없고, 그러면 미국은 아시아에 나타나지 않을 것이라는 인식이 아시아 지도자들 사이에 생긴다. 기지는 자산이 아니라 부채가 될 수 있다. 칩이 대만에서 나오는데 중국이 닷새만 봉쇄하겠다고 위협해도 세계 증시가 무너진다 — 이것이 군사력이 아닌 힘이다. 필리핀은 NATO와 비슷한 조약을 미국과 맺고 있는데, 미국 국민이 항공모함을 보내는 데 어떻게 반응하겠느냐고 그는 묻는다. 그리고 중국은 이미 대부분의 나라에서 미국보다 큰 교역 상대다.</p>
+        <blockquote>"Like the British in the Suez Canal, we didn't realize. Now, we realize." / "That power no longer exists."
+          <span class="tr">수에즈 운하에서의 영국처럼, 우리는 몰랐다. 이제 알게 됐다. / 그 힘은 더 이상 존재하지 않는다.</span>
+        </blockquote>
+        <p>그가 이 판단을 놓는 방식이 이 대담의 마지막 톤이다. 자신은 글로벌 매크로 투자자이고 목표는 최대한 정확한 것이며, 편향이 그것을 막게 둘 수 없다. 그래서 통계와 지표를 본다. "It's mechanics."</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">04</span> 인사이트</h2>
+    <p class="sub">이 영상 밖에서도 쓰이는 원칙으로</p>
+
+    <div class="insight">
+      <h4>① 상승을 증폭한 장치가 하락도 증폭한다</h4>
+      <p>담보는 오를 때 복리로 돈을 불려 주고, 내릴 때 같은 속도로 매도를 강제한다. 그래서 붕괴는 상승의 거울상이 아니라 <b>가속된 상승의 되감기</b>다. 어떤 시스템이든 "무엇이 이 상승을 빠르게 만들었나"를 찾으면 하락이 얼마나 빠를지가 함께 나온다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>② 위험은 자산이 아니라 보유자에게 있다</h4>
+      <p>같은 주식도 누가, 얼마나 빌려서 들고 있느냐가 무너지는 속도를 정한다. 그래서 "무엇을 살까"보다 <b>"지금 누가 사고 있나"</b>가 더 많은 것을 말해 준다. 이건 시장 밖에서도 통한다 — 어떤 유행이든 마지막에 들어온 사람들이 얼마나 무리했는지가 반작용의 크기다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>③ 안전하다는 감각과 안전하다는 사실은 다른 것이다</h4>
+      <p>현금은 숫자가 줄지 않기 때문에 안전해 <i>느껴진다</i>. 줄어드는 것이 숫자가 아니라 구매력이면 감각은 그걸 잡아내지 못한다. 안전은 편안함이 아니라 <b>장기 실질 결과</b>로 재야 하고, 이 원칙은 커리어의 "안정적인 직장"에도 똑같이 적용된다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>④ 모른다는 것을 인정하는 것 자체가 전략이다</h4>
+      <p>화자는 포트폴리오와 커리어에 <b>같은 답</b>을 준다. 타이밍을 재지 말고 분산하라, 직업을 고르지 말고 적응력을 키워라. 둘 다 "미래를 맞힐 수 없다"는 같은 전제에서 나온 같은 구조다. 예측을 포기하면 대신 <b>어떤 미래에서도 살아남는 배치</b>를 설계하게 된다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>⑤ 쓰지 않은 힘은 신용으로 남고, 쓴 힘은 한도를 드러낸다</h4>
+      <p>화자가 이란에서 본 것은 승패가 아니라 <b>가시화</b>였다. 위협은 시험받기 전까지 무한해 보이고, 한 번 시험받으면 정확한 크기가 공개된다. 협상력·평판·조직의 권위도 같다 — 한도를 모르게 두는 것이 힘의 일부이고, 그래서 힘을 쓰는 결정에는 그 한도가 공개되는 비용이 늘 포함돼 있다.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">05</span> 앞으로 지켜볼 것</h2>
+    <ul class="watch">
+      <li><b>바늘 후보 — 금리와 세금</b> — 화자가 꼽은 초기 방아쇠는 "부를 팔아 돈을 만들게 하는" 사건이다. 금리 인상, 그리고 부유세 같은 현금 요구.</li>
+      <li><b>주식의 공급</b> — 수요가 아니라 공급 쪽. 상장·증자가 얼마나 쉽게 이뤄지는지, 조달이 "쉬웠다"는 말이 얼마나 흔해지는지.</li>
+      <li><b>누가 들고 있는가</b> — 레버리지 ETF 등 차입을 태운 비전문 자금의 유입. 화자 기준으로 이게 약한 손의 신호다.</li>
+      <li><b>대졸자 취업</b> — 화자가 AI의 노동 대체를 두고 제시한 유일한 실물 지표. 경제 상황이 나쁘지 않은데도 난이도가 오르는지.</li>
+      <li><b>영국</b> — 순자산 1000만 초과 2% 부유세 논쟁의 결말, 그리고 그 뒤에 소급 과세·자본 통제·출국세가 따라 나오는지. 화자는 이 순서를 전례로 본다.</li>
+      <li><b>대만과 호르무즈</b> — 화자가 말한 "비군사적 힘". 칩 반출 봉쇄 같은 위협이 실제 카드로 등장하는지.</li>
+      <li><b>강한 중도</b> — 초당적 위원회로 고통을 나누는 계획이 나오는지. 화자 본인이 "매우 어렵고 가능성 낮다"고 표시한 경로다.</li>
+    </ul>
+  </section>
+
+  <footer>
+    유튜브 자동 생성 자막(영어) 전문을 바탕으로 정리. 타임스탬프는 미측정 기본값 2.2초 보정. 인용은 자막 원문 그대로이며 아래 줄은 옮긴이 번역. 삽입 클립(제러미 그랜섬, 우버의 다라)은 게스트 본인의 발언과 구분해 표시했다. 발언자의 견해이며 투자 판단의 근거가 아닌 학습 자료입니다.
+  </footer>
+
+</div>
+</body>
+</html>
