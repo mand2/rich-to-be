@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>매일 정보를 인사이트로 만드는 4단계 루틴 — 스터디 노트</title>
+<style>
+:root {
+  --accent: #1d4ed8;
+  --ink: #16181d;
+  --muted: #6b7280;
+  --line: #e5e3de;
+  --wash: #f7f6f3;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: #fff; }
+.note {
+  max-width: 720px; margin: 0 auto; padding: 32px 28px;
+  font-family: Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  color: var(--ink); font-size: 15px; line-height: 1.72;
+  word-break: keep-all;
+}
+
+header { border-bottom: 2px solid var(--ink); padding-bottom: 18px; margin-bottom: 26px; }
+.label { font-size: 11px; letter-spacing: .14em; color: var(--accent); font-weight: 700; }
+h1 { font-size: 27px; line-height: 1.3; margin: 10px 0 12px; letter-spacing: -.02em; }
+.meta { font-size: 12.5px; color: var(--muted); }
+.meta a { color: var(--muted); }
+
+.conclusion {
+  border-left: 3px solid var(--accent); background: var(--wash);
+  padding: 16px 18px; margin-bottom: 34px; font-size: 15.5px;
+}
+.tag {
+  display: block; font-size: 11px; font-weight: 700; letter-spacing: .1em;
+  color: var(--accent); margin-bottom: 6px;
+}
+
+section { margin-bottom: 34px; }
+h2 { font-size: 19px; margin: 0 0 4px; letter-spacing: -.01em; }
+.num {
+  display: inline-block; min-width: 26px; height: 22px; margin-right: 8px;
+  background: var(--accent); color: #fff; font-size: 12px; font-weight: 700;
+  text-align: center; line-height: 22px; border-radius: 3px;
+}
+.sub { font-size: 13px; color: var(--muted); margin: 0 0 16px; }
+time { font-variant-numeric: tabular-nums; font-size: 12px; color: var(--accent); font-weight: 600; }
+
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.card { border: 1px solid var(--line); border-radius: 5px; padding: 14px 16px; }
+.card h4 { margin: 0 0 8px; font-size: 14.5px; }
+.card p { margin: 0; font-size: 14px; }
+
+.term { border-top: 1px solid var(--line); padding: 13px 0; }
+.term h4 { margin: 0 0 5px; font-size: 15px; }
+.term h4 em { font-style: normal; font-weight: 400; font-size: 12.5px; color: var(--muted); }
+.term p { margin: 0; }
+.aside {
+  margin-top: 7px !important; background: var(--wash); padding: 8px 11px;
+  border-radius: 4px; font-size: 13.5px; color: #3f4450;
+}
+.aside b { color: var(--accent); font-weight: 700; }
+
+.frame { border: 1px solid var(--line); border-radius: 5px; padding: 4px 16px 10px; margin: 14px 0; }
+.frame .row { display: flex; gap: 12px; padding: 9px 0; border-top: 1px solid var(--line); align-items: baseline; }
+.frame .row:first-of-type { border-top: 0; }
+.frame .key {
+  flex: 0 0 74px; font-weight: 700; color: var(--accent); font-size: 14px;
+}
+.frame .row p { margin: 0; font-size: 14px; }
+.frame .row p span { color: var(--muted); }
+
+.step { display: flex; gap: 14px; padding: 15px 0; border-top: 1px solid var(--line); }
+.marker {
+  flex: 0 0 26px; height: 26px; border-radius: 50%; background: var(--ink); color: #fff;
+  font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+}
+.step .body { flex: 1; }
+.step h4 { margin: 0 0 6px; font-size: 15px; display: flex; gap: 8px; align-items: baseline; }
+.step p { margin: 0 0 6px; }
+.step p:last-of-type { margin-bottom: 0; }
+blockquote {
+  margin: 9px 0 0; padding-left: 12px; border-left: 2px solid var(--line);
+  color: #3f4450; font-size: 14px;
+}
+
+.insight { padding: 12px 0; border-top: 1px solid var(--line); }
+.insight h4 { margin: 0 0 4px; font-size: 15px; }
+.insight p { margin: 0; font-size: 14.5px; }
+
+.watch { margin: 0; padding-left: 18px; }
+.watch li { margin-bottom: 9px; }
+
+footer {
+  margin-top: 38px; padding-top: 14px; border-top: 1px solid var(--line);
+  font-size: 12px; color: var(--muted);
+}
+
+@page { size: A4; margin: 14mm; }
+.card, .term, .step, .insight, .conclusion, .frame, blockquote { break-inside: avoid; page-break-inside: avoid; }
+h1, h2, h3, h4 { break-after: avoid; page-break-after: avoid; }
+@media print {
+  .note { max-width: none; padding: 0; font-size: 10.5pt; }
+  section { margin-bottom: 22px; }
+}
+</style>
+</head>
+<body>
+<div class="note">
+
+  <header>
+    <div class="label">STUDY NOTE · 정보 습득과 사고 프레임워크</div>
+    <h1>매일 정보를 인사이트로 만드는 4단계 루틴</h1>
+    <div class="meta">미키피디아 · 2026.8.30 · 17분 4초 · <a href="https://www.youtube.com/watch?v=Lonz2cN0TNs">원본 영상</a></div>
+  </header>
+
+  <div class="conclusion">
+    <span class="tag">한 줄 결론</span>
+    정보를 많이 소비한다고 세상을 이해하게 되지는 않는다. 관찰할 영역을 먼저 좁히고 <b>습득 → 맥락 → 미래 가설 → 기록</b> 네 단계를 통과시켜야 정보가 인사이트가 된다. 주가도 결국 세상이 어떻게 흘러가는지의 결과이므로, 인사이트를 잘 찾는 사람이 투자도 잘한다는 것이 화자의 전제다.
+  </div>
+
+  <section>
+    <h2><span class="num">01</span> 출발점 — 점과 흐름</h2>
+    <p class="sub">영상이 깔아 둔 대비 구도 <time>0:07–0:45</time></p>
+    <p>화자는 정보가 부족한 시대가 아니라 <b>너무 많아서 세상이 어디로 흘러가는지 알기 더 어려워진 시대</b>라는 진단에서 출발한다. 그래서 필요한 것은 더 많은 정보가 아니라 선별과 맥락, 그리고 그것을 자기 것으로 만드는 프레임워크다.</p>
+    <div class="split">
+      <div class="card">
+        <h4>점 — 정보</h4>
+        <p>오늘 일어난 하나의 사건. 실적 발표, 인사 이동, 주가 등락. 아무리 많이 모아도 점은 점이다.</p>
+      </div>
+      <div class="card">
+        <h4>흐름 — 맥락</h4>
+        <p>여러 점이 연결될 때 생기는 것. 사건이 아니라 <b>변화</b>를 보는 일이고, 이것이 2단계의 목표다.</p>
+      </div>
+    </div>
+    <blockquote>"1단계 정보 습득이 하나의 점이라면 여러 점들이 연결될 때 흐름이 돼요. 즉 사건이 아니라 변화를 보는 거죠."</blockquote>
+  </section>
+
+  <section>
+    <h2><span class="num">02</span> 용어 사전</h2>
+    <p class="sub">영상에 등장한 개념을 쉬운 말로</p>
+
+    <div class="term">
+      <h4>1차 자료 <em>source</em></h4>
+      <p>사건을 직접 만든 주체가 내놓은 원문. 실적 발표라면 뉴스 기사가 아니라 실적 발표 자료, 그리고 정책 원문·보고서 원문이 여기 해당한다. 사실을 파악하는 가장 확실한 방법이다.</p>
+      <p class="aside"><b>포인트</b> — 1차 자료는 그것을 만든 기관의 이해관계가 반영돼 있어서 <em>중립적인 자료는 아니다</em>. 정확한 자료와 공정한 자료는 다르다.</p>
+    </div>
+
+    <div class="term">
+      <h4>보도와 해석</h4>
+      <p>1차 자료에 대한 누군가의 정리와 해설. 과거에는 언론이 독점했지만 온라인·소셜 미디어 시대에는 개인들이 이 역할을 적극적으로 하고 있다.</p>
+      <p class="aside"><b>포인트</b> — 화자는 주도권이 개인에게 넘어간 것을 언론의 힘이 약해진 결정적 이유이자, 동시에 "5만 가지 의견과 확인되지 않는 뉴스가 넘쳐나는" 이유로 본다. 같은 변화의 앞뒷면이다.</p>
+    </div>
+
+    <div class="term">
+      <h4>데이터</h4>
+      <p>판매량, 주가, 검색, 평점, 지지율처럼 객관적인 신호를 주는 정보. 1차 자료나 뉴스도 데이터를 정리해 주지만, 직접 볼 수 있다면 직접 보는 쪽이 낫다.</p>
+      <p class="aside"><b>읽는 법</b> — 주가가 많이 올랐다는 기사만 보지 말고 하루·한 달·1년을 직접 찾아본다. "어제 많이 올랐다"는 기사와 "1년간 반토막"이라는 데이터는 완전히 다른 인사이트를 준다.</p>
+    </div>
+
+    <div class="term">
+      <h4>원반확지관 <em>화자가 만든 말</em></h4>
+      <p>맥락을 파악할 때 적용하는 다섯 가지 기준의 앞글자. 원인·반복·확산·지속·관점. 미래는 일단 제쳐 두고 <b>과거와 현재에만 집중</b>하는 단계다.</p>
+      <p class="aside"><b>포인트</b> — 뉴스를 분석한다는 것도 결국 이 맥락 파악 과정이라는 것이 화자의 정의다.</p>
+    </div>
+
+    <div class="term">
+      <h4>미래 가설</h4>
+      <p>3단계에서 세우는 것. 정보를 잘 연결한다고 미래를 맞출 수 있는 것은 아니므로 — 우리가 미래 주가를 못 맞추듯이 — 화자는 '예측'이 아니라 '가설'이라는 표현이 맞다고 본다.</p>
+      <p class="aside"><b>쉽게</b> — 회사에서 사업 계획을 보고할 때 베스트 시나리오와 워스트 시나리오를 같이 주는 것과 같은 방식. 기본·상승·하락 세 갈래로 벌려 두고, 가능하면 확률까지 붙인다.</p>
+    </div>
+
+    <div class="term">
+      <h4>기록</h4>
+      <p>1·2·3단계를 정리해 남기는 4단계. 화자는 두 종류로 나눈다. ① 관심 있는 뉴스를 컴퓨터 앞에 각 잡고 앉아 1·2·3단계로 정리하는 기록, ② 문득 떠오르거나 팟캐스트·오디오북에서 알게 된 것을 메모장에 그때그때 적어 두는 기록.</p>
+      <p class="aside"><b>포인트</b> — 화자는 애플 노트 앱에 '생각과 정보'라는 노트를 따로 두고 즉시 적는다. 바로 적지 않으면 나중에 잊힌다는 것이 이유다.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">03</span> 논리 흐름</h2>
+    <p class="sub">전제 하나 + 4단계 + 실제 적용 사례</p>
+
+    <div class="step">
+      <div class="marker">0</div>
+      <div class="body">
+        <h4>전제 — 관찰할 영역을 먼저 제한한다 <time>1:19–2:04</time></h4>
+        <p>모든 분야를 알 수는 없으니 지속적으로 관찰할 영역부터 좁힌다. 화자 본인은 주식 시장과 테크 산업에는 관심이 많지만 정치 뉴스와 에너지 산업에는 크지 않고, 영화는 자주 보지만 연예인 소식에는 관심이 없다.</p>
+        <p>이 구분은 뒤의 모든 단계가 성립하는 조건이다. 맥락 파악은 "아는 만큼 보이는" 일이라서, 팔로업 영역이 제한돼 있을 때만 제대로 된다. 부수적으로는 클릭을 유도하는 피드 속에서 손가락 통제를 가능하게 해 준다.</p>
+        <blockquote>"내가 지속적으로 깊게 팔로업하는 분야와 그냥 정말 빅뉴스만 소비하는 분야는 꽤 명확하게 구분하는게 중요하다고 생각을 합니다."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">1</div>
+      <div class="body">
+        <h4>1단계 · 정보 습득 — 세 가지 원천 <time>0:51–4:51</time></h4>
+        <p>무슨 일이 일어나고 있는가를 파악하는 단계. 원천은 <b>1차 자료 · 보도와 해석 · 데이터</b> 셋이다. 화자는 해설과 정리는 주로 유튜브·팟캐스트에서 얻고, 포털 뉴스는 낚시성 기사가 많아 "내가 뭘 보러 들어갔는지도 잊어버린다"며 선호하지 않는다.</p>
+        <p>유튜브는 알고리즘이 관심사 기반으로 노출을 제한해 주고 팟캐스트는 구독한 것만 나오므로 팔로업 영역 안에 머물게 해 준다 — 단 반복적인 정보와 확증 편향을 키울 수 있다는 점은 조심해야 한다. 뉴스 해설은 한국과 미국 채널을 균형 있게 본다.</p>
+        <blockquote>"정보를 많이 소비한다고 세상을 잘 이해한 건 아니잖아요."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">2</div>
+      <div class="body">
+        <h4>2단계 · 맥락 파악 — 원반확지관 <time>5:01–6:11</time></h4>
+        <p>점을 흐름으로 바꾸는 단계. 다섯 기준을 순서대로 대 본다. 이 단계에서는 미래를 생각하지 않고 과거와 현재에만 집중한다.</p>
+        <div class="frame">
+          <div class="row"><div class="key">원 · 원인</div><p>왜 이런 일이 일어나고 있는지, 왜 이런 결정을 했는지 <span>— 원인과 의도</span></p></div>
+          <div class="row"><div class="key">반 · 반복</div><p>비슷한 현상이 반복적으로 나타나는지, 다른 곳에서도 일어나는지</p></div>
+          <div class="row"><div class="key">확 · 확산</div><p>다른 산업이나 다른 지역으로도 번지고 있는지</p></div>
+          <div class="row"><div class="key">지 · 지속</div><p>일시적인 현상인지, 구조적으로 지속되는 변화인지</p></div>
+          <div class="row"><div class="key">관 · 관점</div><p>이 변화는 누구에게 기회이고 누구에게 위기인지</p></div>
+        </div>
+        <p>애플이 신제품을 발표한 경우로 예를 들면 — 왜 지금 출시했지(원) / 과거에 비슷한 사례가 있었을까(반) / 경쟁사들도 비슷한 제품을 내고 있을까(확) / 더 큰 제품 전략의 일부일까(지) / 어떤 사용자들이 좋아할까(관).</p>
+        <blockquote>"딱 아는만큼 보인다는게 맥락 파악이고, 또 그래서 어설프게 잘 모르는 분야 아는 척하면 오히려 더 어설픈 티가 많이 나는 것도 이것 때문이잖아요."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">3</div>
+      <div class="body">
+        <h4>3단계 · 미래 가설 <time>7:42–9:01</time></h4>
+        <p>여기서 처음으로 미래를 본다. 애플 신제품 사례라면 — 얼마나 팔릴까, 사람들의 행동에 어떤 변화를 줄까, 이 제품을 중심으로 어떤 생태계가 만들어지고 거기서 누가 돈을 벌까, 주가에는 어떤 영향을 줄까.</p>
+        <p>한 단계 더 들어가려면 기본 시나리오 위에 상승·하락 시나리오를 얹고, 가능하면 확률까지 붙인다. 그리고 <b>내가 세운 가설이 맞는지 확인하려면 앞으로 어떤 데이터나 변화를 봐야 하는지</b>까지 정해 둔다.</p>
+        <blockquote>"이 단계를 미래 예측이라고 하기보다는 미래 가설이란 표현이 더 맞을 거 같아요."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">4</div>
+      <div class="body">
+        <h4>4단계 · 정리와 기록 <time>9:01–10:32</time></h4>
+        <p>1·2·3단계를 합쳐 놓는 단계. 화자는 인사이트를 "어떤 일이 있었고, 왜 그런 일이 있었고, 큰 그림에서 이게 어떤 현상이고, 앞으로 어떤 변화가 있을지"의 합으로 정의한다.</p>
+        <p>기록은 그 자체로 끝이 아니라 재료가 된다. 화자가 인스타그램 스토리에 올리는 뉴스 정리가 이 기록의 요약이고, 모아 둔 기록이 채널 영상(예: 분기 실적 인사이트 모음)의 소스가 된다.</p>
+        <blockquote>"기록을 하면은 내가 그냥 생각만 하는 것보다 훨씬 더 정리가 잘 됩니다."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">5</div>
+      <div class="body">
+        <h4>실전 적용 — 구글 개발자 이탈 뉴스 <time>10:36–12:41</time></h4>
+        <p><b>1단계</b> 구글에서 30년 가까이 검색을 비롯한 주요 서비스의 코딩을 담당한 개발자(자막 표기 '제이')가 퇴사한 소식. 화자는 1차 자료인 본인의 X 글과 구글 공식 블로그에서 확인했고, 이 소식에 구글 주가가 4% 하락한 것을 데이터로 봤다.</p>
+        <p><b>2단계</b> 다섯 기준 중 원·반만 적용. <b>원인</b> — 대기업이 된 구글의 속도와 내부 정치가 답답했을 것이고 자기 것을 하고 싶었을 것. 단 화자는 이것을 <em>추정이지 팩트가 아니라고</em> 명시한다. <b>반복</b> — 개발자가 나가서 창업하는 것은 구글뿐 아니라 빅테크에서 항상 일어나는 일이고, 이건 팩트다.</p>
+        <p><b>3단계</b> 슈퍼 개발자의 이탈은 단기 개발 일정에 영향을 주고, 새 스타트업이 성장하면 따라 나가는 개발자가 생겨 내부 분위기에도 계속 영향을 준다. 다만 구글처럼 큰 기업은 기본적으로 시스템으로 돌아가므로 기술력이 붕괴할 가능성은 없고 실적 영향도 제한적이다. 대신 인재 유출로 AI 경쟁력이 장기적으로 낮아진다면 문제이므로, 앞으로 나올 구글 AI 제품들을 신경 써서 볼 필요가 있다 — 여기까지가 하나의 기록이다.</p>
+        <blockquote>"이렇게 어떤 정보를 사실, 맥락, 예측으로 나누어서 생각해 보는 거는 인사이트를 키울 수 있는 좋은 방법이라고 생각합니다."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">6</div>
+      <div class="body">
+        <h4>결론 — 훈련이면 된다 <time>12:41–13:23</time></h4>
+        <p>하루에 뉴스 하나씩만 이 4단계를 적용하면 인사이트가 오르는 것이 느껴진다는 것이 화자의 마무리다. 여기서 뉴스란 앞서 말한 '깊게 들어가고 싶은 영역'의 뉴스다. 결국 정보를 나에게 맞춰 나만의 인사이트로 만드는 일은 <b>나만의 기준을 만드는 일</b>과 비슷하다.</p>
+        <blockquote>"그냥 읽은 기사 내용을 얘기하는 사람과 어떤 인사이트를 얘기하는 사람은 진짜 달라 보이거든요. 이건 훈련으로 충분히 가능하다고 생각합니다."</blockquote>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">04</span> 인사이트</h2>
+    <p class="sub">영상 밖에서도 통하는 원칙으로</p>
+
+    <div class="insight">
+      <h4>① 입력을 줄여야 출력이 깊어진다</h4>
+      <p>관심 영역을 좁히는 것은 게으름이 아니라 맥락이 생길 수 있는 조건이다. 같은 대상을 반복해서 봐야 점들이 서로 붙는다. 모든 분야를 얕게 보는 사람은 어느 분야에서도 흐름을 보지 못한다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>② 정확한 자료와 공정한 자료는 다르다</h4>
+      <p>1차 자료는 사실 확인에 가장 강하지만 만든 쪽의 이해관계가 실려 있다. 원문에 가까이 가되 그 원문이 누구의 목적으로 쓰였는지를 같이 읽는 것 — 신뢰도는 출처의 지위가 아니라 동기에서 판정한다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>③ 예측 대신 가설로 말하면 생각이 자산이 된다</h4>
+      <p>예측은 맞았는지 틀렸는지로 끝나지만, 가설은 "무엇을 보면 이게 맞는지 알 수 있는가"라는 검증 조건을 남긴다. 시나리오를 벌려 두고 확인할 지표를 함께 적어 두는 순간, 틀린 판단조차 다음 판단의 재료가 된다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>④ AI에는 질문이 아니라 내 프레임을 먼저 준다</h4>
+      <p>정보를 찾아 달라고만 하면 정보가 늘어날 뿐이지만, 내 기준을 심어 두고 그걸로 분석시키면 사고의 틀이 반복 적용된다. 도구에 내 방법론을 이식하는 것이 결과물을 받는 것보다 오래 남는다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>⑤ 추정과 팩트를 문장 안에서 구분하는 습관</h4>
+      <p>구글 사례에서 화자는 원인은 "내 추정이지 팩트가 아니다", 반복성은 "이건 팩트다"라고 매번 라벨을 붙인다. 이 라벨링이 없으면 내 해석이 시간이 지나 사실로 기억된다. 기록의 정확도는 무엇을 적었는가보다 무엇을 어떤 확신도로 적었는가에서 갈린다.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">05</span> 앞으로 해 볼 것</h2>
+    <p class="sub">영상이 남긴 실행 항목</p>
+    <ul class="watch">
+      <li><b>하루 뉴스 한 건에 4단계 적용</b> — 대상은 '깊게 들어가고 싶은 영역'의 뉴스 하나. 매일 반복하는 것이 화자가 제시한 유일한 훈련법이다.</li>
+      <li><b>내 팔로업 영역 목록 만들기</b> — 깊게 파는 분야와 빅뉴스만 소비하는 분야를 종이에 갈라 적는다. 이것이 안 되면 2단계가 작동하지 않는다.</li>
+      <li><b>원반확지관을 AI에 등록</b> — 프레임을 먼저 설명해 두고 "원반확지관으로 분석해 줘"로 쓴다. 화자는 반복 사용 뒤 요청하지 않아도 AI가 알아서 이 분석을 해 준다고 말한다.</li>
+      <li><b>시나리오에 확률 붙이기</b> — 기본 / 상승 / 하락 세 갈래를 적고 각각에 확률을 붙여 본다. 화자도 "말처럼 쉽지 않다"고 단서를 달았다.</li>
+      <li><b>즉시 기록용 메모 하나 만들기</b> — 화자의 '생각과 정보' 노트처럼, 팟캐스트·독서 중 떠오른 것을 그 자리에서 적는 단일 노트를 둔다.</li>
+      <li><b>가설 검증 지표 정해 두기</b> — 구글 사례에서 화자가 잡은 지표는 "앞으로 나올 구글 AI 제품들이 어떻게 나오는지". 내 가설에도 동일하게 확인 대상을 붙인다.</li>
+    </ul>
+  </section>
+
+  <footer>
+    유튜브 자동 생성 자막 전문을 바탕으로 정리 (미측정 기본값 2.2초 보정). 영상 13:23 이후의 협찬 구간(맞춤 안경 브랜드 소개·댓글 이벤트)은 학습 내용과 무관해 제외했다. 발언자의 견해이며 투자 판단의 근거가 아닌 학습 자료입니다.
+  </footer>
+</div>
+</body>
+</html>
