@@ -65,4 +65,5 @@ jobs:
         run: |
           # -z/-0: 한글 파일명을 git 이 "\353\250\270..." 로 이스케이프해 내보내는 걸 막는다
           git diff -z --name-only --diff-filter=A ${{ github.event.before }} ${{ github.sha }} \
-            -- 'notes/morning-routine/*.html' 'notes/invest/*.html' | xargs -0 -r python3 scripts/slack.py
+            -- 'notes/morning-routine/*.html' 'notes/invest/*.html' 'notes/real-estate/*.html' \
+            | xargs -0 -r python3 scripts/slack.py

@@ -24,6 +24,7 @@ const SITE = {
 const KINDS = {
   "morning-routine": { label: "모닝루틴", color: "var(--morning)" },
   "invest":          { label: "투자",     color: "var(--invest)"  },
+  "real-estate":     { label: "부동산",   color: "var(--estate)"  },
   "self-study":      { label: "공부",     color: "var(--study)"   }
 };
 
@@ -50,6 +51,7 @@ const META = {
   --rule-soft:#D9E0E6;
   --morning:#A16207;   /* morning-routine — 다이제스트 */
   --invest:#1D4ED8;    /* invest — 투자 스터디 노트 */
+  --estate:#9A3412;    /* real-estate — 부동산 */
   --study:#0F766E;     /* self-study — 개인 공부용 */
   --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
   --sans:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
@@ -239,7 +241,7 @@ body{
     <h3>새 기록 추가하기</h3>
     <code style="display:inline;padding:1px 5px;border:0;background:var(--card)">notes/&lt;폴더&gt;/{yyMMdd}_&lt;slug&gt;.html</code>
     로 파일을 올리고 push 하면 끝입니다. 제목과 설명은 노트의 <code style="display:inline;padding:1px 5px;border:0;background:var(--card)">&lt;h1&gt;</code> 과
-    한 줄 결론 · 헤드라인에서 자동으로 뽑습니다. 폴더는 <strong>morning-routine · invest · self-study</strong> 셋뿐입니다.
+    한 줄 결론 · 헤드라인에서 자동으로 뽑습니다. 폴더는 <strong>morning-routine · invest · real-estate · self-study</strong> 넷뿐입니다.
     <br><br>
     태그를 달거나 자동 추출한 제목·설명을 덮어쓰고 싶을 때만 위쪽 <strong>META</strong> 에 한 줄 추가하세요.
     <code>scripts/build-notes-index.py   # 로컬에서 목록을 미리 갱신할 때</code>

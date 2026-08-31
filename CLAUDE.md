@@ -1,6 +1,6 @@
 # rich-to-be
 
-유튜브 영상을 **한 장짜리 HTML 문서**로 정리하는 Claude Code 스킬 두 개. 리포의 산출물은 `notes/<폴더>/{yyMMdd}_<slug>.html` 이다 (날짜는 노트를 만든 날, 영상 방송일이 아니다). **폴더는 모닝루틴 `notes/morning-routine/` · 투자 노트 `notes/invest/` · 개인 공부용 `notes/self-study/` 셋뿐이다.** 스터디 노트 스킬은 투자 노트인지 개인 공부용인지 사용자에게 한 번 묻는다.
+유튜브 영상을 **한 장짜리 HTML 문서**로 정리하는 Claude Code 스킬 두 개. 리포의 산출물은 `notes/<폴더>/{yyMMdd}_<slug>.html` 이다 (날짜는 노트를 만든 날, 영상 방송일이 아니다). **폴더는 모닝루틴 `notes/morning-routine/` · 투자 노트 `notes/invest/` · 부동산 `notes/real-estate/` · 개인 공부용 `notes/self-study/` 넷뿐이다.** 스터디 노트 스킬은 투자·부동산·개인 공부용 중 어디인지 사용자에게 한 번 묻는다.
 
 | 스킬 | 대상 | 만드는 것 |
 |---|---|---|
@@ -27,7 +27,7 @@ Python은 **반드시 `.venv/bin/python`** 을 쓴다. `youtube-transcript-api` 
 |---|---|
 | `transcript.py` | 자막 받기. `.work/<video_id>/` 에 `transcript.txt` 와 `meta.json` 을 만든다 |
 | `caption-lag.md` | 자동자막 지연 보정 절차 (기본 2.2초 자동 적용, 어긋날 때만 `--probe` → `--lag`) |
-| `slack.py` | 발행된 노트 링크를 슬랙 채널에 전송. `.env` 에 `SLACK_BOT_TOKEN`(chat:write) + `SLACK_CHANNEL`, 봇을 채널에 초대해 둘 것. 채널엔 "<파일명> 정리" 만 올리고 **Pages 링크는 그 메시지의 스레드 답글**로 넣는다 (여러 개면 전부 첫 메시지 스레드로). **평소엔 손으로 안 돌린다** — 푸시하면 `pages.yml` 의 `slack` 잡이 새로 추가된 morning-routine · invest 노트만 골라 호출하고, 베이스 URL 을 `NOTES_BASE_URL` 로 넘긴다. 리포 시크릿에 같은 두 값이 있어야 한다 |
+| `slack.py` | 발행된 노트 링크를 슬랙 채널에 전송. `.env` 에 `SLACK_BOT_TOKEN`(chat:write) + `SLACK_CHANNEL`, 봇을 채널에 초대해 둘 것. 채널엔 "<파일명> 정리" 만 올리고 **Pages 링크는 그 메시지의 스레드 답글**로 넣는다 (여러 개면 전부 첫 메시지 스레드로). **평소엔 손으로 안 돌린다** — 푸시하면 `pages.yml` 의 `slack` 잡이 새로 추가된 morning-routine · invest 노트만 골라 호출하고, 베이스 URL 을 `NOTES_BASE_URL` 로 넘긴다. 리포 시크릿에 같은 두 값이 있어야 한다. `--mentions` 는 반대로 **읽는** 쪽 — 봇이 멘션된 스레드와 거기 있는 유튜브 링크를 탭 구분으로 뱉는다 (`slack-mention-notes` 스킬이 쓴다). 노트 HTML 에 `<meta name="slack-thread" content="<ts>">` 가 있으면 채널에 새 글을 만들지 않고 **그 스레드에 링크만** 답글로 단다 |
 | `build-notes-index.py` | 목록 데이터 `notes/notes.js` 를 만든다 (`index.html` 이 `<script src>` 로 읽는다). 노트의 `<h1>` 과 한 줄 결론·헤드라인을 파싱한다 |
 
 ## 파이프라인
@@ -38,7 +38,9 @@ transcript.py --outline-only (자동자막이면 2.2초 자동 보정) → 본�
 
 **노트 파일은 Write 툴로 만들고 Edit 툴로 고친다. Bash 리다이렉트(`cat > ...`)로 쓰지 마라.** `.claude/settings.json` 의 `PostToolUse(Write|Edit)` 훅이 `scripts/commit-note.sh` 를 불러 커밋·인덱스 재빌드·푸시까지 하는데, Bash 로 쓰면 훅이 매칭될 툴 호출이 없어서 **발행이 조용히 멈춘다.** `.work/` 나 스크래치 파일은 Bash 로 써도 된다.
 
-**전 과정을 메인 세션이 한다. 에이전트를 띄우지 않는다.** 자막 대조 검수 절은 두 스킬에서 제거됐다 — 되살릴 거면 git 이력에서 꺼내야 한다.
+**노트 한 건은 전 과정을 메인 세션이 한다. 에이전트를 띄우지 않는다.** 자막 대조 검수 절은 두 스킬에서 제거됐다 — 되살릴 거면 git 이력에서 꺼내야 한다.
+
+**예외는 `slack-mention-notes` 하나다.** 슬랙 멘션을 여러 건 골라 돌릴 때만 건당 worktree 격리 서브에이전트를 띄운다. worktree 여야 하는 이유는 `commit-note.sh` 가 tool_input 을 안 보고 `git status` 로 더러운 노트를 **전부** 커밋하기 때문이다 — 작업 디렉토리를 공유하면 에이전트 A 의 훅이 에이전트 B 의 쓰다 만 노트를 같이 커밋·푸시한다. worktree 안에서는 `git rev-parse --show-toplevel` 이 그 worktree 를 가리켜 훅이 자기 것만 커밋한다 (2026-08-31 실측).
 
 ## 발행 (`notes/index.html` + GitHub Pages)
 

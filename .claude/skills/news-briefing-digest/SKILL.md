@@ -89,6 +89,6 @@ HTML 아티팩트 한 페이지. 레이아웃과 CSS는 `references/layout.md`�
 
 파일명은 `notes/<폴더>/{yyMMdd}_<슬러그>.html` 이다 — 날짜는 **노트를 만드는 오늘 날짜**다. 영상 방송일이 아니다 (방송일은 헤더에 적는다).
 
-**모닝루틴 영상이면 `notes/morning-routine/`, 투자 관련이면 `notes/invest/`, 그 외에는 `notes/self-study/` 아래에 쌓는다.** 예: `notes/morning-routine/260826_한경-모닝루틴.html`
+**모닝루틴 영상이면 `notes/morning-routine/`, 투자 관련이면 `notes/invest/`, 부동산이면 `notes/real-estate/`, 그 외에는 `notes/self-study/` 아래에 쌓는다.** 예: `notes/morning-routine/260826_한경-모닝루틴.html`
 
 문서를 낸 뒤에는 한 줄만 덧붙인다 — 어떤 꼭지를 더 깊게 볼지 물어보고, 원하면 해당 구간만 자세히 풀어 줄 수 있다는 것.

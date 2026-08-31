@@ -17,12 +17,16 @@ Pages 아티팩트의 루트가 notes/ 라서 notes/ 아래 경로가 그대로 
 import argparse
 import json
 import os
+import re
 import sys
 import urllib.parse
 import urllib.request
 from pathlib import Path
 
 API = "https://slack.com/api/"
+YOUTUBE = re.compile(r"(?:youtube\.com/watch\?\S*?v=|youtu\.be/|youtube\.com/live/)([\w-]{11})")
+# 멘션으로 시작한 노트는 이 태그로 원본 스레드를 들고 다닌다. 심는 건 슬랙 멘션 스킬.
+THREAD_META = re.compile(r'<meta\s+name="slack-thread"\s+content="([\d.]+)"')
 ENV_FILE = Path(__file__).resolve().parent.parent / ".env"
 # ponytail: CI 는 deploy-pages 의 page_url 을 NOTES_BASE_URL 로 넘긴다. 이 기본값은 로컬 실행용 —
 # 리포/계정이 바뀌면 여기도 바꾼다.
@@ -61,12 +65,51 @@ def note_url(path, base=BASE_URL):
     return base.rstrip("/") + "/" + "/".join(urllib.parse.quote(p) for p in rel)
 
 
+def note_thread(path):
+    """노트 HTML 에 심어둔 원본 슬랙 스레드 ts. 없거나 파일이 없으면 None."""
+    p = Path(path)
+    m = THREAD_META.search(p.read_text(errors="ignore")) if p.exists() else None
+    return m and m.group(1)
+
+
+def mentions(token, channel, limit=50):
+    """봇이 멘션된 스레드 목록. 부모·답글 어디에 유튜브 링크가 있어도 찾는다.
+
+    상태 파일은 두지 않는다 — 슬랙 자체가 상태다. 봇이 이미 링크를 답글로 단 스레드는 done=True.
+    """
+    bot = call("auth.test", token)["user_id"]
+    out = []
+    for m in call("conversations.history", token, channel=channel, limit=limit)["messages"]:
+        msgs = (call("conversations.replies", token, channel=channel, ts=m["ts"])["messages"]
+                if m.get("reply_count") else [m])
+        # subtype 이 붙은 건 채널 참여/봇 알림 같은 시스템 메시지다 — 사람이 부른 게 아니다
+        hit = next((t for t in msgs
+                    if f"<@{bot}>" in t.get("text", "") and not t.get("subtype") and t.get("user") != bot), None)
+        if not hit:
+            continue
+        vids = [v for t in msgs for v in YOUTUBE.findall(t.get("text", ""))]
+        out.append({
+            "thread_ts": m["ts"],
+            "video": f"https://www.youtube.com/watch?v={vids[0]}" if vids else None,
+            "text": " ".join(hit.get("text", "").split())[:70],
+            "done": any(t.get("user") == bot and "http" in t.get("text", "") for t in msgs),
+        })
+    return out
+
+
 def post(path, token, channel, base=BASE_URL, thread_ts=None):
     """제목을 올리고 링크는 그 스레드 답글로 넣는다. thread_ts 가 있으면 그 스레드에 이어 단다.
+
+    노트에 slack-thread 태그가 있으면(멘션으로 시작한 건) 새 글을 만들지 않고
+    요청이 걸린 그 스레드에 링크만 답글로 단다. 채널 스레드 체인은 건드리지 않는다.
 
     반환은 (링크, 스레드 부모 ts) — 다음 파일에 그대로 넘기면 같은 스레드로 모인다.
     """
     url = note_url(path, base)
+    origin = note_thread(path)
+    if origin:
+        call("chat.postMessage", token, channel=channel, text=url, thread_ts=origin)
+        return url, thread_ts
     body = call("chat.postMessage", token, channel=channel, text=f"{Path(path).stem} 정리",
                 **({"thread_ts": thread_ts} if thread_ts else {}))
     root = thread_ts or body["ts"]
@@ -83,6 +126,14 @@ def selftest():
         f.write('# 주석\nSLACK_BOT_TOKEN="xoxb-1"\n\nSLACK_CHANNEL = C0X \nBROKEN\n')
     assert dotenv(Path(f.name)) == {"SLACK_BOT_TOKEN": "xoxb-1", "SLACK_CHANNEL": "C0X"}
 
+    assert YOUTUBE.findall("보세요 <https://www.youtube.com/watch?v=Bu0xNDLNabc&t=3s>") == ["Bu0xNDLNabc"]
+    assert YOUTUBE.findall("https://youtu.be/aBcDeFgHiJk 랑 youtube.com/live/12345678901") == ["aBcDeFgHiJk", "12345678901"]
+    assert YOUTUBE.findall("링크 없음") == []
+    assert note_thread("notes/does-not-exist.html") is None
+    with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False) as g:
+        g.write('<meta name="slack-thread" content="1787897791.593189">')
+    assert note_thread(g.name) == "1787897791.593189"
+
     global call
     real, sent = call, []
     call = lambda m, tok, **kw: (sent.append(kw), {"ok": True, "ts": f"t{len(sent)}"})[1]
@@ -91,13 +142,18 @@ def selftest():
         assert root == "t1", root
         _, root2 = post("notes/invest/b.html", "x", "C0X", "http://e.com", root)
         assert root2 == root
+        # 제목은 채널(첫 건)·같은 스레드(둘째 건), 링크는 늘 스레드 답글
+        assert [(s["text"], s.get("thread_ts")) for s in sent] == [
+            ("a 정리", None), ("http://e.com/invest/a.html", "t1"),
+            ("b 정리", "t1"), ("http://e.com/invest/b.html", "t1"),
+        ], sent
+        # 멘션 노트는 새 글 없이 원본 스레드에 링크만, 채널 체인(root)은 그대로 넘어간다
+        _, root3 = post(g.name, "x", "C0X", "http://e.com", root)
+        assert root3 == root
+        assert sent[-1] == {"channel": "C0X", "text": f"http://e.com/{Path(g.name).name}",
+                            "thread_ts": "1787897791.593189"}, sent[-1]
     finally:
         call = real
-    # 제목은 채널(첫 건)·같은 스레드(둘째 건), 링크는 늘 스레드 답글
-    assert [(s["text"], s.get("thread_ts")) for s in sent] == [
-        ("a 정리", None), ("http://e.com/invest/a.html", "t1"),
-        ("b 정리", "t1"), ("http://e.com/invest/b.html", "t1"),
-    ], sent
     print("ok")
 
 
@@ -107,14 +163,21 @@ def main():
     ap.add_argument("--channel", default=os.environ.get("SLACK_CHANNEL"))  # 없으면 .env
     ap.add_argument("--base-url", default=os.environ.get("NOTES_BASE_URL") or BASE_URL)
     ap.add_argument("--selftest", action="store_true")
+    ap.add_argument("--mentions", action="store_true", help="봇이 멘션된 스레드를 탭 구분으로 출력")
     a = ap.parse_args()
     if a.selftest:
         return selftest()
     env = dotenv()
     token = os.environ.get("SLACK_BOT_TOKEN") or env.get("SLACK_BOT_TOKEN")
     a.channel = a.channel or env.get("SLACK_CHANNEL")
-    if not (a.paths and token and a.channel):
-        sys.exit(".env 의 SLACK_BOT_TOKEN / SLACK_CHANNEL(--channel) 과 파일 경로가 있어야 한다")
+    if not (token and a.channel):
+        sys.exit(".env 의 SLACK_BOT_TOKEN / SLACK_CHANNEL(--channel) 이 있어야 한다")
+    if a.mentions:
+        for i, m in enumerate(mentions(token, a.channel), 1):
+            print(f"{i}\t{'done' if m['done'] else 'new'}\t{m['thread_ts']}\t{m['video'] or '-'}\t{m['text']}")
+        return
+    if not a.paths:
+        sys.exit("보낼 노트 파일 경로가 있어야 한다")
     ts = None
     for p in a.paths:
         url, ts = post(p, token, a.channel, a.base_url, ts)   # 첫 메시지가 스레드 부모

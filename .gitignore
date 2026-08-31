@@ -8,4 +8,5 @@ __pycache__/
 *.key
 notes/self-study/**
 notes/notes.js
+.claude/worktrees/
 
