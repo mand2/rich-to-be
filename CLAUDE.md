@@ -25,7 +25,7 @@ Python은 **반드시 `.venv/bin/python`** 을 쓴다. `youtube-transcript-api` 
 
 | 파일 | 무엇 |
 |---|---|
-| `transcript.py` | 자막 받기. `.work/<video_id>/` 에 `transcript.txt` 와 `meta.json` 을 만든다 |
+| `transcript.py` | 자막 받기. `.work/<video_id>/` 에 `transcript.txt`(전문) 와 `meta.json` 을 만든다 |
 | `caption-lag.md` | 자동자막 지연 보정 절차 (기본 2.2초 자동 적용, 어긋날 때만 `--probe` → `--lag`) |
 | `slack.py` | 발행된 노트 링크를 슬랙 채널에 전송. `.env` 에 `SLACK_BOT_TOKEN`(chat:write) + `SLACK_CHANNEL`, 봇을 채널에 초대해 둘 것. `SLACK_MENTION_GROUP` (사용자 그룹 ID)이 있으면 **멘션으로 시작한 건의 스레드 답글에만** `<!subteam^…>` 를 앞줄로 붙인다 — 액션이 자동 발행하는 건은 부르는 사람이 없으니 멘션도 없다. 채널엔 "<파일명> 정리" 만 올리고 **Pages 링크는 그 메시지의 스레드 답글**로 넣는다 (여러 개면 전부 첫 메시지 스레드로). **평소엔 손으로 안 돌린다** — 푸시하면 `pages.yml` 의 `slack` 잡이 새로 추가된 morning-routine · invest 노트만 골라 호출하고, 베이스 URL 을 `NOTES_BASE_URL` 로 넘긴다. 리포 시크릿에 같은 두 값이 있어야 한다. `--mentions` 는 반대로 **읽는** 쪽 — 봇이 멘션된 스레드와 거기 있는 유튜브 링크를 탭 구분으로 뱉는다 (`slack-mention-notes` 스킬이 쓴다). 노트 HTML 에 `<meta name="slack-thread" content="<ts>">` 가 있으면 채널에 새 글을 만들지 않고 **그 스레드에 링크만** 답글로 단다 |
 | `build-notes-index.py` | 목록 데이터 `notes/notes.js` 를 만든다 (`index.html` 이 `<script src>` 로 읽는다). 노트의 `<h1>` 과 한 줄 결론·헤드라인을 파싱한다 |
@@ -33,7 +33,7 @@ Python은 **반드시 `.venv/bin/python`** 을 쓴다. `youtube-transcript-api` 
 ## 파이프라인
 
 ```
-transcript.py --outline-only (자동자막이면 2.2초 자동 보정) → 본문 작성 → notes/<폴더>/{yyMMdd}_<slug>.html
+transcript.py (자동자막이면 2.2초 자동 보정) → 본문 작성 → notes/<폴더>/{yyMMdd}_<slug>.html
 ```
 
 **노트 파일은 Write 툴로 만들고 Edit 툴로 고친다. Bash 리다이렉트(`cat > ...`)로 쓰지 마라.** `.claude/settings.json` 의 `PostToolUse(Write|Edit)` 훅이 `scripts/commit-note.sh` 를 불러 커밋·인덱스 재빌드·푸시까지 하는데, Bash 로 쓰면 훅이 매칭될 툴 호출이 없어서 **발행이 조용히 멈춘다.** `.work/` 나 스크래치 파일은 Bash 로 써도 된다.
@@ -77,7 +77,7 @@ scripts/transcript.py "<URL>" --lag 3.5    # 영상과 대조한 값으로 재�
 
 ## 코드 규칙
 
-`transcript.py` 는 스크립트 1개로 유지한다. fetch와 split을 파일로 쪼개지 않는다.
+`transcript.py` 는 스크립트 1개로 유지한다. 자막 받기·지연 보정·메타 수집을 파일로 쪼개지 않는다.
 
 로직을 고치면 `--selftest` 의 assert도 함께 고친다 — `scripts/transcript.py` 와 `scripts/build-notes-index.py` 둘 다 `--selftest` 를 갖고 있다. 별도 테스트 프레임워크는 두지 않는다.
 

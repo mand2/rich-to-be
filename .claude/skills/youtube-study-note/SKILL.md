@@ -15,10 +15,10 @@ description: 유튜브 영상 자막을 '스터디 노트' 형식의 HTML 아티
 **이 리포에서는 먼저 `transcript.py` 를 시도한다.** 자막을 자동으로 받아오므로 사용자에게 붙여넣기를 시키지 않아도 된다.
 
 ```sh
-.venv/bin/python scripts/transcript.py "<URL>" --outline-only
+.venv/bin/python scripts/transcript.py "<URL>"
 ```
 
-`.work/<video_id>/` 에 타임스탬프가 찍힌 `transcript.txt` 와 `meta.json`(제목·채널·길이·원본 URL·자동자막 여부)이 생긴다. `--outline-only` 는 구간 분할을 건너뛴다 — 스터디 노트는 전문을 한 번에 읽으므로 분할이 필요 없다.
+`.work/<video_id>/` 에 타임스탬프가 찍힌 `transcript.txt` 와 `meta.json`(제목·채널·길이·원본 URL·자동자막 여부)이 생긴다. 자막은 쪼개지 않는다 — 전문을 한 번에 읽는다.
 
 `meta.json` 의 `auto_generated` 가 `true` 면 표시 지연 보정 2.2초가 **자동으로 적용된다. 사용자에게 확인을 묻지 않는다.** 측정값이 아니므로 푸터에 `(미측정 기본값 2.2초 보정)` 이라고 밝히고, 사용자가 타임스탬프 어긋남을 알려올 때만 `--lag <초>` 로 다시 뽑는다 (절차: `scripts/caption-lag.md`).
 
