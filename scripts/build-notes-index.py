@@ -89,7 +89,7 @@ def selftest():
     assert text("<b>가</b> 나  <a href='#'>다</a>") == "가 나 다"
     assert text("<b>구조</b>를 짰다") == "구조를 짰다"
     assert text("<p>가</p><p>나</p>") == "가 나"
-    assert clip("abcdef", 4) == "abcde…" or clip("abcdef", 4).endswith("…")
+    assert clip("abcdef", 4) == "abcd…"
     assert describe('<div class="conclusion"><span class="tag">한 줄 결론</span>수급 때문이다.</div>') == "수급 때문이다."
     assert describe('<section class="top3"><ol><li><b>가</b> — x</li><li><b>나</b></li></ol></section>') == "가 · 나"
     assert describe('<div class="meta">채널 · 15분</div>') == "채널 · 15분"

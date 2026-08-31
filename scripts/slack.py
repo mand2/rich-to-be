@@ -28,6 +28,8 @@ API = "https://slack.com/api/"
 YOUTUBE = re.compile(r"(?:youtube\.com/watch\?\S*?v=|youtu\.be/|youtube\.com/live/)([\w-]{11})")
 # 멘션으로 시작한 노트는 이 태그로 원본 스레드를 들고 다닌다. 심는 건 슬랙 멘션 스킬.
 THREAD_META = re.compile(r'<meta\s+name="slack-thread"\s+content="([\d.]+)"')
+# ponytail: 멘션 스캔 깊이. 오래된 멘션이 잘려 안 보이면 올린다 (SKILL.md 도 이 값을 가리킨다).
+HISTORY_LIMIT = 50
 ENV_FILE = Path(__file__).resolve().parent.parent / ".env"
 # ponytail: CI 는 deploy-pages 의 page_url 을 NOTES_BASE_URL 로 넘긴다. 이 기본값은 로컬 실행용 —
 # 리포/계정이 바뀌면 여기도 바꾼다.
@@ -73,14 +75,14 @@ def note_thread(path):
     return m and m.group(1)
 
 
-def mentions(token, channel, limit=50):
+def mentions(token, channel):
     """봇이 멘션된 스레드 목록. 부모·답글 어디에 유튜브 링크가 있어도 찾는다.
 
     상태 파일은 두지 않는다 — 슬랙 자체가 상태다. 봇이 이미 링크를 답글로 단 스레드는 done=True.
     """
     bot = call("auth.test", token)["user_id"]
     out = []
-    for m in call("conversations.history", token, channel=channel, limit=limit)["messages"]:
+    for m in call("conversations.history", token, channel=channel, limit=HISTORY_LIMIT)["messages"]:
         msgs = (call("conversations.replies", token, channel=channel, ts=m["ts"])["messages"]
                 if m.get("reply_count") else [m])
         # subtype 이 붙은 건 채널 참여/봇 알림 같은 시스템 메시지다 — 사람이 부른 게 아니다
@@ -171,20 +173,22 @@ def selftest():
 
 
 def main():
+    # .env 를 환경변수로 올려 두면 뒤의 default= 하나로 CI(환경변수)와 로컬(.env)이 같은 경로를 탄다.
+    # 이미 있는 환경변수가 이긴다 — CI 는 시크릿을 그쪽으로 넘긴다.
+    for k, v in dotenv().items():
+        os.environ.setdefault(k, v)
+
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("paths", nargs="*", type=Path)
-    ap.add_argument("--channel", default=os.environ.get("SLACK_CHANNEL"))  # 없으면 .env
-    ap.add_argument("--group", default=os.environ.get("SLACK_MENTION_GROUP"), help="멘션할 사용자 그룹 ID")
+    ap.add_argument("--channel", default=os.environ.get("SLACK_CHANNEL"))
+    ap.add_argument("--group", default=os.environ.get("SLACK_MENTION_GROUP") or "", help="멘션할 사용자 그룹 ID")
     ap.add_argument("--base-url", default=os.environ.get("NOTES_BASE_URL") or BASE_URL)
     ap.add_argument("--selftest", action="store_true")
     ap.add_argument("--mentions", action="store_true", help="봇이 멘션된 스레드를 탭 구분으로 출력")
     a = ap.parse_args()
     if a.selftest:
         return selftest()
-    env = dotenv()
-    token = os.environ.get("SLACK_BOT_TOKEN") or env.get("SLACK_BOT_TOKEN")
-    a.channel = a.channel or env.get("SLACK_CHANNEL")
-    a.group = a.group or env.get("SLACK_MENTION_GROUP") or ""
+    token = os.environ.get("SLACK_BOT_TOKEN")
     if not (token and a.channel):
         sys.exit(".env 의 SLACK_BOT_TOKEN / SLACK_CHANNEL(--channel) 이 있어야 한다")
     if a.mentions:

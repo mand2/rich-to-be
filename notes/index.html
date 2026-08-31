@@ -190,6 +190,7 @@ body{
   font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.16em;
   text-transform:uppercase;color:var(--ink-faint);margin:0 0 12px;
 }
+.howto code.inline{display:inline;padding:1px 5px;border:0}
 .howto code{
   display:block;background:var(--card);border:1px solid var(--rule-soft);
   font-family:var(--mono);font-size:11.5px;line-height:1.8;color:var(--ink);
@@ -239,8 +240,8 @@ body{
 
   <footer class="howto">
     <h3>새 기록 추가하기</h3>
-    <code style="display:inline;padding:1px 5px;border:0;background:var(--card)">notes/&lt;폴더&gt;/{yyMMdd}_&lt;slug&gt;.html</code>
-    로 파일을 올리고 push 하면 끝입니다. 제목과 설명은 노트의 <code style="display:inline;padding:1px 5px;border:0;background:var(--card)">&lt;h1&gt;</code> 과
+    <code class="inline">notes/&lt;폴더&gt;/{yyMMdd}_&lt;slug&gt;.html</code>
+    로 파일을 올리고 push 하면 끝입니다. 제목과 설명은 노트의 <code class="inline">&lt;h1&gt;</code> 과
     한 줄 결론 · 헤드라인에서 자동으로 뽑습니다. 폴더는 <strong>morning-routine · invest · real-estate · self-study</strong> 넷뿐입니다.
     <br><br>
     태그를 달거나 자동 추출한 제목·설명을 덮어쓰고 싶을 때만 위쪽 <strong>META</strong> 에 한 줄 추가하세요.
@@ -275,6 +276,7 @@ function fromPath(e) {
 }
 
 const NOTES = NOTES_RAW.map(fromPath);
+const LATEST = NOTES.map(n => n.date).filter(Boolean).sort().pop();   // 없으면 undefined
 
 let activeKinds = new Set();
 let newestFirst = true;
@@ -350,7 +352,7 @@ function render() {
 
   $("#tally").textContent =
     rows.length === NOTES.length
-      ? `${NOTES.length}개의 기록 · 최근 ${NOTES.length ? fmtFull(latest()) : "—"}`
+      ? `${NOTES.length}개의 기록 · 최근 ${LATEST ? LATEST.replace(/-/g, ".") : "—"}`
       : `${rows.length} / ${NOTES.length}개 표시 중`;
 
   if (!rows.length) {
@@ -395,8 +397,6 @@ function entryHTML(n, i) {
     </a>`;
 }
 
-function latest() { return NOTES.map(n => n.date).filter(Boolean).sort().pop(); }
-function fmtFull(s) { return `${s.slice(0, 4)}.${s.slice(5, 7)}.${s.slice(8, 10)}`; }
 function esc(s) {
   return String(s).replace(/[&<>"']/g, c =>
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));

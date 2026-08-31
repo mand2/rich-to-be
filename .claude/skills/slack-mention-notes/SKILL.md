@@ -73,5 +73,5 @@ Actions 의 `slack` 잡이 새로 추가된 노트를 골라 `slack.py` 로 보�
 
 `CLAUDE.md` 의 "절대 지키는 것" 이 그대로 적용된다 — 자막에 없는 것을 만들지 않고, 자막 수치를 임의로 교정하지 않고, 타임스탬프를 추정하지 않는다. 서브에이전트에게도 같은 제약이 걸린다 (worktree 안에도 `CLAUDE.md` 가 있다).
 
-<!-- ponytail: 멘션 스캔은 conversations.history 기본 50건. 오래된 멘션이 잘려 안 보이면 slack.py 의 limit 을 올린다.
+<!-- ponytail: 멘션 스캔은 conversations.history 기본 50건. 오래된 멘션이 잘려 안 보이면 slack.py 의 HISTORY_LIMIT 을 올린다.
      채널은 SLACK_CHANNEL 하나만 본다 — DM·멀티채널은 스코프(im:history 등)와 채널 목록 관리가 붙어서 안 넣었다. -->
