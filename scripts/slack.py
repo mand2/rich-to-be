@@ -8,6 +8,7 @@
 
     SLACK_BOT_TOKEN=xoxb-...   # scope: chat:write
     SLACK_CHANNEL=C0XXXXXXX    # 봇을 채널에 /invite 해 둘 것
+    SLACK_MENTION_GROUP=S0X... # 선택. 멘션으로 시작한 건의 답글에 부를 사용자 그룹 ID
 
     .venv/bin/python scripts/slack.py notes/morning-routine/260826_한경-모닝루틴.html
     .venv/bin/python scripts/slack.py --selftest
@@ -97,18 +98,22 @@ def mentions(token, channel, limit=50):
     return out
 
 
-def post(path, token, channel, base=BASE_URL, thread_ts=None):
+def post(path, token, channel, base=BASE_URL, thread_ts=None, group=""):
     """제목을 올리고 링크는 그 스레드 답글로 넣는다. thread_ts 가 있으면 그 스레드에 이어 단다.
 
     노트에 slack-thread 태그가 있으면(멘션으로 시작한 건) 새 글을 만들지 않고
     요청이 걸린 그 스레드에 링크만 답글로 단다. 채널 스레드 체인은 건드리지 않는다.
+
+    group 은 멘션으로 시작한 노트(slack-thread 태그)의 답글에만 붙는다 — 사람이 봇을 불러
+    요청한 건이라 알릴 대상이 있다. 액션이 자동 발행하는 건은 채널에 조용히 쌓이게 둔다.
 
     반환은 (링크, 스레드 부모 ts) — 다음 파일에 그대로 넘기면 같은 스레드로 모인다.
     """
     url = note_url(path, base)
     origin = note_thread(path)
     if origin:
-        call("chat.postMessage", token, channel=channel, text=url, thread_ts=origin)
+        call("chat.postMessage", token, channel=channel,
+             text=f"<!subteam^{group}>\n{url}" if group else url, thread_ts=origin)
         return url, thread_ts
     body = call("chat.postMessage", token, channel=channel, text=f"{Path(path).stem} 정리",
                 **({"thread_ts": thread_ts} if thread_ts else {}))
@@ -148,10 +153,18 @@ def selftest():
             ("b 정리", "t1"), ("http://e.com/invest/b.html", "t1"),
         ], sent
         # 멘션 노트는 새 글 없이 원본 스레드에 링크만, 채널 체인(root)은 그대로 넘어간다
+        # 액션이 자동 발행하는 건은 group 을 줘도 멘션하지 않는다
+        sent.clear()
+        post("notes/invest/c.html", "x", "C0X", "http://e.com", group="S0G")
+        assert [s["text"] for s in sent] == ["c 정리", "http://e.com/invest/c.html"], sent
+
         _, root3 = post(g.name, "x", "C0X", "http://e.com", root)
         assert root3 == root
         assert sent[-1] == {"channel": "C0X", "text": f"http://e.com/{Path(g.name).name}",
                             "thread_ts": "1787897791.593189"}, sent[-1]
+        # 멘션으로 시작한 건만 그룹을 부른다
+        post(g.name, "x", "C0X", "http://e.com", root, group="S0G")
+        assert sent[-1]["text"] == f"<!subteam^S0G>\nhttp://e.com/{Path(g.name).name}", sent[-1]
     finally:
         call = real
     print("ok")
@@ -161,6 +174,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("paths", nargs="*", type=Path)
     ap.add_argument("--channel", default=os.environ.get("SLACK_CHANNEL"))  # 없으면 .env
+    ap.add_argument("--group", default=os.environ.get("SLACK_MENTION_GROUP"), help="멘션할 사용자 그룹 ID")
     ap.add_argument("--base-url", default=os.environ.get("NOTES_BASE_URL") or BASE_URL)
     ap.add_argument("--selftest", action="store_true")
     ap.add_argument("--mentions", action="store_true", help="봇이 멘션된 스레드를 탭 구분으로 출력")
@@ -170,6 +184,7 @@ def main():
     env = dotenv()
     token = os.environ.get("SLACK_BOT_TOKEN") or env.get("SLACK_BOT_TOKEN")
     a.channel = a.channel or env.get("SLACK_CHANNEL")
+    a.group = a.group or env.get("SLACK_MENTION_GROUP") or ""
     if not (token and a.channel):
         sys.exit(".env 의 SLACK_BOT_TOKEN / SLACK_CHANNEL(--channel) 이 있어야 한다")
     if a.mentions:
@@ -180,7 +195,7 @@ def main():
         sys.exit("보낼 노트 파일 경로가 있어야 한다")
     ts = None
     for p in a.paths:
-        url, ts = post(p, token, a.channel, a.base_url, ts)   # 첫 메시지가 스레드 부모
+        url, ts = post(p, token, a.channel, a.base_url, ts, a.group)   # 첫 메시지가 스레드 부모
         print(f"{p} -> {url}")
 
 
