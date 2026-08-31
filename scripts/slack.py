@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """발행된 노트 링크를 슬랙 채널에 올린다. 외부 의존성 0 (urllib 만 쓴다).
 
-채널엔 "<파일명> 정리" 만 뜨고 Pages 링크는 그 메시지의 스레드 답글로 들어간다 — 채널에 링크 프리뷰가 쌓이지 않는다.
+채널엔 "<파일명> 정리" 만 뜨고 Pages 링크는 그 메시지의 스레드 답글로 [노트 제목](링크) 꼴로 들어간다.
 한 번에 여러 개를 보내면 첫 메시지가 스레드 부모가 되고 나머지는 전부 그 스레드에 달린다.
 
 리포 루트 .env 에 두 줄 (환경변수로 이미 있으면 그쪽이 이긴다). .env.example 참고:
@@ -16,6 +16,7 @@
 Pages 아티팩트의 루트가 notes/ 라서 notes/ 아래 경로가 그대로 URL 경로가 된다.
 """
 import argparse
+import html
 import json
 import os
 import re
@@ -28,6 +29,7 @@ API = "https://slack.com/api/"
 YOUTUBE = re.compile(r"(?:youtube\.com/watch\?\S*?v=|youtu\.be/|youtube\.com/live/)([\w-]{11})")
 # 멘션으로 시작한 노트는 이 태그로 원본 스레드를 들고 다닌다. 심는 건 슬랙 멘션 스킬.
 THREAD_META = re.compile(r'<meta\s+name="slack-thread"\s+content="([\d.]+)"')
+H1 = re.compile(r"<h1[^>]*>(.*?)</h1>", re.S)
 # ponytail: 멘션 스캔 깊이. 오래된 멘션이 잘려 안 보이면 올린다 (SKILL.md 도 이 값을 가리킨다).
 HISTORY_LIMIT = 50
 ENV_FILE = Path(__file__).resolve().parent.parent / ".env"
@@ -75,6 +77,19 @@ def note_thread(path):
     return m and m.group(1)
 
 
+def note_link(path, url):
+    """슬랙 mrkdwn 링크. 제목은 노트의 <h1>, 없으면 파일명.
+
+    마크다운 [제목](링크) 는 슬랙 API 로 보내면 링크가 안 되고 글자 그대로 뜬다 —
+    같은 것을 슬랙에서 그리는 표기가 <링크|제목> 이다.
+    """
+    p = Path(path)
+    m = H1.search(p.read_text(errors="ignore")) if p.exists() else None
+    title = re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]*>", " ", m.group(1)))).strip() if m else p.stem
+    esc = title.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+    return f"<{url}|{esc}>"
+
+
 def mentions(token, channel):
     """봇이 멘션된 스레드 목록. 부모·답글 어디에 유튜브 링크가 있어도 찾는다.
 
@@ -112,15 +127,16 @@ def post(path, token, channel, base=BASE_URL, thread_ts=None, group=""):
     반환은 (링크, 스레드 부모 ts) — 다음 파일에 그대로 넘기면 같은 스레드로 모인다.
     """
     url = note_url(path, base)
+    link = note_link(path, url)
     origin = note_thread(path)
     if origin:
         call("chat.postMessage", token, channel=channel,
-             text=f"<!subteam^{group}>\n{url}" if group else url, thread_ts=origin)
+             text=f"<!subteam^{group}>\n{link}" if group else link, thread_ts=origin)
         return url, thread_ts
     body = call("chat.postMessage", token, channel=channel, text=f"{Path(path).stem} 정리",
                 **({"thread_ts": thread_ts} if thread_ts else {}))
     root = thread_ts or body["ts"]
-    call("chat.postMessage", token, channel=channel, text=url, thread_ts=root)
+    call("chat.postMessage", token, channel=channel, text=link, thread_ts=root)
     return url, root
 
 
@@ -140,6 +156,11 @@ def selftest():
     with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False) as g:
         g.write('<meta name="slack-thread" content="1787897791.593189">')
     assert note_thread(g.name) == "1787897791.593189"
+    # 링크 제목은 <h1>, 없으면 파일명. 슬랙 특수문자는 이스케이프
+    assert note_link("notes/does-not-exist.html", "http://e.com/x") == "<http://e.com/x|does-not-exist>"
+    with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False) as h:
+        h.write("<h1>\n삼성 &amp; <b>SK</b> 정리\n</h1>")
+    assert note_link(h.name, "http://e.com/x") == "<http://e.com/x|삼성 &amp; SK 정리>", note_link(h.name, "u")
 
     global call
     real, sent = call, []
@@ -151,22 +172,24 @@ def selftest():
         assert root2 == root
         # 제목은 채널(첫 건)·같은 스레드(둘째 건), 링크는 늘 스레드 답글
         assert [(s["text"], s.get("thread_ts")) for s in sent] == [
-            ("a 정리", None), ("http://e.com/invest/a.html", "t1"),
-            ("b 정리", "t1"), ("http://e.com/invest/b.html", "t1"),
+            ("a 정리", None), ("<http://e.com/invest/a.html|a>", "t1"),
+            ("b 정리", "t1"), ("<http://e.com/invest/b.html|b>", "t1"),
         ], sent
         # 멘션 노트는 새 글 없이 원본 스레드에 링크만, 채널 체인(root)은 그대로 넘어간다
         # 액션이 자동 발행하는 건은 group 을 줘도 멘션하지 않는다
         sent.clear()
         post("notes/invest/c.html", "x", "C0X", "http://e.com", group="S0G")
-        assert [s["text"] for s in sent] == ["c 정리", "http://e.com/invest/c.html"], sent
+        assert [s["text"] for s in sent] == ["c 정리", "<http://e.com/invest/c.html|c>"], sent
 
         _, root3 = post(g.name, "x", "C0X", "http://e.com", root)
         assert root3 == root
-        assert sent[-1] == {"channel": "C0X", "text": f"http://e.com/{Path(g.name).name}",
+        assert sent[-1] == {"channel": "C0X",
+                            "text": f"<http://e.com/{Path(g.name).name}|{Path(g.name).stem}>",
                             "thread_ts": "1787897791.593189"}, sent[-1]
         # 멘션으로 시작한 건만 그룹을 부른다
         post(g.name, "x", "C0X", "http://e.com", root, group="S0G")
-        assert sent[-1]["text"] == f"<!subteam^S0G>\nhttp://e.com/{Path(g.name).name}", sent[-1]
+        assert sent[-1]["text"] == (
+            f"<!subteam^S0G>\n<http://e.com/{Path(g.name).name}|{Path(g.name).stem}>"), sent[-1]
     finally:
         call = real
     print("ok")
