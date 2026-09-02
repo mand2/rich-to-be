@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>예측 대신 무너지지 않는 구조 — 스터디 노트</title>
+<style>
+:root {
+  --accent: #1d4ed8;
+  --ink: #16181d;
+  --muted: #6b7280;
+  --line: #e5e3de;
+  --wash: #f7f6f3;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: #fff; }
+.note {
+  max-width: 720px; margin: 0 auto; padding: 32px 28px;
+  font-family: Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  color: var(--ink); font-size: 15px; line-height: 1.72;
+  word-break: keep-all;
+}
+
+header { border-bottom: 2px solid var(--ink); padding-bottom: 18px; margin-bottom: 26px; }
+.label { font-size: 11px; letter-spacing: .14em; color: var(--accent); font-weight: 700; }
+h1 { font-size: 27px; line-height: 1.3; margin: 10px 0 12px; letter-spacing: -.02em; }
+.meta { font-size: 12.5px; color: var(--muted); }
+.meta a { color: var(--muted); }
+
+.conclusion {
+  border-left: 3px solid var(--accent); background: var(--wash);
+  padding: 16px 18px; margin-bottom: 34px; font-size: 15.5px;
+}
+.tag {
+  display: block; font-size: 11px; font-weight: 700; letter-spacing: .1em;
+  color: var(--accent); margin-bottom: 6px;
+}
+
+section { margin-bottom: 34px; }
+h2 { font-size: 19px; margin: 0 0 4px; letter-spacing: -.01em; }
+.num {
+  display: inline-block; min-width: 26px; height: 22px; margin-right: 8px;
+  background: var(--accent); color: #fff; font-size: 12px; font-weight: 700;
+  text-align: center; line-height: 22px; border-radius: 3px;
+}
+.sub { font-size: 13px; color: var(--muted); margin: 0 0 16px; }
+time { font-variant-numeric: tabular-nums; font-size: 12px; color: var(--accent); font-weight: 600; }
+
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.card { border: 1px solid var(--line); border-radius: 5px; padding: 14px 16px; }
+.card h4 { margin: 0 0 8px; font-size: 14.5px; }
+.card p { margin: 0; font-size: 14px; }
+
+.term { border-top: 1px solid var(--line); padding: 13px 0; }
+.term h4 { margin: 0 0 5px; font-size: 15px; }
+.term h4 em { font-style: normal; font-weight: 400; font-size: 12.5px; color: var(--muted); }
+.term p { margin: 0; }
+.aside {
+  margin-top: 7px !important; background: var(--wash); padding: 8px 11px;
+  border-radius: 4px; font-size: 13.5px; color: #3f4450;
+}
+.aside b { color: var(--accent); font-weight: 700; }
+
+.step { display: flex; gap: 14px; padding: 15px 0; border-top: 1px solid var(--line); }
+.marker {
+  flex: 0 0 26px; height: 26px; border-radius: 50%; background: var(--ink); color: #fff;
+  font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+}
+.step .body { flex: 1; }
+.step h4 { margin: 0 0 6px; font-size: 15px; display: flex; gap: 8px; align-items: baseline; }
+.step p { margin: 0; }
+blockquote {
+  margin: 9px 0 0; padding-left: 12px; border-left: 2px solid var(--line);
+  color: #3f4450; font-size: 14px;
+}
+
+.insight { padding: 12px 0; border-top: 1px solid var(--line); }
+.insight h4 { margin: 0 0 4px; font-size: 15px; }
+.insight p { margin: 0; font-size: 14.5px; }
+
+.watch { margin: 0; padding-left: 18px; }
+.watch li { margin-bottom: 9px; }
+
+table { width: 100%; border-collapse: collapse; margin: 12px 0 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+thead th { background: var(--wash); font-size: 13px; }
+
+footer {
+  margin-top: 38px; padding-top: 14px; border-top: 1px solid var(--line);
+  font-size: 12px; color: var(--muted);
+}
+
+@page { size: A4; margin: 14mm; }
+.card, .term, .step, .insight, .conclusion, blockquote, table { break-inside: avoid; page-break-inside: avoid; }
+h1, h2, h3, h4 { break-after: avoid; page-break-after: avoid; }
+@media print {
+  .note { max-width: none; padding: 0; font-size: 10.5pt; }
+  section { margin-bottom: 22px; }
+}
+</style>
+</head>
+<body>
+<div class="note">
+
+  <header>
+    <div class="label">STUDY NOTE · 자산배분과 연금</div>
+    <h1>예측 대신, 무너지지 않는 구조 — 25년 애널리스트가 본 부자들의 매매법</h1>
+    <div class="meta">머니인사이드 · 2026.8.31 · 57분 33초 · 박소연 이사 · <a href="https://www.youtube.com/watch?v=IvdIomAPFS4">원본 영상</a></div>
+  </header>
+
+  <div class="conclusion">
+    <span class="tag">한 줄 결론</span>
+    시장은 25년 경력의 애널리스트도 맞히지 못하니, 예측을 잘하려 애쓰는 대신 틀려도 무너지지 않는 구조를 설계하라. 화자가 본 부자들은 불확실한 100%가 아니라 확실한 10%를 여러 번 반복했고, 그 반복을 버티게 해 준 것은 근로소득이라는 현금 흐름과 연금이라는 그릇이었다.
+  </div>
+
+  <section>
+    <h2><span class="num">01</span> 출발점 — 20년 걸려 돌아온 가격</h2>
+    <p class="sub">영상의 프레임은 화자 본인의 실패담에서 시작한다 <time>0:38–4:47</time></p>
+    <p>화자는 2002년 증권사에 입사해 할인된 가격으로 받은 자사주를 들고 있다가, 애널리스트 직업 윤리 때문에 2007년 9월 전량 매도한다. 팔기 싫어서 가격까지 기억한다는 <b>35,400~35,500원</b>. 그리고 1년 뒤 미국 금융위기가 터졌으니, 억지로 판 그 가격이 거의 고점이었다.</p>
+    <p>반전은 그다음이다. 그 주가가 35,500원을 회복한 것은 <b>2026년 1월</b> — 20년이 걸렸다. 주식은 우상향한다지만, 비싸게 사면 그 우상향을 확인하는 데 인생의 20년이 들어갈 수도 있다는 것이 화자가 깔아 둔 대비 구도다.</p>
+    <div class="split">
+      <div class="card">
+        <h4>예측을 잘하려던 사람</h4>
+        <p>밤을 새우고 새벽 3시에 일어나 채권 금리를 보던 애널리스트. 그래도 한 치 앞을 못 봤다.</p>
+      </div>
+      <div class="card">
+        <h4>그래서 남는 두 가지</h4>
+        <p>첫째 겸손해야 한다. 둘째, 그럼에도 무너지지 않는 구조는 설계할 수 있다.</p>
+      </div>
+    </div>
+    <blockquote>"주식을 잘했으면 보통은 그만둬요." <time>0:43</time></blockquote>
+  </section>
+
+  <section>
+    <h2><span class="num">02</span> 용어 사전</h2>
+    <p class="sub">영상에 등장한 개념을 화자의 말로</p>
+
+    <div class="term">
+      <h4>자산배분 <em>asset allocation</em></h4>
+      <p>주식·채권·대체자산 등에 자금을 나눠 담는 것. 화자는 비중(6대 4, 5대 3대 2)을 먼저 묻는 질문에 "비중보다 돈의 성격이 먼저"라고 답한다.</p>
+      <p class="aside"><b>포인트</b> — 화자에게 자산배분은 기법이 아니라 <b>겸손의 징표</b>다. "나도 틀릴 수 있다"를 인정했기 때문에 나눠 놓는 것이다. <time>5:55–6:15</time></p>
+    </div>
+
+    <div class="term">
+      <h4>도마뱀의 뇌</h4>
+      <p>화자가 읽은 책에서 가져온 표현. 읽고 쓰고 논리적으로 사고하는 전두엽과, 본능을 담당하는 뇌간·변연계가 따로 있다는 설명이다.</p>
+      <p class="aside"><b>비유</b> — 수풀이 흔들리면 바로 도망가야 맹수한테 안 잡아먹힌다. 스마트폰 앱에서 시세가 흔들리는 걸 계속 보는 것은 하루 종일 수풀이 흔들리는 걸 보는 것과 같다. <time>11:45–12:39</time></p>
+    </div>
+
+    <div class="term">
+      <h4>포모 <em>FOMO</em></h4>
+      <p>투자할 때 가장 경계해야 할 심리. 화자는 그 원인을 감정이 아니라 노출 빈도에서 찾는다 — 시세를 자주 보기 때문에 조급해지고, 조급해지니 평정을 잃는다.</p>
+    </div>
+
+    <div class="term">
+      <h4>확실한 10% vs 불확실한 100%</h4>
+      <p>화자가 본 부자들은 불확실한 100%를 고르지 않는다. 확실한 10%, 혹은 확실한 1%를 고르고 <b>그것을 여러 번 반복</b>한다. 확실한 10%를 열 번 하면 확실한 100%가 된다는 셈법이다.</p>
+      <p class="aside"><b>포인트</b> — 사람은 "이걸로는 내 인생이 안 바뀔 것 같아서" 불확실한 100%에 손을 내민다는 것을 화자도 인정한다. <time>19:20</time></p>
+    </div>
+
+    <div class="term">
+      <h4>파산의 수학</h4>
+      <p>투자는 곱셈이라서, 여덟 번 잘하다가 아홉 번째에 0을 곱하면 무일푼이 된다. 첫 투자에 성공하고 두 번째도 운 좋게 성공한 사람이 자신감 때문에 세 번째에 0을 곱하는 패턴을 화자는 많이 봤다고 말한다.</p>
+    </div>
+
+    <div class="term">
+      <h4>연금 3층 구조</h4>
+      <p>1층은 국가가 책임지는 국민연금·공무원연금 등, 2층은 회사 몫인 퇴직연금, 3층은 스스로 쌓는 개인연금·IRP다. 화자는 본업에 충실하면서 할 수 있는 가장 좋은 투자로 연금 투자를 꼽는다.</p>
+      <p class="aside"><b>읽는 법</b> — 3층에 세제 혜택이 붙어 있는 이유는 "국가와 기업이 책임지지 못하는 층이니 네가 알아서 쌓아라"는 뜻이다. 안 넣는 것은 국가가 주겠다는 것을 거부하는 꼴. <time>34:01–34:19</time></p>
+    </div>
+
+    <div class="term">
+      <h4>DB형 · DC형</h4>
+      <p>퇴직금 형태로 받는 것이 DB, 퇴직연금으로 바꿔 <b>내가 직접 운용</b>하는 것이 DC다. DB는 회사가 책임진다.</p>
+    </div>
+
+    <div class="term">
+      <h4>채권 혼합형</h4>
+      <p>연금 자산에서 많이 쓰이는 상품 유형. 안정성을 위해 채권을 60% 이상 담고 나머지 40%를 위험자산에 투자한다. 담는 채권의 만기(듀레이션)가 긴 것과 짧은 것이 따로 있고, 시장 상황에 따라 유불리가 다르다.</p>
+      <p class="aside"><b>포인트</b> — 화자의 권유는 "삼성전자·SK하이닉스를 공부하는 만큼 <b>상품</b>을 공부하라"는 것이다. <time>39:09</time></p>
+    </div>
+
+    <div class="term">
+      <h4>5대 3대 2 법칙</h4>
+      <p>같은 이름의 두 가지가 있다. 하나는 <b>월급</b>에 적용하는 지출 법칙, 다른 하나는 <b>목돈</b>에 적용하는 자산배분 법칙이다. 아래 표로 정리했다.</p>
+    </div>
+
+    <div class="term">
+      <h4>대체투자 <em>alternative investment</em></h4>
+      <p>주식·채권이라는 전통 자산 밖의 자산. 원자재일 때도, 비트코인 같은 가상자산일 때도, 금일 때도 있다. 예전엔 주식 6 채권 4가 정석이었지만, 전쟁·전염병·무역전쟁이 겹치는 "어지러운 시대"에는 대체자산 20%를 유지해야 한다는 이야기가 많아졌다는 것이 화자의 설명이다.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">03</span> 영상의 논리 흐름</h2>
+    <p class="sub">멘탈에서 출발해 연금과 포트폴리오까지 이어지는 9단계</p>
+
+    <div class="step">
+      <div class="marker">1</div>
+      <div class="body">
+        <h4>예측은 안 된다, 구조는 된다 <time>4:51–5:21</time></h4>
+        <p>맞히려는 노력이 실패한 자리에서 화자가 꺼내는 대안이 구조 설계다. 예측은 못 해도, 예측이 틀린 날에 살아남는 설계는 할 수 있다는 것.</p>
+        <blockquote>"예측을 아무리 잘하려고 해도 맞출 수 없는게 시장이기 때문에 첫 번째는 겸손해야 된다. 그리고 두 번째는 그럼에도 불구하고 무너지지 않는 구조는 설계할 수 있는 거 아닌가?"</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">2</div>
+      <div class="body">
+        <h4>구조는 비중이 아니라 '이 돈이 어디서 왔는가'에서 시작한다 <time>6:15–8:17</time></h4>
+        <p>같은 3천만 원이라도 연봉 3,600만 원을 1년 모은 돈이면 잃는 순간 내 1년이 날아간다. 반대로 결혼·차·거주가 이미 해결된 사람의 3천만 원은 성격이 다르다. 그래서 비중표보다 <b>자금의 꼬리표</b>를 먼저 본다.</p>
+        <blockquote>"그러면이 돈은 어디에서 왔는가부터 저는 출발을 해야 된다고 생각을 하거든요."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">3</div>
+      <div class="body">
+        <h4>그 구조의 기둥은 근로소득이다 <time>8:25–10:59</time></h4>
+        <p>2단계에서 본 '돈의 출처'를 안정적으로 만드는 가장 쉬운 방법이 월급이다. 화자는 월급을 자산으로 환산해 보여 준다 — 월 300만 원, 연 3,600만 원을 은행 이자율 4%로 역산하면 <b>9억</b>이 나온다.</p>
+        <blockquote>"내가 이미 3,600만 원에 월급을 받고 있다라고 한다면 나는 9억짜리 상가를 이미 갖고 있는거나 똑같은 거예요." <time>10:22</time></blockquote>
+        <p style="margin-top:9px">대출 한도도 근로소득에서 나오므로, 레버리지를 쓸 수 있는 능력까지 여기에 딸려 온다. 그래서 재테크서에 "회사를 함부로 그만두지 마라"는 챕터가 있는 것이다.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">4</div>
+      <div class="body">
+        <h4>구조를 깨는 것은 시장이 아니라 내 마음이다 <time>11:23–17:10</time></h4>
+        <p>도마뱀의 뇌 때문에 시세를 볼수록 조급해진다. 화자가 찾아간 성공한 전업 투자자의 사무실에는 블룸버그 단말기가 없었고 낡은 컴퓨터 한 대뿐이었다. 시세는 네이버로 <b>하루 한 번 종가만</b> 확인하고, 남는 시간엔 산책을 하며 생각한다고 했다.</p>
+        <blockquote>"일단 시세를 많이 보면 팔고 싶어. 시세를 많이 보면 사고 싶어. 그리고 남들은 사고 있는데 나만 안 사는 거 같고 남들은 팔고 있는데 나만 안 파는 거 같고" <time>15:00</time></blockquote>
+        <p style="margin-top:9px">화자는 애널리스트 출신 전업 투자자 중 약 70%가 돌아왔고, 돌아오지 않은 20~30%가 이런 식이었다고 덧붙인다. 명상 트레이닝을 1~2개월 받은 그룹의 전두엽 회백질이 두꺼워졌다는 논문 이야기도 같이 꺼낸다.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">5</div>
+      <div class="body">
+        <h4>부자의 셈법 — 느리게, 그리고 0을 피해서 <time>17:31–24:20</time></h4>
+        <p>화자가 25년간 본 것은 "부자가 되는 사람"보다 "부를 유지하는 사람"이 훨씬 적다는 사실이다. 유지하는 사람들의 공통점 두 가지: 확실한 10%를 반복한다는 것, 그리고 자신이 틀릴 수 있다고 전제한다는 것.</p>
+        <blockquote>"세상에 천천히 부자가 되려는 사람은 아무도 없다. 그것이 대부분의 사람들이 부자가 되지 못하는 이유다." — 찰리 멍거 <time>18:29</time></blockquote>
+        <p style="margin-top:9px">복리 계산은 이렇게 든다. 매일 0.1%씩 좋아지면 1년 뒤 1.44배, 2년 뒤 2.09배, 10년 뒤 38배, 20년 뒤 <b>1,470배</b>. 그래서 화자에게 장기는 5년·10년이 아니라 20~30년이다. 우리가 조급한 이유는 그것을 3년 안에 당겨 보려 하기 때문이다.</p>
+        <blockquote>"여덟 번 잘하고 잘하다가도 아홉 번째 0을 곱해 버리면 정말 무일푼이 되어 버리는게 투자인데" <time>23:06</time></blockquote>
+        <p style="margin-top:9px">그리고 "내가 틀릴 수 있다"를 인정하면 두 가지 행동이 자동으로 따라온다 — 몰빵하지 않게 되고(=자산배분), 남에게 묻게 된다(=책·신문·공부). 화자는 <b>돈을 지키는 마인드와 이제부터 벌려고 공부하는 마인드가 사실상 같은 마인드</b>라고 정리한다.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">6</div>
+      <div class="body">
+        <h4>조급함의 뿌리인 비교는, 계획으로만 덮인다 <time>24:27–26:21</time></h4>
+        <p>화자도 매일 비교한다고 말한다. 옷으로, 성과급으로, 몸매로. "비교하지 말아야지"라는 결심으로는 비교를 멈출 수 없다는 것이 전제다.</p>
+        <blockquote>"계획이 있으면 비교하지 않게 되더라고요." <time>25:21</time></blockquote>
+        <p style="margin-top:9px">좋은 집에 들어간 친구를 진심으로 축복하려면, 나에게도 그만큼의 부를 달성할 계획이 있고 오늘 그 계획을 실천했고 그래서 뿌듯하게 잠들 루틴이 있어야 한다. 그 하루하루가 5단계의 0.1%를 쌓는 단계이기도 하다.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">7</div>
+      <div class="body">
+        <h4>실패는 복기한다 — 오답노트와 다음 버스 <time>26:48–29:50</time></h4>
+        <p>주식 투자를 시작하면 누구나 수업료를 낸다. 중요한 것은 복기다. 화자는 이창호 9단이 집에 돌아가자마자 복기를 했다는 이야기와, 자신이 틀린 문제를 가위로 오려 붙이고 옆에 이유를 적던 오답노트를 겹쳐 놓는다. 나중에 넘겨 보니 <b>실수에 패턴이 있었다</b>.</p>
+        <blockquote>"다음 버스는 반드시 다시 오는데 지금 놓치면 그 버스를 못 탈 것 같은 두려움이 그 당시는 생깁니다." <time>28:31</time></blockquote>
+        <p style="margin-top:9px">뛰어가다 넘어지면 다치기만 하고 버스는 떠난다. 10분 기다리면 순환버스는 다시 온다. 단, 다음 버스에 타려면 <b>버스카드 잔액이 0이 아니어야</b> 한다.</p>
+        <blockquote>"그 입장권을 살 현금은 근로 소득에서 온다. 그래서 저는 아 회사를 함부로 그만두지 않는다." <time>29:22</time></blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">8</div>
+      <div class="body">
+        <h4>실전의 그릇은 연금이다 <time>30:31–39:57</time></h4>
+        <p>2부의 출발은 관찰이다. 9시가 되면 사람들이 자리에 없다 — 장 시작 주문을 넣으러 화장실로 사라진다. 점심에 또 보고, 3시 반 마감 전에 또 본다. 본업에 충실하면서 할 수 있는 가장 좋은 투자로 화자가 연금을 꼽는 이유가 이 장면이다.</p>
+        <blockquote>"결국에는 똑같은 돈인데 계좌의 속성을 바꿨을 뿐인데 나에게 떨어지는 세액 공제가 생긴다" <time>34:45</time></blockquote>
+        <p style="margin-top:9px">화자가 실제로 아는 은퇴 앞둔 선배의 <b>부부합산 연금 자산은 20억</b>(집과 차 제외)이다. 방법은 특별하지 않았다 — 맞벌이로 매년 세액공제 한도를 꽉 채워 넣고, 잘 운용한다고 판단한 운용사·매니저의 상품에 맡기고, 그것을 30년 했다.</p>
+        <blockquote>"매일매일 아침에 화장실 가서 시세 보지 않고 3시 반에 장 끝나기 전에 시세 보지 않고 그냥 연금에서 가장 잘 운용할 수 있는 운용사를 믿고 기다리는 것도 하나의 방법인 거죠." <time>38:04</time></blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">9</div>
+      <div class="body">
+        <h4>계좌를 쪼개면 목적이 살아남는다 <time>39:57–45:57</time></h4>
+        <p>내집마련은 중요하지만, 화자는 <b>내집마련과 상급지 갈아타기를 분리해서</b> 생각하라고 말한다. 시세를 따라 계속 올라가는 것은 4단계의 포모와 매우 유사하다는 것이다. 20년 후에 필요한 것이 주거인지 현금 흐름인지를 먼저 묻는다.</p>
+        <p style="margin-top:9px">현금 흐름 이야기에서 배당주가 나오고, 배당주에서 계좌 분리로 넘어간다. 성장주와 배당주를 한 계좌에 담으면 처음 투자 목적을 잊게 된다는 것이 이유다.</p>
+        <blockquote>"내가 배당 받으려고 B라는 거 샀는데 안 되겠다. 그러면 A가 올라가는 것을 따라사기 위해서 B를 팔고 A를 사게 됩니다. … 사실 보통은 그때가 고점인 경우가 많거든요." <time>44:17</time></blockquote>
+        <p style="margin-top:9px">그래서 A증권사 계좌는 성장주만, B는 채권만, C는 배당주만. 각각 5천·3천·2천만 원이면 그 합이 곧 자산배분이 된다. 화자는 이것을 "흔들리는 멘탈을 관리할 수 있는 강제적인 방법"이라고 부른다.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">10</div>
+      <div class="body">
+        <h4>40대 이후에는 실패의 단위가 나 혼자가 아니다 <time>46:28–53:56</time></h4>
+        <p>20~30대는 실패해도 다시 일어날 시간과 체력이 있다. 40대 이후는 시간이 적게 남았고, 결정적으로 실패의 범위가 달라진다.</p>
+        <blockquote>"제가 투자에 실패를 하잖아요. 그러면 제가 실패를 한게 아니라 가족의 실패가 되어 버려요." <time>47:02</time></blockquote>
+        <p style="margin-top:9px">잃은 3천만 원은 아이의 대학 등록금이나 미래의 사업자금이었을 수 있고, 가족에게 해를 끼쳤다는 감정 때문에 다음 투자는 더 어려워진다. 그래서 40·50대의 답은 안전자산 비중이 조금 더 높은 <b>잃지 않는 구조</b>다 — 5단계의 "확실한 10%"가 여기서 다시 만난다.</p>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr><th style="width:22%">5대 3대 2</th><th>월급에 적용 (엘리자베스 워런) <time>48:47–50:57</time></th><th>목돈·자산배분에 적용 <time>51:01–53:04</time></th></tr>
+      </thead>
+      <tbody>
+        <tr><td><b>5 (50%)</b></td><td>필수 지출 — 숨만 쉬어도 나가는 돈(식비, 월세 등)</td><td>주식</td></tr>
+        <tr><td><b>3 (30%)</b></td><td>써도 되고 안 써도 되지만 사람답게 살려면 쓰는 돈(영화·운동·옷)</td><td>채권 — 화자는 "채권이 곧 현금"이라고 본다</td></tr>
+        <tr><td><b>2 (20%)</b></td><td><b>절대 양보하지 않는 연금 납입.</b> 30년간 넣으면 퇴직 후에도 월급의 70% 수준을 유지할 수 있다는 계산</td><td>대체투자 — 원자재·가상자산·금 등. 주식과 채권이 같이 움직이는 사태에 대비하는 몫</td></tr>
+      </tbody>
+    </table>
+    <p class="sub" style="margin-top:10px">과거 정석은 주식 6 채권 4였다. 인플레이션이 오면 채권 가격은 떨어지고 기업 가치는 올라가므로 둘은 보통 반대로 움직이는데, 요즘은 같이 움직이는 경우가 많아 대체자산 한 칸이 생겼다는 것이 화자의 설명이다.</p>
+  </section>
+
+  <section>
+    <h2><span class="num">04</span> 인사이트</h2>
+    <p class="sub">영상 밖에서도 통하는 원칙으로</p>
+
+    <div class="insight">
+      <h4>① 못 맞힌다는 걸 인정한 순간부터 설계가 시작된다</h4>
+      <p>예측 정확도를 올리는 일과 예측이 틀렸을 때 살아남는 일은 완전히 다른 문제다. 전자는 25년을 해도 안 되지만 후자는 오늘 결정할 수 있다. 겸손은 태도가 아니라 설계의 입력값이다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>② 곱셈 게임에서는 평균이 아니라 최악의 한 판을 관리한다</h4>
+      <p>결과가 누적되는 게임에서는 여덟 번의 성공보다 한 번의 0이 더 크다. 그래서 "얼마나 벌 수 있나"보다 "어디서 0을 곱하게 되나"를 먼저 묻는 것이 합리적이다. 몰빵을 피하는 이유는 수익률 계산이 아니라 이 비대칭성에 있다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>③ 조급함은 성격이 아니라 노출량의 함수다</h4>
+      <p>블룸버그를 끊고 네이버로 하루 한 번만 보기로 한 선택은 의지력을 기른 것이 아니라 자극의 빈도를 줄인 것이다. 자제력을 훈련하는 것보다 자제력이 필요한 상황을 없애는 쪽이 언제나 싸게 먹힌다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>④ 물리적 분리가 심리적 규율보다 강하다</h4>
+      <p>계좌를 쪼개는 것은 회계 편의가 아니라 목적을 지키는 장치다. 같은 그릇에 담긴 것들은 서로를 비교하기 시작하고, 비교가 시작되면 처음 그것을 산 이유가 지워진다. 흔들릴 것을 아는 규칙은 의지가 아니라 구조로 만든다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>⑤ 비교는 없앨 수 없고, 진도표로만 덮인다</h4>
+      <p>"비교하지 말자"는 결심은 실패한다. 남의 속도가 신경 쓰이지 않는 유일한 상태는 내 계획과 오늘의 실행이 있는 상태다. 부러움의 반대는 무관심이 아니라 진행 중인 내 계획이다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>⑥ 같은 돈이라도 담는 그릇이 수익을 바꾼다</h4>
+      <p>500만 원을 통장에 두느냐 연금계좌로 옮기느냐는 종목 선택이 아니라 계좌 속성의 문제인데, 결과에 미치는 차이는 제도가 보장해 준다. 무엇을 사느냐를 고민하기 전에, 어디에 담고 있는지를 점검하는 것이 순서상 먼저다.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">05</span> 앞으로 지켜볼 것</h2>
+    <ul class="watch">
+      <li><b>연금계좌 개별 채권 투자 허용</b> — 정부가 법을 바꿔 제도를 개편 중이라고 화자가 언급했다. 예전엔 ETF도 못 샀지만 지금은 되는 것처럼, 쓸 수 있는 상품 범위가 어디까지 넓어지는지 확인. <time>38:52–39:00</time></li>
+      <li><b>연말정산 전 3층 한도 점검</b> — IRP + 개인연금 합산 900만 원. 연봉 5,500만 원 이상/이하에 따라 세액공제율이 갈린다.</li>
+      <li><b>내 퇴직연금이 DB인지 DC인지</b> — DC로 바꾸면 내가 운용한다. 지금 어느 쪽인지부터 확인.</li>
+      <li><b>이번 하락장 오답노트 작성</b> — 얼마에 샀는지, 그때 어떤 논리였는지, 그 논리가 왜 틀렸는지. 반복되는 패턴이 있는지 확인하는 것이 목적이다.</li>
+      <li><b>계좌 성격 분리 상태</b> — 성장주·채권·배당주가 한 계좌에 섞여 있지 않은지. 계좌별 잔액을 합산했을 때 5대 3대 2에 가까운지.</li>
+      <li><b>버스카드 잔액</b> — 다음 기회에 탈 현금이 0이 아닌지. 화자는 그 현금의 출처를 근로소득으로 본다.</li>
+      <li><b>오늘부터 할 수 있는 것: 종이신문 1종 구독</b> — 월 15,000원. 포털·유튜브 뉴스는 클릭을 유도하는 흥미 위주 기사를 위에 올리지만, 신문은 데스크가 100~200개 기사 중 오늘 가장 중요한 것을 골라 1면에 올린다. <time>54:04–54:46</time></li>
+    </ul>
+    <blockquote style="margin-top:14px">"나보다 똑똑한 사람, 내지는 나보다 더 고민한 사람이 오늘 가장 중요한 기사는 이겁니다라고 해서 내 앞에 쟁반에다가 잘 올려서 갖다 놔 주는 거거든요." <time>54:46</time></blockquote>
+  </section>
+
+  <footer>
+    유튜브 자동 생성 자막 전문을 바탕으로 정리 (미측정 기본값 2.2초 보정). 한국은행 기준금리 수치를 언급한 대목은 자막 수치가 불명확해 옮기지 않았다. 발언자의 견해이며 투자 판단의 근거가 아닌 학습 자료입니다.
+  </footer>
+
+</div>
+</body>
+</html>
