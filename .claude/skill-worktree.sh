@@ -36,9 +36,12 @@ root=$(git rev-parse --show-toplevel) || exit 0
 # slack-mention-notes 만 예외다 — 스스로 worktree 에이전트를 띄우므로 중첩되면 안 된다
 [ "$skill" = slack-mention-notes ] && exit 0
 
-name=$(printf '%s' "$skill" | tr -c 'A-Za-z0-9._-' '-')
+# 브랜치는 feature/<yyyyMMddHHmmss> 다. EnterWorktree(name:) 는 브랜치에 worktree- 를 강제로 붙이고
+# 같은 스킬을 두 번 부르면 이름이 겹치므로, 워크트리를 git 으로 직접 만들고 path 로 들어가게 시킨다.
+# 훅이 직접 만들지 않는 이유: UserPromptSubmit 쪽은 권고라 무시될 수 있어 빈 워크트리가 남는다.
+name=$(date +%Y%m%d%H%M%S)
 q='\"'
-reason="main 워크트리다. EnterWorktree(name: ${q}${name}${q}) 로 격리 브랜치에 먼저 들어간 뒤 이 스킬을 다시 호출해라."
+reason="main 워크트리다. \`git fetch -q origin main && git worktree add -b feature/${name} .claude/worktrees/${name} origin/main\` 를 돌린 뒤 EnterWorktree(path: ${q}.claude/worktrees/${name}${q}) 로 들어가고, 그다음 이 스킬을 다시 호출해라."
 
 if [ "$event" != UserPromptSubmit ]; then
   printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"%s"}}' "$reason"
