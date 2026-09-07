@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>환율 1,350원대, 달러 살 때인가 팔 때인가 — 스터디 노트</title>
+<style>
+:root {
+  --accent: #1d4ed8;
+  --ink: #16181d;
+  --muted: #6b7280;
+  --line: #e5e3de;
+  --wash: #f7f6f3;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: #fff; }
+.note {
+  max-width: 720px; margin: 0 auto; padding: 32px 28px;
+  font-family: Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  color: var(--ink); font-size: 15px; line-height: 1.72;
+  word-break: keep-all;
+}
+
+header { border-bottom: 2px solid var(--ink); padding-bottom: 18px; margin-bottom: 26px; }
+.label { font-size: 11px; letter-spacing: .14em; color: var(--accent); font-weight: 700; }
+h1 { font-size: 27px; line-height: 1.3; margin: 10px 0 12px; letter-spacing: -.02em; }
+.meta { font-size: 12.5px; color: var(--muted); }
+.meta a { color: var(--muted); }
+
+.conclusion {
+  border-left: 3px solid var(--accent); background: var(--wash);
+  padding: 16px 18px; margin-bottom: 34px; font-size: 15.5px;
+}
+.tag {
+  display: block; font-size: 11px; font-weight: 700; letter-spacing: .1em;
+  color: var(--accent); margin-bottom: 6px;
+}
+
+section { margin-bottom: 34px; }
+h2 { font-size: 19px; margin: 0 0 4px; letter-spacing: -.01em; }
+.num {
+  display: inline-block; min-width: 26px; height: 22px; margin-right: 8px;
+  background: var(--accent); color: #fff; font-size: 12px; font-weight: 700;
+  text-align: center; line-height: 22px; border-radius: 3px;
+}
+.sub { font-size: 13px; color: var(--muted); margin: 0 0 16px; }
+time { font-variant-numeric: tabular-nums; font-size: 12px; color: var(--accent); font-weight: 600; }
+
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.card { border: 1px solid var(--line); border-radius: 5px; padding: 14px 16px; }
+.card h4 { margin: 0 0 8px; font-size: 14.5px; }
+.card p { margin: 0; font-size: 14px; }
+
+.term { border-top: 1px solid var(--line); padding: 13px 0; }
+.term h4 { margin: 0 0 5px; font-size: 15px; }
+.term h4 em { font-style: normal; font-weight: 400; font-size: 12.5px; color: var(--muted); }
+.term p { margin: 0; }
+.aside {
+  margin-top: 7px !important; background: var(--wash); padding: 8px 11px;
+  border-radius: 4px; font-size: 13.5px; color: #3f4450;
+}
+.aside b { color: var(--accent); font-weight: 700; }
+
+.step { display: flex; gap: 14px; padding: 15px 0; border-top: 1px solid var(--line); }
+.marker {
+  flex: 0 0 26px; height: 26px; border-radius: 50%; background: var(--ink); color: #fff;
+  font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+}
+.step .body { flex: 1; }
+.step h4 { margin: 0 0 6px; font-size: 15px; display: flex; gap: 8px; align-items: baseline; }
+.step p { margin: 0; }
+blockquote {
+  margin: 9px 0 0; padding-left: 12px; border-left: 2px solid var(--line);
+  color: #3f4450; font-size: 14px;
+}
+
+.insight { padding: 12px 0; border-top: 1px solid var(--line); }
+.insight h4 { margin: 0 0 4px; font-size: 15px; }
+.insight p { margin: 0; font-size: 14.5px; }
+
+.watch { margin: 0; padding-left: 18px; }
+.watch li { margin-bottom: 9px; }
+
+table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 10px 0 14px; }
+th, td { border: 1px solid var(--line); padding: 7px 10px; text-align: left; }
+th { background: var(--wash); font-weight: 700; }
+td.n { font-variant-numeric: tabular-nums; text-align: right; }
+
+footer {
+  margin-top: 38px; padding-top: 14px; border-top: 1px solid var(--line);
+  font-size: 12px; color: var(--muted);
+}
+
+@page { size: A4; margin: 14mm; }
+.card, .term, .step, .insight, .conclusion, blockquote, table { break-inside: avoid; page-break-inside: avoid; }
+h1, h2, h3, h4 { break-after: avoid; page-break-after: avoid; }
+@media print {
+  .note { max-width: none; padding: 0; font-size: 10.5pt; }
+  section { margin-bottom: 22px; }
+  a { text-decoration: underline; }
+}
+</style>
+</head>
+<body>
+<div class="note">
+
+  <header>
+    <div class="label">STUDY NOTE · 환율과 달러 자산</div>
+    <h1>환율 1,350원대 추락, 달러 살 때인가 팔 때인가</h1>
+    <div class="meta">박종훈의 지식한방 · 2026.9.6 · 25분 43초 · <a href="https://www.youtube.com/watch?v=5EjaIUaypfo">원본 영상</a></div>
+  </header>
+
+  <div class="conclusion">
+    <span class="tag">한 줄 결론</span>
+    직전 36개월 평균 환율은 1,403원인데 9월 4일 종가가 1,350원이니 화자의 기준선 아래로 들어왔다. 지금은 달러를 팔 때가 아니라 기간을 정해 분할 환전을 시작할 때다. 단, 환차익을 노리는 환투기가 아니라 "세계 최대 복리 자산의 입장권"을 사서 장기 보유한다는 목적일 때만 그렇다.
+  </div>
+
+  <section>
+    <h2><span class="num">01</span> 먼저, 달러를 왜 사는지부터</h2>
+    <p class="sub">영상의 출발점 — 같은 1,350원 환전이라도 목적이 다르면 전혀 다른 행동이 된다 <time>1:10–2:53</time></p>
+    <div class="split">
+      <div class="card">
+        <h4>환투기</h4>
+        <p>1,350원에 사서 1,450원에 팔겠다는 것. 성공해도 7.5%인데, 환율 방향은 외환시장 전문가도 중앙은행도 모른다. 화자는 "장기적으로 돈을 잃는 방법"이라고 단정한다.</p>
+      </div>
+      <div class="card">
+        <h4>복리 자산의 입장권</h4>
+        <p>달러는 현금으로 두는 게 아니라, 유럽·일본보다 훨씬 빠르게 오른 미국 자산을 사기 위한 표다. 한 번 환차익은 7.5%지만 "복리가 되면 몇 배를 먹는 겁니다."</p>
+      </div>
+    </div>
+    <p>화자는 환율이 1,560원에서 1,350원으로 13% 떨어진 지금, 댓글에서 "달러 팔아야 하나"라는 질문이 쏟아지는 것을 보고 이 영상을 만들었다. 답은 2018년부터 지켜온 환전 원칙, 곧 "지난 3년 평균보다 환율이 아래로 떨어지면 계속해서 원화를 달러로 바꾼다"에 있다.</p>
+  </section>
+
+  <section>
+    <h2><span class="num">02</span> 용어 사전</h2>
+    <p class="sub">영상에 등장한 개념을 쉬운 말로</p>
+
+    <div class="term">
+      <h4>3년 평균 환전 원칙 <em>36개월 이동평균 기준선</em></h4>
+      <p>직전 36개월 평균 환율보다 현재 환율이 낮으면 그때부터 조금씩 원화를 달러로 바꾼다. 화자가 2018년에 세워 2019년 책 <em>밀레니얼 이코노미</em>에 활자로 남겼다.</p>
+      <p class="aside"><b>비유</b> — "3년 평균이라는 신호등이 켜지면 그때부터 분할 환전을 하는 겁니다." 예측이 아니라 신호등이다.</p>
+    </div>
+
+    <div class="term">
+      <h4>분할 환전 <em>시간 분산 매수</em></h4>
+      <p>3개월·6개월·9개월·12개월처럼 기간을 정해 놓고 일정하게 사거나, 어느 값 이하로 떨어지면 자동으로 사도록 매수선을 걸어 두는 것.</p>
+      <p class="aside"><b>포인트</b> — 환전 다음 날 환율이 더 떨어질 수 있다. 화자도 "그럴 수도 있습니다"라고 인정한다. 그래서 한 번에 사지 않고 나눠 산다.</p>
+    </div>
+
+    <div class="term">
+      <h4>복리 자산 <em>compounding asset</em></h4>
+      <p>가격이 꾸준히, 빠르게 오르는 자산. 화자는 미국 성장률이 다른 선진국보다 높아서 미국 자산이 여기 해당한다고 본다.</p>
+      <p class="aside"><b>비유</b> — 워런 버핏의 60년 연평균 수익률은 19.9%. "생각보다 낮은 편이죠." 그런데 세계적 부자인 이유는 복리 효과 하나뿐이다.</p>
+    </div>
+
+    <div class="term">
+      <h4>교회와 카지노 <em>버핏의 비유</em></h4>
+      <p>"증시는 교회에 카지노가 붙었다." 복리로 자산을 누려온 사람들은 교회, 하루 수익률에 현혹돼 사고팔기를 반복하는 것은 카지노.</p>
+      <p class="aside"><b>쉽게</b> — 환전했다 말았다를 반복하면 은행과 증권사만 돈을 번다. "투자를 잘하고 싶다면 당장 카지노 밖으로 나오셔야 됩니다."</p>
+    </div>
+
+    <div class="term">
+      <h4>언더슈팅 <em>undershooting</em></h4>
+      <p>환율이 원래 균형 환율보다 훨씬 더 아래로 내려가는 것. 외환시장은 심리가 크게 작동하는 곳이라 오버슈팅도, 언더슈팅도 자주 한다.</p>
+      <p class="aside"><b>읽는 법</b> — 소수가 움직이면 따라서 왕창 환전하고 다시 재환전하는 일이 반복된다. 3년 평균보다 더 아래로 내려가는 경우가 많다는 것이 원칙의 근거다.</p>
+    </div>
+
+    <div class="term">
+      <h4>연평균 환율 <em>annual average</em></h4>
+      <p>한 해 동안의 환율 평균. 종가가 아니다. 한 해 안에서는 200원 오르고 300원 떨어지지만, 연평균끼리 비교하면 추세가 보인다.</p>
+      <p class="aside"><b>읽는 법</b> — 2018년 1,099원에서 2025년 1,421원으로 29% 상승. 10년 단위로 봐도 2010년대 1,130원, 2020년대 1,285원.</p>
+    </div>
+
+    <div class="term">
+      <h4>안전자산 <em>safe asset</em></h4>
+      <p>나스닥을 산 만큼 같이 사 두어야 하는 자산. 화자는 이제 둘뿐이라고 본다. 미국 단기채와 금. "장기채는 더 이상 안전 자산이 아닙니다."</p>
+    </div>
+
+    <div class="term">
+      <h4>단일 종목 레버리지 <em>single-stock leverage</em></h4>
+      <p>한 종목에 배율을 걸어 투자하는 상품. 출시 이후 국내 증시 변동성이 "그 어느 때보다" 높아졌다고 화자는 본다.</p>
+      <p class="aside"><b>포인트</b> — 7월 거래대금 중 삼성전자·SK하이닉스 두 종목이 51%, 레버리지 상품까지 더하면 83%였다.</p>
+    </div>
+
+    <div class="term">
+      <h4>아베노믹스 <em>Abenomics</em></h4>
+      <p>정부 지출을 크게 늘리고 그 국채를 일본 중앙은행이 사 준 정책. 화자는 엔화가 "박살이 난" 큰 원인으로 꼽는다.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">03</span> 영상의 논리 흐름</h2>
+    <p class="sub">결론까지 가는 8단계</p>
+
+    <div class="step">
+      <div class="marker">1</div>
+      <div class="body">
+        <h4>원화는 세계에서 아주 독특한 자산이다 <time>2:56–5:00</time></h4>
+        <p>월급도 집도 연금도 예금도 전부 원화인데 투자 자산까지 원화면, 글로벌 시각에서는 "독특하고 특이한 자산"에 몰빵한 것이다. 분산을 위해 외화 투자가 필요하고, 성장률과 인구 구조가 탄탄한 나라를 고르면 여전히 달러다. 달러가 흔들리는 건 맞지만 유로·엔·위안도 어마어마하게 찍고 있어서 종이돈 대비 달러 가치가 떨어질지는 예단할 수 없다.</p>
+        <blockquote>"지금 달러만 흔들리고 있는게 아니라 모든 종이돈이 흔들리고 있습니다."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">2</div>
+      <div class="body">
+        <h4>2018년 1,054원, 다들 900원 간다던 그때 <time>5:00–6:35</time></h4>
+        <p>원칙을 세운 2018년 환율은 1,054원이었고 증권사들은 900원을 전망해 달러를 팔아야 한다는 공포가 컸다. 직전 3년 평균은 1,140원이었으므로 화자 기준으로는 살 때였다. 지금 보면 당연해 보이지만 그때는 1,054원에 환전하기가 "너무나 두려웠거든요."</p>
+        <blockquote>"환율이 최근 직전 3년보다 낮기 때문에 오히려 지금은 달러 살 때입니다라고 했습니다."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">3</div>
+      <div class="body">
+        <h4>7년 성적표 — 환차익만 노렸으면 28% <time>6:37–8:38</time></h4>
+        <p>그 사이 코스피는 2,442에서 6,687, 나스닥은 6,900대에서 26,000대가 됐다. 환투기 목적이면 환율 오르면 바로 원화로 바꿀 생각이라 자산을 사지 않는다. 복리 자산 목적이면 달러로 달러 자산을 산다.</p>
+        <table>
+          <tr><th>2018년에 100만 원을</th><th>수익률</th><th>결과</th></tr>
+          <tr><td>코스피에</td><td class="n">174%</td><td class="n">274만 원</td></tr>
+          <tr><td>나스닥 ETF에 (달러 기준)</td><td class="n">282%</td><td class="n">382만 원</td></tr>
+          <tr><td>나스닥 ETF에 (원화 환산)</td><td class="n">389%</td><td class="n">489만 원</td></tr>
+          <tr><td>환차익만 (1,054원 → 1,350원)</td><td class="n">28%</td><td>은행 이자보다 조금 높은 수준</td></tr>
+        </table>
+        <blockquote>"코스피가 지금 역대급 상승을 했는데도 불구하고 나스닥을 못 따라갑니다."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">4</div>
+      <div class="body">
+        <h4>위기는 온다, 그래도 한국 변동성이 더 크다 <time>8:38–11:24</time></h4>
+        <p>미국 자산도 8~12년마다 위기가 왔고 그때 나스닥은 보통 50~60%, 2000년에는 5,100에서 1,100으로 78% 떨어졌다. 그래서 나스닥을 산 만큼 단기채와 금을 산다. 달러가 타락하면 원화는 더 빨리 타락한다. 수출이 완전히 미국에 의존하기 때문이다. 같은 HBM을 만드는데 최근 1년 고점까지 10배씩 오른 뒤 지난 금요일 기준 마이크론은 16%, SK하이닉스는 43.6% 떨어졌다. 자본시장이 얼마나 두껍고 튼튼한가의 차이다.</p>
+        <blockquote>"달러 자산은 지속적으로 복리로 늘어나는 것도 훨씬 더 강력하지만 변동성 측면에서도 미국의 달러 자산이 우리 한국의 자산보다는 훨씬 더 작다는 거죠."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">5</div>
+      <div class="body">
+        <h4>왜 200원에 이렇게 흔들리나 — 카지노에 익숙해졌다 <time>11:24–15:06</time></h4>
+        <p>단일 종목 레버리지가 나온 뒤 두 종목 거래대금 비중이 30%에서 51%로, 레버리지까지 더하면 83%로 올라갔다. 코스피가 한 번에 17% 오르고 걸핏하면 8%씩 떨어지는 걸 보다 보니 환율에도 똑같이 접근한다. 환율 올랐을 때 팔고 내렸을 때 사는 걸 기적처럼 해낼 사람은 없다. 복리 투자를 하는 사람은 기다리고, 분산하고, 장기 보유한다. 못 하는 사람은 하루 수익률에 현혹되고, 과도하게 집중하고, 계속 사고판다. 나스닥만 몽땅 갖고 있으면 반액 세일 때 살 돈이 없다.</p>
+        <blockquote>"우리가 계속 자산을 사고팔면 그 복리 효과는 절대로 누릴 수가 없거든요."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">6</div>
+      <div class="body">
+        <h4>신호등이 켜졌다 — 36개월 평균 1,403원, 종가 1,350원 <time>15:06–16:07</time></h4>
+        <p>2019년 책, 2021년 책, 그리고 2022~2026년 내내 반복한 규칙을 지금 대입한다. 직전 36개월 평균이 1,403원이고 9월 4일 종가가 1,350원이니 행동선 아래로 들어왔다. 이제부터 기간을 정해 일정하게 사거나 자동 매수선을 걸어 분할 환전한다. 중간의 오르내림에 현혹되지 않는 것이 핵심이다.</p>
+        <blockquote>"드디어 행동선 아래로 들어왔다는 거죠. 분할 환전을 하는 기준선인 겁니다."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">7</div>
+      <div class="body">
+        <h4>왜 3년 평균인가 — 항복, 투매, 언더슈팅의 반복 <time>16:09–18:41</time></h4>
+        <p>화자가 27년간 금융시장에서 목격한 순서다. 환율이 고공행진하면 한국은행은 처음엔 항복하지 않다가 결국 금리를 올린다. 사람이 바뀌면 가능성이 더 커진다. 정부도 약한 정책이 안 통하면 온갖 수단을 동원하고, 6월 11일에는 기업을 소집해 달러를 팔라고 권고했다. 지금 한국은 달러가 부족한 게 아니라 기업이 안 팔았던 것인데, SK하이닉스와 삼성전자가 대규모로 환전하자 다른 수출 대기업도 "환율 더 내려가겠구나" 하고 투매한다. 그래서 균형 환율보다 훨씬 아래로 언더슈팅하고, 3년 평균보다 더 내려가는 경우가 많다.</p>
+        <blockquote>"환율이 1550원 갔을 때는 더 올라갈까 봐 달러를 벌어둔 걸 원화로 환전하지 못하다가 … 갑자기 달러를 투매합니다."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">8</div>
+      <div class="body">
+        <h4>추세는 우상향 — 일본이 먼저 걸은 길 <time>18:41–22:54</time></h4>
+        <p>연평균 환율은 2021년 1,145원 한 번을 빼면 계속 올라 2018년 1,099원에서 2025년 1,421원이 됐다. 일본은 2011년 달러당 75엔이 156엔으로, 엔화 가치가 반토막 났다. 한국 환율로 치면 1,400원이 2,900원 된 셈이다. 원인은 재정적자로 발행한 국채를 중앙은행이 찍어서 사 준 것, 그리고 고령화로 소비 인구는 늘고 생산 인구는 줄어 무역수지 흑자가 쪼그라든 것이다. 그 일본도 2014년 120엔에서 2019년 100엔으로 17% 하락한 구간이 있었다. 그때 엔화로 굴린 사람과 달러 자산에 투자한 사람 중 이긴 쪽은 달러였다. 일본 금리는 0%였고 니케이는 오르지 못한 반면 나스닥은 크게 올랐기 때문이다.</p>
+        <blockquote>"최근에 우리 원화 환율이 13%가 하락해서 많은 분들이 야 달러 투자해서 손해 봤네라고 하실 텐데 일본의 엔도 17% 하락한 적이 있습니다."</blockquote>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">04</span> 인사이트</h2>
+    <p class="sub">영상 밖에서도 통하는 원칙으로</p>
+
+    <div class="insight">
+      <h4>① 목적을 먼저 정하면 가격 변동에 대한 반응이 저절로 정해진다</h4>
+      <p>같은 자산을 같은 값에 사도 "되팔려고" 산 사람과 "입장권으로" 산 사람은 하락장에서 정반대로 움직인다. 흔들리는 이유는 대개 가격이 아니라 목적을 정하지 않은 데 있다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>② 측정 단위로 쓰는 자산도 하나의 포지션이다</h4>
+      <p>모든 걸 원화로 재다 보면 원화 자체가 위험이라는 사실이 보이지 않는다. 월급·집·연금·예금이 전부 한 통화라면 이미 몰빵 상태다. 분산은 투자 자산이 아니라 기준 통화에서부터 시작한다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>③ 방향을 못 맞힐 때는 예측 대신 기계적 기준선을 쓴다</h4>
+      <p>전문가도 중앙은행도 모르는 변수에 판단을 걸지 않는다. 대신 "3년 평균 아래면 산다"처럼 감정이 개입할 틈 없는 규칙을 세우고, 나눠서 실행한다. 규칙의 가치는 적중률이 아니라 공포 속에서도 행동하게 만드는 데 있다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>④ 극단은 대응을 부르고, 대응은 되돌림을 부른다</h4>
+      <p>가격이 한쪽으로 치우치면 당국이 움직이고, 눈치 보던 참여자들이 한꺼번에 따라 움직여 반대쪽으로 지나친다. 되돌림이 반복되는 시장에서는 평균으로부터의 거리 자체가 신호가 된다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>⑤ 손익은 시간 단위를 늘려서 재야 추세가 보인다</h4>
+      <p>한 해 안의 200~300원 등락에 눈을 두면 매번 손해 본 것 같다. 연평균, 10년 평균으로 올려 보면 방향이 드러난다. 카지노에 익숙해진 눈은 시간 단위가 짧아진 눈이다.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">05</span> 앞으로 지켜볼 것</h2>
+    <ul class="watch">
+      <li><b>36개월 평균 1,403원 vs 현재 환율</b> — 이 아래에 머무는 동안 3·6·9·12개월 중 기간을 정해 분할 환전. 자동 매수선을 걸어 두는 방법도 있다.</li>
+      <li><b>미국 10년물 국채 금리 5% 돌파 여부</b> — 넘으면 미국에서도 지금 같은 투자를 지속할 수 없어 "엄청난 영향"을 미친다고 화자는 본다.</li>
+      <li><b>반도체가 언제까지 잘 나가느냐</b> — 세수·원화 가치·금리가 삼성전자와 SK하이닉스 두 기업에 달려 있다. 잘 나가면 일시적 원화 강세, 삐끗하면 모든 변수가 한꺼번에 어려워진다.</li>
+      <li><b>내년 정부 예산 821조 원의 국회 심의</b> — 화자는 일본과 비슷한 점으로 정부 지출 확대를 꼽는다. 2030년 예산 규모는 언급됐으나 자막 수치가 불명확해 옮기지 않았다.</li>
+      <li><b>한국은행의 인사 교체와 금리 인상</b> — "사람이 바뀌면 금리를 올릴 가능성이 굉장히 커져요."</li>
+      <li><b>8~12년 주기의 미국 위기</b> — 나스닥 50~60% 하락을 각오하고, 산 만큼 미국 단기채와 금을 함께 보유한다.</li>
+    </ul>
+  </section>
+
+  <footer>
+    유튜브 자동 생성 자막 전문을 바탕으로 정리 (미측정 기본값 2.2초 보정). 2030년 정부 예산 규모는 자막 수치가 불명확해 옮기지 않았다. 발언자의 견해이며 투자 판단의 근거가 아닌 학습 자료입니다.
+  </footer>
+
+</div>
+</body>
+</html>
