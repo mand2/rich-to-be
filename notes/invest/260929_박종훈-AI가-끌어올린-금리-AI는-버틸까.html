@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI가 끌어올린 금리, AI는 버틸까 — 스터디 노트</title>
+<style>
+:root {
+  --accent: #1d4ed8;
+  --ink: #16181d;
+  --muted: #6b7280;
+  --line: #e5e3de;
+  --wash: #f7f6f3;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: #fff; }
+.note {
+  max-width: 720px; margin: 0 auto; padding: 32px 28px;
+  font-family: Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  color: var(--ink); font-size: 15px; line-height: 1.72;
+  word-break: keep-all;
+}
+
+header { border-bottom: 2px solid var(--ink); padding-bottom: 18px; margin-bottom: 26px; }
+.label { font-size: 11px; letter-spacing: .14em; color: var(--accent); font-weight: 700; }
+h1 { font-size: 27px; line-height: 1.3; margin: 10px 0 12px; letter-spacing: -.02em; }
+.meta { font-size: 12.5px; color: var(--muted); }
+.meta a { color: var(--muted); }
+
+.conclusion {
+  border-left: 3px solid var(--accent); background: var(--wash);
+  padding: 16px 18px; margin-bottom: 34px; font-size: 15.5px;
+}
+.tag {
+  display: block; font-size: 11px; font-weight: 700; letter-spacing: .1em;
+  color: var(--accent); margin-bottom: 6px;
+}
+
+section { margin-bottom: 34px; }
+h2 { font-size: 19px; margin: 0 0 4px; letter-spacing: -.01em; }
+.num {
+  display: inline-block; min-width: 26px; height: 22px; margin-right: 8px;
+  background: var(--accent); color: #fff; font-size: 12px; font-weight: 700;
+  text-align: center; line-height: 22px; border-radius: 3px;
+}
+.sub { font-size: 13px; color: var(--muted); margin: 0 0 16px; }
+time { font-variant-numeric: tabular-nums; font-size: 12px; color: var(--accent); font-weight: 600; }
+
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.card { border: 1px solid var(--line); border-radius: 5px; padding: 14px 16px; }
+.card h4 { margin: 0 0 8px; font-size: 14.5px; }
+.card p { margin: 0; font-size: 14px; }
+
+.term { border-top: 1px solid var(--line); padding: 13px 0; }
+.term h4 { margin: 0 0 5px; font-size: 15px; }
+.term h4 em { font-style: normal; font-weight: 400; font-size: 12.5px; color: var(--muted); }
+.term p { margin: 0; }
+.aside {
+  margin-top: 7px !important; background: var(--wash); padding: 8px 11px;
+  border-radius: 4px; font-size: 13.5px; color: #3f4450;
+}
+.aside b { color: var(--accent); font-weight: 700; }
+
+.step { display: flex; gap: 14px; padding: 15px 0; border-top: 1px solid var(--line); }
+.marker {
+  flex: 0 0 26px; height: 26px; border-radius: 50%; background: var(--ink); color: #fff;
+  font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+}
+.step .body { flex: 1; }
+.step h4 { margin: 0 0 6px; font-size: 15px; display: flex; gap: 8px; align-items: baseline; }
+.step p { margin: 0 0 6px; }
+.step p:last-child { margin-bottom: 0; }
+blockquote {
+  margin: 9px 0 0; padding-left: 12px; border-left: 2px solid var(--line);
+  color: #3f4450; font-size: 14px;
+}
+
+table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin: 8px 0 10px; }
+th, td { border: 1px solid var(--line); padding: 6px 9px; text-align: left; vertical-align: top; }
+th { background: var(--wash); font-weight: 600; font-size: 12.5px; }
+
+.insight { padding: 12px 0; border-top: 1px solid var(--line); }
+.insight h4 { margin: 0 0 4px; font-size: 15px; }
+.insight p { margin: 0; font-size: 14.5px; }
+
+.watch { margin: 0; padding-left: 18px; }
+.watch li { margin-bottom: 9px; }
+
+footer {
+  margin-top: 38px; padding-top: 14px; border-top: 1px solid var(--line);
+  font-size: 12px; color: var(--muted);
+}
+
+@page { size: A4; margin: 14mm; }
+.card, .term, .step, .insight, .conclusion, blockquote, tr { break-inside: avoid; page-break-inside: avoid; }
+h1, h2, h3, h4 { break-after: avoid; page-break-after: avoid; }
+@media print {
+  .note { max-width: none; padding: 0; font-size: 10.5pt; }
+  section { margin-bottom: 22px; }
+  a { text-decoration: underline; }
+}
+</style>
+</head>
+<body>
+<div class="note">
+
+  <header>
+    <div class="label">STUDY NOTE · 금리와 AI 투자</div>
+    <h1>AI가 끌어올린 금리, AI는 버틸까?</h1>
+    <div class="meta">박종훈의 지식한방 · 2026.9.29 · 34분 42초 · <a href="https://www.youtube.com/watch?v=tsDTfVGqCeE">원본 영상</a></div>
+  </header>
+
+  <div class="conclusion">
+    <span class="tag">한 줄 결론</span>
+    AI는 금리를 낮추는 게 아니라 지금 당장 올리고 있다. 빅테크가 경쟁적으로 돈을 빌려 돈값을 올리고(자본 쟁탈전), 부품·전력 값을 올려 물가를 밀어올리는 두 경로다. 그 고금리가 이번엔 AI 주가를 위협하는데, 서로 죽이는 치킨 게임이라 투자를 멈출 수도 없다. 출구는 생산성이 금리보다 먼저 오르는 것 하나뿐인데, 생산성은 2.1%에서 2.2%로 가속이 없다. 결말은 생산성 통계와 호르무즈 유가가 가른다.
+  </div>
+
+  <section>
+    <h2><span class="num">01</span> 장담과 현실 — "AI가 금리를 낮춘다"는 말은 어디서 틀렸나</h2>
+    <p class="sub">영상의 출발점 — 재무장관과 차기 연준 의장의 호언장담, 그리고 2007년 이후 최고 금리 <time>0:00–3:38</time></p>
+    <div class="split">
+      <div class="card">
+        <h4>장담</h4>
+        <p>베센트 재무장관: AI가 발전하면 금리는 크게 낮아질 테니 "금리 따위는 걱정하지 말아라." 케빈 워시는 연준 의장 지명 전 월스트리트 기고에서 "AI는 물가를 끌어내리는 강력한 힘"이고 기준금리를 더 낮출 힘은 AI에서 나온다고 썼다.</p>
+      </div>
+      <div class="card">
+        <h4>현실</h4>
+        <p>10년물 국채 금리 5.2% 돌파, 2007년 이후 최고. 30년물 5.5%, 2004년 이래 최고. 연준은 결국 "항복"해 시장 금리에 딸려 기준금리를 올렸고(9월 16일), 시장 금리가 더 오르면 한 번 더 올릴 수밖에 없다.</p>
+      </div>
+    </div>
+    <p>화자는 두 가지 프레임을 깐다. 첫째, 금리가 한 번 오르는 건 사람도 기업도 견딘다. 문제는 <b>오랫동안 높게 유지되는 것</b>이다. 소비가 줄고 투자가 줄기 때문이다. 둘째, AI가 금리를 내리는 경로는 "생산성 향상 → 비용 하락 → 물건값 하락 → 물가 하락 → 금리 하락"의 여러 단계인데, 그 첫 단계인 생산성부터 아직 오르지 않았다. 원래 혁명은 초반에 생산성이 오르지 않고, 창조적 파괴로 많은 기업이 파산하고 대량 해고가 난 뒤에야 생산성 혁명이 온다는 것.</p>
+    <p>연준의 딜레마도 여기서 나온다. 시장 금리가 오르는 건 물가 우려 때문이라, 이때 기준금리를 올리지 않으면 물가 우려가 더 커져 시장 금리와 기준금리의 격차가 더 벌어진다. 그래서 따라 올릴 수밖에 없다.</p>
+  </section>
+
+  <section>
+    <h2><span class="num">02</span> 용어 사전</h2>
+    <p class="sub">영상에 등장한 개념을 쉬운 말로</p>
+
+    <div class="term">
+      <h4>자본 쟁탈전 <em>capital scramble</em></h4>
+      <p>베센트가 최근 바꾼 설명. AI 투자는 "단기적인 자본의 쟁탈전"을 일으키고 있고, 진짜 생산성 향상은 언젠간 온다는 것. 화자는 이것이 AI가 금리를 올리는 첫 경로라고 본다.</p>
+      <p class="aside"><b>비유</b> — "너도 나도 돈을 빌리려고 한다. 그러면 돈값이 올라갈까요, 떨어질까요? 당연히 올라가겠죠."</p>
+    </div>
+
+    <div class="term">
+      <h4>중립금리 <em>neutral rate</em></h4>
+      <p>경기가 과열되지 않은 상태에서 물가도 안정시키는 금리 수준. 연준은 2023년까지 2.5%로 봤는데 지금은 3.2%로 본다. 3년 만에 0.7%p 상승.</p>
+      <p class="aside"><b>읽는 법</b> — 자금 수요는 많은데 빌려 주겠다는 사람이 별로 없는 상황이 이어지면 돈값의 "기조"가 바뀐다. 화자의 표현으로 "고금리가 뉴노멀이 된 거예요."</p>
+    </div>
+
+    <div class="term">
+      <h4>국채 대비 가산금리 <em>credit spread</em></h4>
+      <p>회사채가 국채보다 더 얹어 주는 금리. 국채가 가장 신뢰도가 높으니 회사채는 "플러스 알파"가 붙는다. 투자등급 회사채 전체는 0.78%p면 되는데, AI 회사채는 1.15%p가 붙는다.</p>
+      <p class="aside"><b>포인트</b> — 가산금리가 벌어지는 건 AI 기업에 대한 위험 프리미엄이 높아지고 있다는 뜻이다.</p>
+    </div>
+
+    <div class="term">
+      <h4>CDS 프리미엄 <em>부도 보험료</em></h4>
+      <p>어떤 기업의 회사채가 부도날 때를 대비해 드는 보험의 값. 엔비디아의 CDS 프리미엄은 두 달 전 0.4%에서 최근 0.8%p로 두 배가 됐고, 부도 보험 거래 규모는 직전 6개월 6.4억 달러에서 최근 6개월 69억 달러로 열 배 넘게 늘었다.</p>
+      <p class="aside"><b>포인트</b> — 화자도 신용지수 편입으로 거래가 늘어난 효과가 있다고 인정한다. 그래도 "옛날에는 엔비디아 회사채를 산 다음에 굳이 보험을 들지 않았는데 이제는 불안하니까 보험 들어야지"로 시각이 바뀐 것이 놀랍다는 것.</p>
+    </div>
+
+    <div class="term">
+      <h4>이익수익률과 국채 금리 <em>earnings yield</em></h4>
+      <p>기업이 시가총액 대비 얼마를 버는가. S&amp;P 500은 시가총액 100원에 5.2원을 버는데, 10년물 국채 금리도 5.2%다. 위험 자산인 주식과 안전 자산인 국채의 수익률이 같아진 것.</p>
+      <p class="aside"><b>비유</b> — "시가총액이 100원이다. 그럼 이 기업이 버는 게 5.2원이란 뜻인데 미국의 10년물 국채 금리가 지금 5.2%예요." 주식을 보유하면 당연히 있어야 할 추가 보상이 사실상 0인 상태.</p>
+    </div>
+
+    <div class="term">
+      <h4>지분 평가 이익 vs 현금흐름</h4>
+      <p>빅테크의 사상 최대 순익은 대부분 투자해 둔 기업들의 주가가 올라 장부에 잡힌 지분 평가 이익이다. 알파벳 2분기 순익 1,121억 달러(사상 최대)가 그것이고, 현금흐름만 보면 391억 달러를 벌어 449억 달러를 설비투자에 써서 −59억 달러다.</p>
+      <p class="aside"><b>포인트</b> — 빅테크는 그동안 번 돈으로 자사주를 사서 소각하고 지분 투자를 해 놔서 현찰이 많지 않다. 현금흐름이 적자면 회사채를 발행한다. 알파벳은 100년·40년 만기 회사채를 냈다.</p>
+    </div>
+
+    <div class="term">
+      <h4>창조적 파괴와 생산성 <em>creative destruction</em></h4>
+      <p>미국 생산성 증가율은 1973~95년 연평균 1.4%, 1995~2000년 2.5%, 2019년부터 2.1%, 최근 1년 2.2%. PC 혁명은 1980년대에 시작됐지만 생산성이 오른 건 1995년부터였다.</p>
+      <p class="aside"><b>포인트</b> — "생산성이라는 건 이전보다 높아지는 게 중요한 거지 지금 얼마나 높으냐는 그렇게까지 중요하지 않습니다. 절대치가 아니라 가속화되는 게 중요합니다."</p>
+    </div>
+
+    <div class="term">
+      <h4>치킨 게임 <em>chicken game</em></h4>
+      <p>둘 다 멈추면 모두 비용이 낮아져 윈윈이지만, 나만 멈추면 시장을 다 잃는 구조. 그래서 아무도 멈추지 못하고 실탄(자금)이 먼저 떨어진 쪽이 탈락한다.</p>
+      <p class="aside"><b>포인트</b> — AI 개발 속도를 늦추자는 CEO들의 말은 "너 늦춰라, 나는 빨리 할 거야"라는 뜻이라는 것이 화자의 읽기.</p>
+    </div>
+
+    <div class="term">
+      <h4>GDP 대비 투자 비중</h4>
+      <p>투자 붐의 크기를 재는 잣대. 1800년대 후반 미국 철도 3.5%, 1847년 영국 철도 8%, 닷컴 버블 1%(그래도 나스닥이 78% 떨어졌다). AI는 골드만삭스 전망대로면 2027년 2.5%, 2028년 2.7%로 철도 이후 최대.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">03</span> 영상의 논리 흐름</h2>
+    <p class="sub">"AI가 금리를 올린다"에서 "1996년인가 1847년인가"까지 9단계</p>
+
+    <div class="step">
+      <div class="marker">1</div>
+      <div class="body">
+        <h4>장담은 틀렸고, 연준은 시장을 따라간다 <time>0:00–3:38</time></h4>
+        <p>10년물 5.2%, 30년물 5.5%. 베센트·워시의 "AI가 금리를 낮춘다"는 성급했다. 생산성 혁명은 창조적 파괴 뒤에 오는데, 그 과정 없이 결과만 앞당겨 말했기 때문이다.</p>
+        <blockquote>"원래 모든 혁명은 생산성이 초반부터 높아지는 경우가 거의 없습니다."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">2</div>
+      <div class="body">
+        <h4>경로 하나 — 자본 쟁탈전이 돈값을 올린다 <time>3:41–9:44</time></h4>
+        <p>베센트도 말을 바꿨고, 워시는 8월 28일 잭슨홀에서 "회사채 발행이 너무 강하다, 금융 여건이 긴축적이라고 말하기도 어렵다"고 했다. 얼마나 빌리나: 2027년 빅테크 회사채 발행 전망 4,200억 달러(올해보다 60% 증가), 2030년까지 AI 관련 부채 발행 4조 1천억 달러(JP모건). 데이터센터 투자는 2023년 1,540억 달러에서 2027년 1조 2천억 달러로 (2025·2026·2028년 수치는 자막 수치 불명확). GDP 대비 2027년 2.5%, 2028년 2.7%로 닷컴 버블(1%)보다 훨씬 크다.</p>
+        <p>빅테크는 작년까지 돈을 안 빌렸는데 올해부터 빌리기 시작했고 2028년까지 늘어난다. 국가부채로 끊임없이 빌리는 미국 정부와 자금을 놓고 경쟁한다. 그 결과 연준이 보는 중립금리가 2.5%에서 3.2%로 올랐다.</p>
+        <blockquote>"돈을 경쟁적으로 빌리면 돈값이 올라가는 현상이 28년까지 AI 때문에 계속될 수밖에 없다는 겁니다."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">3</div>
+      <div class="body">
+        <h4>경로 둘 — AI가 물가를 올려 금리를 또 올린다 <time>9:46–12:31</time></h4>
+        <p>물가가 높은 나라는 금리가 낮을 수 없다(물가 10%인 나라에서 금리 5%면 100만 원 빌려주고 1년 뒤 실질 90만 원). AI 투자가 중간재 값을 올렸다 — 마이크로소프트는 올해 설비투자를 720억 달러 늘렸는데 그중 250억 달러가 순수하게 부품 가격 상승분이다. 전력망도 문제다. 데이터센터가 들어서면 전기요금이 40~50% 오르고, 하원은 전력망 확충 비용을 개인 소비자가 아니라 데이터센터에 청구하라는 법안을 417대 3으로 통과시켰다. 전기요금은 빵집 운영비와 지하철 교통비로 번진다.</p>
+        <blockquote>"물가를 낮추는 효과는 아직 일어나지 않았는데 투입물값 상승은 지금 당장 일어났습니다."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">4</div>
+      <div class="body">
+        <h4>다른 요인들은 안 바뀐다 — 남은 희망은 유가 하나 <time>12:33–13:34</time></h4>
+        <p>AI 하나가 금리 상승을 전부 설명하진 않는다. 유가, 미국 재정, 연준의 추가 인상 시사, 베이비붐 세대 은퇴로 얇아진 저축, 해외의 미국 국채 매입 감소가 다 있다. 그런데 재정은 절대 안 되고 인구구조는 절대 안 바뀌고, 연준은 시장을 따라가는 처지라 기대할 수 없다. 마지막 희망은 이란 전쟁이 빨리 끝나 유가가 떨어지면 물가 우려가 낮아져 금리가 "몇 달은" 낮아질 수 있다는 것.</p>
+        <blockquote>"이제 연준은 더 이상 시장을 조정하는 게 아니라 시장을 따라서 금리를 끌어올리는 그런 상황이기 때문에 연준도 기대하지 못합니다."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">5</div>
+      <div class="body">
+        <h4>주식은 장부를 보고, 채권은 현금을 본다 — 경고는 채권에서 먼저 <time>13:34–22:04</time></h4>
+        <p>AI 회사채 가산금리 1.15%p(투자등급 평균 0.78%p). S&amp;P 500 이익수익률과 10년물이 5.2%로 같아져 주식의 추가 보상이 사실상 0. 알파벳은 사상 최대 순익(1,121억 달러)을 내고도 현금흐름은 −59억 달러라 100년·40년 만기 회사채를 발행했다. 화자는 구글·아마존은 현금 창출력이 있어 걱정할 필요 없다고 하면서 <b>오라클</b>을 취약한 예로 든다. 자랑하는 6,640억 달러 계약 중 1년 안에 들어오는 매출은 13%, 1~3년 37%, 3년 뒤 50%인데, 뉴멕시코에서 데이터센터를 다 짓고도 전력이 연결되지 않아 불가항력 통지를 냈다. 주민 반대와 중간선거를 앞둔 정치인 압박으로 제때 가동이 어렵다. 게다가 5년 전 10년물이 0.99%일 때 빌린 회사채를 5.2%인 지금 다시 발행해야 한다.</p>
+        <p>그래서 데이터센터에 보증을 서 준 엔비디아의 CDS 프리미엄이 0.4%에서 0.8%로 두 배가 됐고 거래는 6.4억 달러에서 69억 달러로 늘었다. 그런데 미국 주가는 아직 사상 최고치 근처다. 주식시장은 장부에 찍힌 이익을 보고, 채권시장은 현금을 보기 때문이다.</p>
+        <blockquote>"주식 시장은 지금 기업들의 이익을 보는 거죠. … 채권 시장에서는 현금을 보거든요. 야, 근데 쟤네들 현금이 충분하냐? 너네들 부도 보험료 좀 더 높게 해야지."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">6</div>
+      <div class="body">
+        <h4>그런데 멈출 수 없다 — 전형적인 치킨 게임 <time>22:04–25:24</time></h4>
+        <p>클로드 CEO나 오픈AI CEO가 "위험하니 개발 속도를 늦추자"고 한 것은 화자 표현으로 "다 뻥". 클로드는 늦추자고 해 놓고 오퍼스 5.5(자막 표기 '오프스 5.5')를 바로 냈다. 오픈AI가 아스트라를 내놓자 사용자가 쏠려 챗GPT 사용량이 늘었고, 그래서 급하게 출시한 것. 프론티어들이 겁내는 건 AI가 인류를 지배하는 게 아니라 돈값이 비싸져 이자 부담이 커지는 것이다. 나도 경쟁사도 투자를 계속하면 모든 AI 기업의 비용이 오르고, 두 경로(회사채 발행·부품값)로 금리가 올라 자본 조달 비용이 오른다. 실탄이 먼저 떨어진 쪽이 멈추고 탈락하며, 독과점이 거의 확실해질 때까지 악순환은 계속된다.</p>
+        <blockquote>"이렇게 금리가 올라가야 죽을 놈이 죽을 거 아닙니까? 그래서 지금 AI 투자 확대는 결국 상대방을 죽이려는 치킨 게임이기 때문에 이 악순환을 멈추기가 진짜 어려운 상황인 거죠."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">7</div>
+      <div class="body">
+        <h4>출구는 생산성 — 그런데 1.1%p로는 안 된다 <time>25:27–28:36</time></h4>
+        <p>생산성이 오르면 비용 → 물가 → 금리가 내려간다. 그런데 PC 혁명의 생산성 향상(1995~2000년)도 1.4%에서 2.5%로 겨우 1.1%p였고, 지금의 국가부채와 회사채 발행 규모를 생각하면 생산성이 2.2%에서 적어도 4~5%는 가야 금리가 낮아진다. 그런 비약은 AI 혁명으로 무언가 "왕창 파괴되고" 새 시스템과 새 기업이 생겨야 나오는데, 창조적 파괴 없이 생산성만 오른 적은 산업혁명 이후 한 번도 없었다. 1996년 그린스펀이 경기가 뜨거운데도 금리를 올리지 않은 것은 생산성이 실제로 올랐기 때문이고, 그 결과가 호황과 닷컴 버블이었다. 베센트는 "1996년처럼 이번에도 금리 올릴 필요 없다"고 하지만, PC가 1980년에 나와 15년의 창조적 파괴를 거친 뒤였다는 부분을 빼먹었다는 것.</p>
+        <blockquote>"그런 과정 없이, 창조적 파괴 과정 없이 그냥 생산성만 향상된 거, 이건 산업 혁명 이후로 한 번도 없었습니다."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">8</div>
+      <div class="body">
+        <h4>2026년은 1996년인가, 1847년인가 <time>28:36–31:56</time></h4>
+        <p>반대 사례가 1847년 영국 철도붐이다. GDP의 8%를 철도에 투자했는데 생산성이 뒤처지고 금리가 먼저 올라 철도회사들이 파산하고 영국 경제가 무너졌다. 화자는 네 항목으로 비교한다.</p>
+        <table>
+          <tr><th></th><th>1996 미국 IT</th><th>1847 영국 철도</th><th>2026 AI</th></tr>
+          <tr><td>생산성</td><td>1.4% → 2.5% (+1.1%p) 가속</td><td>금리 상승에 뒤처짐</td><td>2.1% → 2.2%, 거의 같음</td></tr>
+          <tr><td>투자 규모 (GDP 대비)</td><td>1%</td><td>8%</td><td>2.5% — IT보다 훨씬 크고 미국 철도 3.5%보다는 낮다</td></tr>
+          <tr><td>물가</td><td>대안정기</td><td>곡물값 급등</td><td>유가 충격 지속, 90~100달러</td></tr>
+          <tr><td>중앙은행</td><td>그린스펀, 인상 보류</td><td>크게 인상</td><td>인상 중</td></tr>
+        </table>
+        <p>그래서 호르무즈가 중요하다. 유가가 얼마나 더 오르느냐보다 고유가가 지속되느냐가 문제고, 지속되면 금리를 제때 낮출 수 없다. 화자 판단으로 미국 경제가 버틸 수 있는 인상은 "딱 한 번 정도" 남았고, 올해 한 번 더 올린 뒤 내년에 또 올려야 한다면 충격이 만만치 않다. 결말을 가르는 것은 생산성 통계가 3.5% 정도로 빠르게 높아지는 게 드러나는 것, 그리고 전쟁의 조기 종결이다.</p>
+        <blockquote>"결국 유가에 따라서 1996년이 될 수도 있고 1847년이 될 수 있기 때문에 결국 트럼프 대통령이 이런 전쟁을 빨리 끝내는 거, 이건 미국 경제와 우리한테 정말 중요합니다."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">9</div>
+      <div class="body">
+        <h4>왜 한국 증시가 더 크게 흔들리는가, 그리고 10월 중순 <time>31:56–33:58</time></h4>
+        <p>10년물 5.2%, 30년물 5.5%에도 미국 주가는 별로 안 빠졌는데 코스피는 크게 조정받는다. 우리 HBM을 사 가는 곳은 결국 엔비디아를 통해 미국 데이터센터를 짓거나 임대하는 기업들이고, 그들은 돈을 빌려 투자하니 금리에 민감하다. 치킨 게임에서 누가 밀려나면 계약을 이행할 수 없을 거라는 두려움이 한국 주가를 더 때린다. 다만 금리가 한 단계 오를 때의 조정은 한 번 오고 5.2%에서 오래 놀면 익숙해진다. 진짜 문제는 고금리가 6개월, 12개월 지나 실물과 데이터센터 기업의 자금 사정을 악화시키는 방식이다.</p>
+        <p>한국 변수 하나 더 — SK하이닉스 자사주 매입·소각은 11월 중순까지, 삼성전자의 임직원용 자사주 대량 매입도 11월까지라고 하지만, 화자가 물량을 계산해 보니 10월 중순이면 더 살 수 없게 된다. 그 뒤 두 종목 주가가 버티는지가 시험대다.</p>
+        <blockquote>"금리가 한번 단계적으로 올라갔을 때 딱 한 번 충격이 옵니다. 그리고 더 올라가지 않는 한 일단은 조정받은 주가에서 거래가 될 겁니다."</blockquote>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">04</span> 인사이트</h2>
+    <p class="sub">영상 밖에서도 통하는 원칙</p>
+
+    <div class="insight">
+      <h4>① 붐은 먼저 값을 올리고, 생산성은 나중에 온다</h4>
+      <p>어떤 기술 혁명이든 초반에 확실한 것은 투입 비용의 상승이고, 그 기술이 약속한 비용 절감은 창조적 파괴를 거친 뒤에야 온다. 기대와 실현 사이의 시차가 그 기간의 금리와 물가를 정한다. "언젠가 온다"는 말이 맞더라도 그 사이를 버틸 수 있는지는 별개의 질문이다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>② 같은 회사를 주식시장과 채권시장은 다른 눈으로 본다</h4>
+      <p>주식은 장부 이익을, 채권은 현금을 본다. 사상 최대 순익과 마이너스 현금흐름이 동시에 성립할 수 있고, 그럴 때 경고는 가산금리와 부도 보험료에서 먼저 나온다. 주가가 최고치라는 사실이 위험이 없다는 증거는 아니다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>③ 수준이 아니라 가속도를 보라</h4>
+      <p>생산성 2.2%가 높은지 낮은지는 중요하지 않다. 이전보다 빨라지고 있는지가 중요하다. 지표를 볼 때 절대치에 안심하거나 놀라기보다 방향과 기울기의 변화를 잡아야 한다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>④ "속도를 늦추자"는 말은 상대에게 하는 말이다</h4>
+      <p>치킨 게임 안에서 나오는 협조 선언은 액면대로 받지 않는다. 선언 뒤의 행동(출시, 발주, 회사채 발행)을 보면 진짜 의도가 드러난다. 그리고 게임의 끝은 합의가 아니라 한쪽의 자금 고갈이다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>⑤ 한 번의 충격과 오래 가는 압력은 다른 위험이다</h4>
+      <p>금리가 한 단계 오르면 조정은 한 번 오고 시장은 익숙해진다. 진짜 타격은 높은 금리가 6~12개월 지속되며 실물과 차입 기업의 자금 사정을 갉아먹는 데서 온다. 내 포트폴리오의 노출은 "누가 돈을 빌려 내 고객이 됐는가"로 잰다 — 한국 HBM처럼 고객이 차입으로 투자하는 구조면 금리 민감도가 그대로 전이된다.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">05</span> 앞으로 지켜볼 것</h2>
+    <ul class="watch">
+      <li><b>미국 생산성 통계</b> — 현재 2.2%. 화자가 말한 희망 신호는 3.5% 정도로 빠르게 높아지는 것이 드러나는 때. 절대치보다 가속.</li>
+      <li><b>10년물 5.2% · 30년물 5.5%</b> 위로 더 오르는지. 오르면 연준이 따라 올린다. 화자 판단으로 버틸 수 있는 인상은 한 번, 내년에 또 올려야 하면 충격.</li>
+      <li><b>호르무즈·이란 전쟁</b> — 유가 90~100달러의 지속 여부. 종결되면 물가 우려가 낮아져 금리가 몇 달 낮아질 수 있는 유일한 외생 변수. 협상 얘기가 나오고 있다.</li>
+      <li><b>AI 회사채 가산금리 1.15%p, 엔비디아 CDS 0.8%</b> — 더 벌어지는지. 채권시장의 경고가 커지는 신호.</li>
+      <li><b>오라클 6,640억 달러 계약의 현금화</b> — 뉴멕시코처럼 전력 연결이 늦어지는 곳이 더 나오는지, 5년 전 0.99% 시절 회사채의 만기 재발행 금리.</li>
+      <li><b>전력망 비용 분리 법안</b> — 하원 417대 3 통과 이후 후속. 데이터센터 전기요금 부담이 어디로 가는지.</li>
+      <li><b>10월 중순</b> — 삼성전자·SK하이닉스 자사주 매입 물량이 소진된 뒤 두 종목 주가가 버티는지.</li>
+    </ul>
+  </section>
+
+  <footer>유튜브 자동 생성 자막 전문을 바탕으로 정리 (미측정 기본값 2.2초 보정). 발언자의 견해이며 투자 판단의 근거가 아닌 학습 자료입니다. 자막에서 자릿수가 끊긴 수치는 (자막 수치 불명확)으로 표시하고 옮기지 않았습니다.</footer>
+</div>
+</body>
+</html>
