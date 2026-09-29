@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>빅테크 vs 반도체 vs 배당주, 10월 승자는 — 스터디 노트</title>
+<style>
+:root {
+  --accent: #1d4ed8;
+  --ink: #16181d;
+  --muted: #6b7280;
+  --line: #e5e3de;
+  --wash: #f7f6f3;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: #fff; }
+.note {
+  max-width: 720px; margin: 0 auto; padding: 32px 28px;
+  font-family: Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  color: var(--ink); font-size: 15px; line-height: 1.72;
+  word-break: keep-all;
+}
+
+header { border-bottom: 2px solid var(--ink); padding-bottom: 18px; margin-bottom: 26px; }
+.label { font-size: 11px; letter-spacing: .14em; color: var(--accent); font-weight: 700; }
+h1 { font-size: 27px; line-height: 1.3; margin: 10px 0 12px; letter-spacing: -.02em; }
+.meta { font-size: 12.5px; color: var(--muted); }
+.meta a { color: var(--muted); }
+
+.conclusion {
+  border-left: 3px solid var(--accent); background: var(--wash);
+  padding: 16px 18px; margin-bottom: 34px; font-size: 15.5px;
+}
+.tag {
+  display: block; font-size: 11px; font-weight: 700; letter-spacing: .1em;
+  color: var(--accent); margin-bottom: 6px;
+}
+
+section { margin-bottom: 34px; }
+h2 { font-size: 19px; margin: 0 0 4px; letter-spacing: -.01em; }
+.num {
+  display: inline-block; min-width: 26px; height: 22px; margin-right: 8px;
+  background: var(--accent); color: #fff; font-size: 12px; font-weight: 700;
+  text-align: center; line-height: 22px; border-radius: 3px;
+}
+.sub { font-size: 13px; color: var(--muted); margin: 0 0 16px; }
+time { font-variant-numeric: tabular-nums; font-size: 12px; color: var(--accent); font-weight: 600; }
+
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.card { border: 1px solid var(--line); border-radius: 5px; padding: 14px 16px; }
+.card h4 { margin: 0 0 8px; font-size: 14.5px; }
+.card p { margin: 0; font-size: 14px; }
+
+.term { border-top: 1px solid var(--line); padding: 13px 0; }
+.term h4 { margin: 0 0 5px; font-size: 15px; }
+.term h4 em { font-style: normal; font-weight: 400; font-size: 12.5px; color: var(--muted); }
+.term p { margin: 0; }
+.aside {
+  margin-top: 7px !important; background: var(--wash); padding: 8px 11px;
+  border-radius: 4px; font-size: 13.5px; color: #3f4450;
+}
+.aside b { color: var(--accent); font-weight: 700; }
+
+.step { display: flex; gap: 14px; padding: 15px 0; border-top: 1px solid var(--line); }
+.marker {
+  flex: 0 0 26px; height: 26px; border-radius: 50%; background: var(--ink); color: #fff;
+  font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+}
+.step .body { flex: 1; }
+.step h4 { margin: 0 0 6px; font-size: 15px; display: flex; gap: 8px; align-items: baseline; }
+.step p { margin: 0 0 6px; }
+.step p:last-child { margin-bottom: 0; }
+blockquote {
+  margin: 9px 0 0; padding-left: 12px; border-left: 2px solid var(--line);
+  color: #3f4450; font-size: 14px;
+}
+
+table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 6px 0 10px; }
+th, td { border: 1px solid var(--line); padding: 7px 10px; text-align: left; vertical-align: top; }
+th { background: var(--wash); font-weight: 600; font-size: 13px; }
+td.n { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+.insight { padding: 12px 0; border-top: 1px solid var(--line); }
+.insight h4 { margin: 0 0 4px; font-size: 15px; }
+.insight p { margin: 0; font-size: 14.5px; }
+
+.watch { margin: 0; padding-left: 18px; }
+.watch li { margin-bottom: 9px; }
+
+footer {
+  margin-top: 38px; padding-top: 14px; border-top: 1px solid var(--line);
+  font-size: 12px; color: var(--muted);
+}
+
+@page { size: A4; margin: 14mm; }
+.card, .term, .step, .insight, .conclusion, blockquote, tr { break-inside: avoid; page-break-inside: avoid; }
+h1, h2, h3, h4 { break-after: avoid; page-break-after: avoid; }
+@media print {
+  .note { max-width: none; padding: 0; font-size: 10.5pt; }
+  section { margin-bottom: 22px; }
+  a { text-decoration: underline; }
+}
+</style>
+</head>
+<body>
+<div class="note">
+
+  <header>
+    <div class="label">STUDY NOTE · 10월 투자 일정</div>
+    <h1>빅테크 vs 반도체 vs 배당주 — 10월 승자는 누구일까</h1>
+    <div class="meta">수페TV · 2026.9.29 · 16분 34초 · <a href="https://www.youtube.com/watch?v=kE2JOpZgrqo">원본 영상</a></div>
+  </header>
+
+  <div class="conclusion">
+    <span class="tag">한 줄 결론</span>
+    10월은 세 가지로 압축된다 — 기준금리(10/28 FOMC)가 배당주를 어떻게 흔드는지, AI 투자 확대에 반도체가 실적으로 답하는지, 그리고 중간선거(11/3) 뒤의 전략 점검. 일정을 먼저 알고 있어야 대응할 수 있다. "알고 견디는 것과 모르고 당하는 건 큰 차이가 있다."
+  </div>
+
+  <section>
+    <h2><span class="num">01</span> 9월을 되짚으며 — 일정을 알았다면 달랐을 것들</h2>
+    <p class="sub">영상의 출발점 — 주가는 무너지기 전에 몇 번의 신호를 보낸다 <time>0:00–2:31</time></p>
+    <div class="split">
+      <div class="card">
+        <h4>금리 인상이 때린 쪽 — 배당주</h4>
+        <p>9월 FOMC에서 금리 인상이 강행됐고, 충격은 성장주보다 배당주가 더 컸다. 대표 섹터가 리츠로, 9월 한 달 내내 하락했다. 인상 가능성이 높아질수록 더 빠졌고, 실제 인상 뒤 추가 하락까지 나왔다.</p>
+      </div>
+      <div class="card">
+        <h4>일정을 타고 오른 쪽 — 메타</h4>
+        <p>메타는 9월에 '뮤즈'(자막 표기)를 공개하며 한 달간 23.2% 상승. 다운로드 미국 1위가 이어지고 작은 하드웨어까지 공개했다. 화자는 기술이 상향 평준화된 지금 중요한 건 대중이고, 36억 유저를 가진 메타의 장점이 돋보이는 순간이라고 본다.</p>
+      </div>
+    </div>
+    <p>AI 에이전트 때문에 하락한 기업도 있다. 구독·금융·보험 등에서 "불필요한 돈"이 제거되면서 헬스장 프랜차이즈 플래닛 피트니스가 가장 크게 타격을 받았다. 반대로 에이전트 시대에는 반도체 사용량이 기하급수적으로 늘고, 기업들은 이미 실적과 전망으로 그 숫자를 제시하고 있다. 최근 한 달 S&amp;P 500 수익률은 반도체를 비롯한 기술주 중심이었고 가치주는 힘이 없었다 — 화자는 이 일정을 미리 알았다면 가치주 적립식을 FOMC 뒤로 미루거나 성장주 비중 확대를 더 빨리 했을 것이라고 말한다.</p>
+  </section>
+
+  <section>
+    <h2><span class="num">02</span> 용어 사전</h2>
+    <p class="sub">영상에 등장한 개념을 쉬운 말로</p>
+
+    <div class="term">
+      <h4>금리 인상 가능성 <em>rate hike probability</em></h4>
+      <p>다음 FOMC에서 금리를 올릴 확률로, 영상 시점 65.9%. 화자는 이 숫자를 "기준선"이라 부르고, 지표가 나올 때마다 이 숫자가 어떻게 바뀌는지에 따라 가치주의 방향이 결정된다고 본다.</p>
+      <p class="aside"><b>읽는 법</b> — 실업률 4.1% 유지(고용), CPI 3.6% 이상(물가 재가열), PPI 5.3% 이하(비용 압박 완화), WTI 90 이하(에너지발 인플레 완화). 이 네 지표를 종합해 인상 가능성이 움직인다.</p>
+    </div>
+
+    <div class="term">
+      <h4>배당 왕족주 <em>dividend kings</em></h4>
+      <p>50년 이상 배당을 늘려 온 기업. 영상에서는 이 중 현재 배당률이 높은 기업을 골라 본다 — 유니버셜 7.8%(10년 평균보다 2.41%p 높음), 알트리아 6.45%(평균과 비슷, 주가도 잘 안 빠짐), 펩시 4.6%.</p>
+      <p class="aside"><b>포인트</b> — 배당주는 어느 산업에 속하는지 같이 봐야 한다. 펩시는 소비재, 애보트는 헬스케어. 산업 자체가 힘든 시기면 상승 모멘텀이 약하다.</p>
+    </div>
+
+    <div class="term">
+      <h4>배당률 박스 <em>dividend yield range</em></h4>
+      <p>한 기업의 배당률이 평소 오가는 범위. 홈디포는 10년 평균 배당률이 2.24%인데 이미 3%를 넘은 지 오래됐다 — 화자는 "기존 배당률 박스에서 이미 벗어나 있는 비정상적인 상황"이라고 표현한다.</p>
+      <p class="aside"><b>읽는 법</b> — 배당률이 오르는 건 주가가 그만큼 빠졌다는 뜻. 실적이 있고 성장하는 기업이면 되돌림 여지로 읽는다.</p>
+    </div>
+
+    <div class="term">
+      <h4>코스톨라니의 반등 조건</h4>
+      <p>화자가 인용한 투자 전략 — "악재에 하락하지 않는 순간이 오면 반등할 수 있다." 금리가 오르는데 배당주 주가가 빠지지 않으면 그것이 신호라는 것.</p>
+    </div>
+
+    <div class="term">
+      <h4>SOX <em>필라델피아 반도체 지수</em></h4>
+      <p>반도체를 대표하는 지수. 차트상 현재 하락 채널을 벗어난 상승을 보여주고 있고, 10월 실적·전망에 따라 상승 채널을 그릴지 결정된다. 그래야 삼성전자·SK하이닉스도 함께 우상향한다.</p>
+    </div>
+
+    <div class="term">
+      <h4>반도체 장비 3대장</h4>
+      <p>ASML · 램리서치 · 어플라이드(자막 표기 '어프라이즈'). GPU·CPU는 같이 오르는데 장비주는 아직 힘을 받지 못하고 횡보 혹은 하락 중이다.</p>
+      <p class="aside"><b>포인트</b> — 화자가 "상대적으로 덜 오른 분야"로 꼽은 곳. 반도체 산업 안에서 순환매가 발생하면 장비주로 확장될 수 있다.</p>
+    </div>
+
+    <div class="term">
+      <h4>캐펙스 <em>CAPEX</em></h4>
+      <p>빅테크의 설비 투자. 빅테크는 캐펙스를 늘리며 빠른 공급을 원하고, 돈을 더 벌어야 하는 반도체 기업은 가격을 높이고 수요를 조절한다 — 이 힘겨루기가 영상 제목의 '빅테크 vs 반도체'다.</p>
+    </div>
+
+    <div class="term">
+      <h4>중간선거와 예측시장 <em>midterm · prediction market</em></h4>
+      <p>선거일은 11월 3일이지만 10월에 모든 게 정리된다. 예측시장은 상원·하원 모두 민주당 장악 확률을 높게 보며, 하원은 거의 확정적이고 변수는 상원이다.</p>
+      <p class="aside"><b>읽는 법</b> — 1974년부터 지난 중간선거까지 13번 모두 선거 6개월 뒤 주가가 올랐고, S&amp;P 500 평균 12.4%. "시장은 누가 이겼냐보다 불확실성이 사라지는 것을 좋아한다."</p>
+    </div>
+
+    <div class="term">
+      <h4>쏠림 현상</h4>
+      <p>지수는 오르는데 오른 종목보다 내린 종목이 많은 상태. 지난 한 달 S&amp;P 500은 500개 중 상승 135개, 하락 365개였다.</p>
+    </div>
+
+    <div class="term">
+      <h4>공매도 비중 <em>short interest</em></h4>
+      <p>주가 하락에 베팅한 물량의 비율. 슈퍼마이크로가 17.3%로 S&amp;P 500 최고이고 지난달보다 0.3%p 더 늘었다. 화자는 이런 종목은 조심하는 게 좋다고 본다. 반대로 모더나는 11%에서 9.2%로 줄면서 주가가 더 가볍게 올라갈 수 있었다.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">03</span> 영상의 논리 흐름</h2>
+    <p class="sub">10월 체크포인트 세 개로 가는 7단계</p>
+
+    <div class="step">
+      <div class="marker">1</div>
+      <div class="body">
+        <h4>일정이 9월의 승패를 갈랐다 <time>0:32–2:31</time></h4>
+        <p>금리 인상 → 배당주·리츠 하락, 메타 일정 → +23.2%. 두 사례 모두 미리 알 수 있던 일정이었다. 그래서 화자는 매달 마지막 주에 다음 달 일정과 전략을 정리하겠다고 한다.</p>
+        <blockquote>"9월 일정을 미리 체크하고 투자 전략을 세웠다면 이번 하락을 대비할 수 있었습니다."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">2</div>
+      <div class="body">
+        <h4>첫째, 기준금리 — 지표 네 개가 65.9%를 움직인다 <time>3:09–4:07</time></h4>
+        <p>10월에도 FOMC가 있어(28일) 배당주 투자자는 다시 점검해야 한다. 그 전에 실업률부터 CPI까지 지표가 나오고, 결과에 따라 인상 가능성이 달라진다. 지금까지는 추가 인상 가능성이 높은 쪽이고, 금리가 오르면 타격받는 건 성장주가 아니라 배당주다.</p>
+        <blockquote>"현재 65.9%이고 여기가 기준선입니다."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">3</div>
+      <div class="body">
+        <h4>그런데 금리가 오르는데 배당주가 안 빠지면? <time>4:10–5:53</time></h4>
+        <p>여기서 "재미난 투자 전략"이 나온다. 홈디포는 290달러까지 내려왔고, 8월 주가로 회복하면 23%, 전고점이면 최대 51% 상승 여지. 배당률은 10년 평균 2.24%를 훌쩍 넘은 3%대. 고금리에 불리하지만 실적이 있고 성장하는 기업이라 화자는 "그 끝이 언제인지" 모니터링하겠다고 한다. 왕족주 중 배당률 높은 기업도 같은 눈으로 본다.</p>
+        <p>단, 산업을 같이 봐야 한다. 헬스케어는 중간선거 때문에 정책적으로 눌려 있어 지금 힘을 못 쓰지만, 금리 인상발 하락이 멈추고 선거 불확실성이 해소되면 더 크게 오를 가능성이 있다.</p>
+        <blockquote>"악재에 하락하지 않는 순간이 오면 반등할 수 있다는 겁니다. 이번 금리 인상 시기에 배당주를 잘 봐야겠습니다."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">4</div>
+      <div class="body">
+        <h4>둘째, AI 투자에 대한 대답 — 실적 시즌의 순서 <time>5:55–7:03</time></h4>
+        <p>AI 투자 확대가 계속되는 지금, 수익화 속도가 따라오는지가 문제다. 순서는 ASML 증설 → TSMC 실적(수요 대비 공급 가늠, 매달 초 발표하는 매출) → 엔비디아 GTC(미래 전망) → 빅테크 실적. 내 종목이 속한 테마가 있다면 이 일정 전체를 염두에 두고 시장을 본다.</p>
+        <blockquote>"좋은 흐름이 이어진다면 실적 발표 전부터 주가가 오르기 시작합니다."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">5</div>
+      <div class="body">
+        <h4>반도체 안에서 덜 오른 곳, 그리고 호황이 안 끝나는 이유 <time>7:06–8:00</time></h4>
+        <p>최근 반등에서 장비주만 뒤처져 있다 — 순환매가 오면 장비주로 확장될 수 있다. 상승이 끝날까 걱정하는 이들에게 화자는 "지금은 수요가 증가하고 가격이 오르는 상황이라 여전히 호황"이라고 답한다. 내년까지 공급이 수요를 못 따라간다는 얘기가 많고, 심지어 공급 과잉을 걱정한 기업들이 수요 자체를 조절하는 눈치다. 삼성·하이닉스·마이크론이 담합했다는 소리까지 나온다.</p>
+        <blockquote>"증설 투자는 1에서 3년 정도 시차가 있기 때문에 시간 여유가 있습니다."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">6</div>
+      <div class="body">
+        <h4>새로운 적 — 빅테크 vs 반도체, 그리고 새우등 <time>8:02–8:59</time></h4>
+        <p>반도체 사이클이 예전과 다르게 흐르면서 빅테크가 반도체의 적이 됐다. 빅테크는 캐펙스를 늘려 빠른 공급을 원하고, 반도체는 가격을 높이고 수요를 조절한다. 그 결과 주가가 반대로 움직인다 — 6월 반도체 상승·빅테크 하락, 7월 반도체 조정·빅테크 수익, 9월 반도체 반등으로 역전.</p>
+        <p>고래 싸움에 터지는 새우등: 빅테크가 회사채를 발행하면서 장기채권이 찬밥 신세, 배당주도 힘이 없고, 고금리 이자 부담을 떠안는 리츠와 중소형주, AI에 예산을 빼앗긴 전통 소프트웨어 기업들이 많이 빠졌다.</p>
+        <blockquote>"우리의 계좌도 새우등 터지지 않게 조심해야겠습니다."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">7</div>
+      <div class="body">
+        <h4>셋째, 중간선거 — 누가 이기느냐보다 무엇이 정리되느냐 <time>9:01–12:14</time></h4>
+        <p>예산을 잃을 수 있는 분야는 방산·청정에너지·의료보험. 트럼프가 미는 방산은 힘이 약해질 수 있지만 지정학 이슈가 있는 국방비는 지출되고, 의료보험은 까다로운 요건으로 가입자가 줄 수 있다. 이 불확실성 때문에 주가가 눌려 있고, 대표 ETF들은 최근 3개월 모두 S&amp;P 500보다 저조하다. 개별 기업은 정책과 더 직접 닿은 쪽을 본다 — 방산은 GE보다 RTX, 건강보험은 유나이티드헬스보다 센틴.</p>
+        <p>선거 뒤 다시 변동성의 주도권을 발언으로 가져올 트럼프가 강하게 미는 것은 '미국에서 만들기'다. 철강·알루미늄·구리 수입품 25% 관세는 미국 금속 생산 기업엔 유리하지만 금속을 사서 만드는 자동차·기계·건설엔 원가 부담. 제약도 같은 원칙 — 수입 특허의약품·원료에 최대 100% 관세, 미국 생산 계획을 승인받은 기업엔 낮은 관세. 앞으로는 공장이 어디 있는지가 실적을 가른다.</p>
+        <blockquote>"시장은 누가 이겼냐보다 불확실성이 사라지는 것을 좋아하죠." · "관세가 모든 미국 기업에게 호재는 아니니 조심해야 합니다."</blockquote>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">04</span> S&amp;P 500의 속사정 — 지난 한 달</h2>
+    <p class="sub">영상 후반의 월간 점검. 화자는 앞으로 매달 정리하겠다고 한다 <time>12:36–14:32</time></p>
+    <table>
+      <tr><th>무엇</th><th>숫자</th><th>화자의 읽기</th></tr>
+      <tr><td>상승 / 하락 종목 수</td><td class="n">135 / 365</td><td>증시는 올랐는데 하락 기업이 더 많다 — 쏠림이 심하다</td></tr>
+      <tr><td>등락 극단</td><td class="n">인텔 +37.4% · 젠디지털 −30%</td><td>크게 오른 기업은 대부분 AI 관련</td></tr>
+      <tr><td>모더나</td><td class="n">+41.7%</td><td>임상 성공. 공매도 비중도 11% → 9.2%로 줄어 주가가 가벼워졌다</td></tr>
+      <tr><td>배당금 인상</td><td class="n">T모바일 10.7% · JP모건 · 마이크로소프트 7.7%</td><td>"배당금을 늘리는 건 그만큼 돈을 잘 벌고 있다는 증거"</td></tr>
+      <tr><td>배당률 최고 / 최저</td><td class="n">필립모리스 3.36% / 마이크로소프트 0.76%</td><td>마이크로소프트는 배당주라 하기엔 아쉬운 숫자</td></tr>
+      <tr><td>탑 10 비중</td><td class="n">메타 6위 복귀 · AMD 14→12위</td><td>엔비디아·애플·구글 비중 상승. 브로드컴(자막 표기 '브로컨')·마이크론·AMD 등 작년엔 없던 반도체 기업이 탑 10에 등장</td></tr>
+      <tr><td>공매도 비중 1위</td><td class="n">슈퍼마이크로 17.3% (+0.3%p)</td><td>탑 5 종목 모두 비중이 높아졌다 — "썩 좋지 않다", 조심</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2><span class="num">05</span> 인사이트</h2>
+    <p class="sub">영상 밖에서도 통하는 원칙</p>
+
+    <div class="insight">
+      <h4>① 달력이 먼저, 종목은 그다음</h4>
+      <p>주가는 무너지기 전에 몇 번의 신호를 보내고, 오를 때도 미리 사 둬야 대응이 된다. 이벤트가 터진 뒤 반응하는 것과 이벤트 일정에 맞춰 비중을 미리 조정하는 것의 차이가 계좌의 차이다. 화자의 말대로 "알고 견디는 것과 모르고 당하는 건 큰 차이"다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>② 악재를 맞고도 안 빠지면, 그것이 신호다</h4>
+      <p>가격이 이미 나쁜 소식을 다 소화했는지는 뉴스가 아니라 뉴스에 대한 가격 반응으로 잰다. 금리가 올라도 배당주가 더 안 빠지는 순간, 배당률이 평소 박스를 벗어나 있는 상태가 그 후보다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>③ 주도 섹터 안에도 후발 주자가 있다</h4>
+      <p>한 사이클이 이미 많이 진행됐다고 다 오른 게 아니다. 같은 산업 안에서 상대적으로 덜 오른 분야(반도체의 장비주)를 찾으면 순환매의 다음 순서를 기다릴 수 있다. 증설 시차처럼 사이클의 길이를 정하는 구조를 알면 "끝났나" 하는 불안을 숫자로 대신할 수 있다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>④ 두 강자가 싸우면 제3자가 다친다 — 내 종목이 새우인지 확인하라</h4>
+      <p>빅테크와 반도체처럼 힘센 쪽끼리의 힘겨루기는 당사자보다 주변을 먼저 때린다. 장기채, 리츠, 중소형주, 전통 소프트웨어처럼 자금·예산·금리의 흐름에서 밀려나는 자리가 어디인지 지도를 그려 두고, 내 포트폴리오가 그 자리에 있는지 본다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>⑤ 정책은 승자가 아니라 '불확실성 해소'와 '원가 구조'로 읽는다</h4>
+      <p>시장은 누가 이기느냐보다 결과가 정해지는 것을 좋아한다. 그리고 같은 정책(관세)이라도 원자재를 파는 쪽과 사서 만드는 쪽의 손익은 반대다. 수혜 테마라는 이름표 대신, 그 기업의 비용이 어디서 나오고 공장이 어디 있는지를 본다.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">06</span> 앞으로 지켜볼 것</h2>
+    <ul class="watch">
+      <li><b>10/28 FOMC</b> — 인상 가능성 65.9%가 기준선. 그 전 지표의 임계값: 실업률 4.1% 유지 여부, CPI 3.6% 이상, PPI 5.3% 이하, WTI 90 이하.</li>
+      <li><b>홈디포 290달러</b> — 8월 주가 회복 시 +23%, 전고점 +51%. 금리가 올라도 더 안 빠지는지(코스톨라니 조건), 배당률 3%대가 언제 박스로 돌아가는지.</li>
+      <li><b>AI 실적 코스</b> — ASML 증설 → TSMC 월초 매출·실적 → 엔비디아 GTC → 빅테크 실적. 좋은 흐름이면 발표 전부터 주가가 먼저 움직인다.</li>
+      <li><b>SOX 상승 채널 전환 여부</b>와 장비주(ASML·램리서치·어플라이드)로의 순환매. 삼성전자·SK하이닉스는 SOX와 같이 간다.</li>
+      <li><b>11/3 중간선거</b> — 상원 향방이 변수. 눌려 있는 방산(RTX)·청정에너지·건강보험(센틴)이 선거 전후로 어떻게 움직이는지. 헬스케어는 금리 하락 멈춤 + 선거 불확실성 해소가 겹칠 때.</li>
+      <li><b>관세 원가 구조</b> — 금속·제약에서 미국 내 생산 여부가 실적을 가른다. 보유 종목의 공장 위치 확인.</li>
+      <li><b>공매도 비중 상위(슈퍼마이크로 17.3%)</b> 종목은 조심. 다음 달 월간 점검에서 비중 변화를 본다.</li>
+    </ul>
+  </section>
+
+  <footer>유튜브 자동 생성 자막 전문을 바탕으로 정리 (미측정 기본값 2.2초 보정). 발언자의 견해이며 투자 판단의 근거가 아닌 학습 자료입니다. 영상 말미의 연금계좌 ETF 매수 이벤트 안내는 제외했습니다.</footer>
+</div>
+</body>
+</html>
