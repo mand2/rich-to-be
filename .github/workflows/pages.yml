@@ -26,18 +26,18 @@ jobs:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
-      # ponytail: actions 는 v4 고정. 2026-08-26 실행 로그에서 Node 20 deprecated 경고가 떴고
-      # 러너가 Node 24 로 강제 실행 중이다. 지금은 성공하니 둔다 — 실제로 깨지거나
-      # v5 가 안정되면 checkout/upload-pages-artifact/deploy-pages 를 한꺼번에 올린다.
-      - uses: actions/checkout@v4
+      # ponytail: 세 액션 다 Node 24 를 선언하는 메이저다 (2026-09-29 action.yml 확인:
+      # checkout v7 · upload-pages-artifact v5(내부 upload-artifact v7) · deploy-pages v5).
+      # 런 로그에 "Node.js N is deprecated" 가 다시 뜨면 셋을 한꺼번에 올린다.
+      - uses: actions/checkout@v7
 
       # 표준 라이브러리만 쓴다 — ubuntu 기본 python3 로 충분하다
       - run: python3 scripts/build-notes-index.py --selftest
       - run: python3 scripts/build-notes-index.py
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: notes
 
       - id: deploy
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

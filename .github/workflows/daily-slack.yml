@@ -22,7 +22,7 @@ jobs:
   slack:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0   # 24시간치 first-parent 로그와 부모 diff 가 필요하다
 
