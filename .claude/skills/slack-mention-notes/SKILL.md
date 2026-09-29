@@ -65,7 +65,7 @@ git branch -D worktree-agent-<id>
 
 ## 5. 확인
 
-Actions 의 `slack` 잡이 새로 추가된 노트를 골라 `slack.py` 로 보내고, `slack-thread` 태그가 있는 건은 새 글 없이 **원본 스레드에 링크만** 답글로 단다.
+매일 KST 21:00 에 `daily-slack.yml` 이 지난 24시간 main 에 추가된 노트를 "오늘의 정리 >>>" 스레드로 보내고, `slack-thread` 태그가 있는 건은 그와 별개로 **원본 스레드에도 링크**를 답글로 단다.
 
 사용자에게는 처리한 건 목록과 각각의 스레드 ts 만 알린다. 슬랙 화면 확인은 사용자가 직접 한다.
 

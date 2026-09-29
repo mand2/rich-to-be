@@ -1,0 +1,42 @@
+name: Daily Slack digest
+
+# 매일 KST 21:00 에 지난 24시간 동안 main 에 들어온 새 노트를 "오늘의 정리 >>>" 스레드 하나로 보낸다.
+# PR 머지마다 보내지 않는다 — 그건 하루에 PR 이 여럿이면 채널이 글로 덮여서 뺐다.
+# 무엇을 어떻게 고르는지는 scripts/slack.py 의 --daily 가 문서다.
+on:
+  schedule:
+    # ponytail: UTC 12:00 = KST 21:00. 창(slack.py DAILY_SINCE 24시간)과 한 쌍이라 주기를 바꾸면 같이 바꾼다.
+    # GitHub 은 스케줄을 몇 분 늦게 돌리기도 하고, 60일간 커밋이 없으면 스케줄을 꺼 버린다.
+    - cron: "0 12 * * *"
+  workflow_dispatch:   # 놓친 날은 손으로 돌린다 — 창이 24시간이라 그 안에만 다시 잡힌다
+
+permissions:
+  contents: read
+  pages: read          # Pages URL 조회용
+
+concurrency:
+  group: daily-slack
+  cancel-in-progress: false
+
+jobs:
+  slack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # 24시간치 first-parent 로그와 부모 diff 가 필요하다
+
+      # 발행 런의 page_url 을 못 받으니 API 로 묻는다. 실패하면 비워 두고 slack.py 의 기본 BASE_URL 을 쓴다.
+      - name: Pages URL
+        id: pages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: echo "url=$(gh api "repos/${GITHUB_REPOSITORY}/pages" --jq .html_url 2>/dev/null || true)" >> "$GITHUB_OUTPUT"
+
+      - name: 오늘의 정리 슬랙 전송
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
+          SLACK_MENTION_GROUP: ${{ secrets.SLACK_MENTION_GROUP }}   # 없어도 된다 — 멘션 건의 원본 스레드 답글에만 쓴다
+          NOTES_BASE_URL: ${{ steps.pages.outputs.url }}
+        run: python3 scripts/slack.py --daily

@@ -4,6 +4,10 @@
 채널엔 "<파일명> 정리" 만 뜨고 Pages 링크는 그 메시지의 스레드 답글로 [노트 제목](링크) 꼴로 들어간다.
 한 번에 여러 개를 보내면 첫 메시지가 스레드 부모가 되고 나머지는 전부 그 스레드에 달린다.
 
+--daily 는 매일 밤 Actions(daily-slack.yml, KST 21:00) 가 부른다 — 지난 24시간 main 에 들어온
+first-parent 커밋(PR 머지·직접 푸시)마다 추가된 노트를 모아 "오늘의 정리 >>>" 한 글을 올리고,
+커밋당 답글 하나(PR 링크 + 노트 링크들)를 그 스레드에 단다. 새 노트가 없으면 아무것도 안 보낸다.
+
 리포 루트 .env 에 두 줄 (환경변수로 이미 있으면 그쪽이 이긴다). .env.example 참고:
 
     SLACK_BOT_TOKEN=xoxb-...   # scope: chat:write
@@ -11,6 +15,7 @@
     SLACK_MENTION_GROUP=S0X... # 선택. 멘션으로 시작한 건의 답글에 부를 사용자 그룹 ID
 
     .venv/bin/python scripts/slack.py notes/morning-routine/260826_한경-모닝루틴.html
+    .venv/bin/python scripts/slack.py --daily            # 지난 24시간 main 의 새 노트를 한 스레드로
     .venv/bin/python scripts/slack.py --selftest
 
 Pages 아티팩트의 루트가 notes/ 라서 notes/ 아래 경로가 그대로 URL 경로가 된다.
@@ -20,6 +25,7 @@ import html
 import json
 import os
 import re
+import subprocess
 import sys
 import urllib.parse
 import urllib.request
@@ -30,6 +36,12 @@ YOUTUBE = re.compile(r"(?:youtube\.com/watch\?\S*?v=|youtu\.be/|youtube\.com/liv
 # 멘션으로 시작한 노트는 이 태그로 원본 스레드를 들고 다닌다. 심는 건 슬랙 멘션 스킬.
 THREAD_META = re.compile(r'<meta\s+name="slack-thread"\s+content="([\d.]+)"')
 H1 = re.compile(r"<h1[^>]*>(.*?)</h1>", re.S)
+MERGE_PR = re.compile(r"^Merge pull request #(\d+) ")
+# 슬랙으로 보내는 노트 폴더. self-study 는 gitignore 라 애초에 git 에 없다.
+NOTE_GLOBS = ("notes/morning-routine/*.html", "notes/invest/*.html", "notes/real-estate/*.html")
+# ponytail: --daily 의 창. daily-slack.yml 의 cron 이 하루 한 번이라 24시간 — cron 주기를 바꾸면 같이 바꾼다.
+# 커밋 시각 기준이라 실행 시각 정각 부근의 머지는 다음 날로 밀릴 수 있다 (상태 파일을 두지 않는 대가).
+DAILY_SINCE = "24 hours ago"
 # ponytail: 멘션 스캔 깊이. 오래된 멘션이 잘려 안 보이면 올린다 (SKILL.md 도 이 값을 가리킨다).
 HISTORY_LIMIT = 50
 ENV_FILE = Path(__file__).resolve().parent.parent / ".env"
@@ -86,8 +98,64 @@ def note_link(path, url):
     p = Path(path)
     m = H1.search(p.read_text(errors="ignore")) if p.exists() else None
     title = re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]*>", " ", m.group(1)))).strip() if m else p.stem
-    esc = title.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-    return f"<{url}|{esc}>"
+    return f"<{url}|{esc(title)}>"
+
+
+def esc(text):
+    """슬랙 텍스트 이스케이프. &, <, > 만 바꾸면 된다."""
+    return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+
+def git(*args, run=subprocess.check_output):
+    return run(["git", "-c", "core.quotePath=false", *args], text=True)
+
+
+def repo_slug(run=subprocess.check_output):
+    """owner/repo. CI 는 GITHUB_REPOSITORY 로 주고, 로컬은 origin 에서 읽는다."""
+    if os.environ.get("GITHUB_REPOSITORY"):
+        return os.environ["GITHUB_REPOSITORY"]
+    url = git("remote", "get-url", "origin", run=run).strip()
+    m = re.search(r"github\.com[:/](.+?)(?:\.git)?$", url)
+    return m.group(1) if m else ""
+
+
+def daily_batches(since=DAILY_SINCE, ref="main", run=subprocess.check_output):
+    """지난 창의 main first-parent 커밋마다 (sha, 제목, 추가된 노트 경로들). 오래된 것부터.
+
+    first-parent 만 보면 PR 머지는 머지 커밋 하나로, 직접 푸시는 그 커밋으로 잡힌다 —
+    PR 안의 개별 커밋은 안 센다. 노트는 첫 부모와의 diff 에서 추가(A)된 것만.
+    """
+    log = git("log", "--first-parent", "--reverse", f"--since={since}", "--format=%H%x09%s", ref, run=run)
+    out = []
+    for line in log.splitlines():
+        sha, _, subject = line.partition("\t")
+        files = git("diff", "--name-only", "--diff-filter=A", f"{sha}^", sha, "--", *NOTE_GLOBS, run=run)
+        out.append((sha, subject, [Path(f) for f in files.splitlines() if f]))
+    return out
+
+
+def daily(batches, token, channel, base=BASE_URL, repo="", group=""):
+    """"오늘의 정리 >>>" 한 글 + 커밋당 답글 하나. 노트가 하나도 없으면 아무것도 안 보내고 None.
+
+    답글 첫 줄은 PR 머지면 PR 링크, 아니면 커밋 제목. 그 아래 노트 링크가 한 줄씩.
+    멘션으로 시작한 노트(slack-thread 태그)는 요청자가 기다리는 원본 스레드에도 링크를 단다 —
+    일일 스레드와 중복이지만 요청자는 자기 스레드에서 바로 받는다.
+    """
+    batches = [(sha, subject, files) for sha, subject, files in batches if files]
+    if not batches:
+        return None
+    root = call("chat.postMessage", token, channel=channel, text=esc("오늘의 정리 >>>"))["ts"]
+    for sha, subject, files in batches:
+        m = MERGE_PR.match(subject)
+        head = f"<https://github.com/{repo}/pull/{m.group(1)}|PR #{m.group(1)}>" if m and repo else esc(subject)
+        links = [note_link(p, note_url(p, base)) for p in files]
+        call("chat.postMessage", token, channel=channel, text="\n".join([head, *links]), thread_ts=root)
+        for p, link in zip(files, links):
+            origin = note_thread(p)
+            if origin:
+                call("chat.postMessage", token, channel=channel,
+                     text=f"<!subteam^{group}>\n{link}" if group else link, thread_ts=origin)
+    return root
 
 
 def mentions(token, channel):
@@ -190,8 +258,48 @@ def selftest():
         post(g.name, "x", "C0X", "http://e.com", root, group="S0G")
         assert sent[-1]["text"] == (
             f"<!subteam^S0G>\n<http://e.com/{Path(g.name).name}|{Path(g.name).stem}>"), sent[-1]
+
+        # --daily: 커밋마다 답글 하나, 노트 없는 커밋은 건너뛰고, 멘션 건은 원본 스레드에도
+        sent.clear()
+        batches = [
+            ("s1", "Merge pull request #11 from mand2/feature/x", [Path("notes/invest/a.html"), Path("notes/invest/b.html")]),
+            ("s2", "fix: <스크립트> & 정리", []),
+            ("s3", "invest: c.html", [Path("notes/invest/c.html"), Path(g.name)]),
+        ]
+        root = daily(batches, "x", "C0X", "http://e.com", repo="mand2/rich-to-be", group="S0G")
+        assert root == "t1", root
+        assert [(s["text"], s.get("thread_ts")) for s in sent] == [
+            ("오늘의 정리 &gt;&gt;&gt;", None),
+            ("<https://github.com/mand2/rich-to-be/pull/11|PR #11>\n<http://e.com/invest/a.html|a>\n<http://e.com/invest/b.html|b>", "t1"),
+            (f"invest: c.html\n<http://e.com/invest/c.html|c>\n<http://e.com/{Path(g.name).name}|{Path(g.name).stem}>", "t1"),
+            (f"<!subteam^S0G>\n<http://e.com/{Path(g.name).name}|{Path(g.name).stem}>", "1787897791.593189"),
+        ], sent
+        # PR 이 아닌 제목은 이스케이프, repo 를 모르면 PR 머지도 제목 그대로
+        sent.clear()
+        daily([("s2", "fix: <a> & b", [Path("notes/invest/a.html")]),
+               ("s1", "Merge pull request #11 from x", [Path("notes/invest/b.html")])], "x", "C0X", "http://e.com")
+        assert sent[1]["text"].startswith("fix: &lt;a&gt; &amp; b\n"), sent[1]
+        assert sent[2]["text"].startswith("Merge pull request #11 from x\n"), sent[2]
+        # 새 노트가 없으면 아무것도 안 보낸다
+        sent.clear()
+        assert daily([("s2", "chore", [])], "x", "C0X") is None and sent == []
     finally:
         call = real
+
+    # daily_batches: git 을 흉내 내 first-parent 로그 → 커밋별 추가 노트. 노트 없는 커밋도 (빈 목록으로) 남긴다
+    def fake_git(cmd, text=True):
+        if cmd[3] == "log":
+            assert "--first-parent" in cmd and "--reverse" in cmd and f"--since={DAILY_SINCE}" in cmd, cmd
+            return "aaa\tMerge pull request #9 from x\nbbb\tfix: 버튼\n"
+        assert cmd[3:6] == ["diff", "--name-only", "--diff-filter=A"] and cmd[8] == "--" and tuple(cmd[9:]) == NOTE_GLOBS, cmd
+        return {"aaa^": "notes/invest/260929_한글.html\n", "bbb^": ""}[cmd[6]]
+    assert daily_batches(run=fake_git) == [
+        ("aaa", "Merge pull request #9 from x", [Path("notes/invest/260929_한글.html")]),
+        ("bbb", "fix: 버튼", []),
+    ], daily_batches(run=fake_git)
+    assert daily_batches(run=lambda cmd, text=True: "") == []
+    assert repo_slug(run=lambda cmd, text=True: "git@github.com:mand2/rich-to-be.git\n") == "mand2/rich-to-be"
+    assert repo_slug(run=lambda cmd, text=True: "https://github.com/mand2/rich-to-be\n") == "mand2/rich-to-be"
     print("ok")
 
 
@@ -208,6 +316,7 @@ def main():
     ap.add_argument("--base-url", default=os.environ.get("NOTES_BASE_URL") or BASE_URL)
     ap.add_argument("--selftest", action="store_true")
     ap.add_argument("--mentions", action="store_true", help="봇이 멘션된 스레드를 탭 구분으로 출력")
+    ap.add_argument("--daily", action="store_true", help="지난 24시간 main 의 새 노트를 '오늘의 정리' 스레드 하나로")
     a = ap.parse_args()
     if a.selftest:
         return selftest()
@@ -217,6 +326,10 @@ def main():
     if a.mentions:
         for i, m in enumerate(mentions(token, a.channel), 1):
             print(f"{i}\t{'done' if m['done'] else 'new'}\t{m['thread_ts']}\t{m['video'] or '-'}\t{m['text']}")
+        return
+    if a.daily:
+        root = daily(daily_batches(), token, a.channel, a.base_url, repo_slug(), a.group)
+        print(f"오늘의 정리 -> {root}" if root else "지난 24시간에 새 노트 없음")
         return
     if not a.paths:
         sys.exit("보낼 노트 파일 경로가 있어야 한다")

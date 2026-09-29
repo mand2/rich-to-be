@@ -13,8 +13,8 @@ permissions:
   id-token: write
 
 # ponytail: 취소하지 않고 줄 세운다. cancel-in-progress: true 였을 때
-# 6초 간격 푸시의 앞 런이 통째로 죽어 그 런의 slack 잡이 사라졌고,
-# 뒤 런의 A-diff 엔 새 노트가 없어 아무것도 안 보내고 초록불로 끝났다 (2026-08-27).
+# 6초 간격 푸시의 앞 런이 통째로 죽어 그 런의 (당시 여기 있던) slack 잡이 사라졌다 (2026-08-27).
+# 슬랙 전송은 daily-slack.yml 로 옮겼지만, 발행 런이 죽으면 중간 상태가 사라지는 건 같아 그대로 둔다.
 concurrency:
   group: pages
   cancel-in-progress: false
@@ -25,8 +25,6 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
-    outputs:
-      page_url: ${{ steps.deploy.outputs.page_url }}   # slack 잡이 링크를 만들 베이스 URL
     steps:
       # ponytail: actions 는 v4 고정. 2026-08-26 실행 로그에서 Node 20 deprecated 경고가 떴고
       # 러너가 Node 24 로 강제 실행 중이다. 지금은 성공하니 둔다 — 실제로 깨지거나
@@ -43,27 +41,3 @@ jobs:
 
       - id: deploy
         uses: actions/deploy-pages@v4
-
-  # 발행과 전송을 다른 잡으로 둔다 — 한 잡에 묶으면 슬랙만 재실행할 수 없고
-  # (아티팩트가 중복 업로드돼 deploy-pages 가 죽는다) 발행이 실패하면 전송이 통째로 스킵된다.
-  slack:
-    needs: deploy
-    # ponytail: push 로 새로 추가된(A) 노트만 보낸다. 브랜치 첫 푸시나 force push 면
-    # event.before 가 0000... 이라 건너뛴다 — 그때는 로컬에서 slack.py 를 직접 돌린다.
-    if: github.event_name == 'push' && github.event.before != '0000000000000000000000000000000000000000'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0   # github.event.before 와 diff 하려면 이력이 필요하다
-
-      - name: 새 노트 슬랙 전송
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-          SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
-          NOTES_BASE_URL: ${{ needs.deploy.outputs.page_url }}
-        run: |
-          # -z/-0: 한글 파일명을 git 이 "\353\250\270..." 로 이스케이프해 내보내는 걸 막는다
-          git diff -z --name-only --diff-filter=A ${{ github.event.before }} ${{ github.sha }} \
-            -- 'notes/morning-routine/*.html' 'notes/invest/*.html' 'notes/real-estate/*.html' \
-            | xargs -0 -r python3 scripts/slack.py
