@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 에이전트가 노는 돈을 다 찾아낸다 — 스터디 노트</title>
+<style>
+:root {
+  --accent: #1d4ed8;
+  --ink: #16181d;
+  --muted: #6b7280;
+  --line: #e5e3de;
+  --wash: #f7f6f3;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: #fff; }
+.note {
+  max-width: 720px; margin: 0 auto; padding: 32px 28px;
+  font-family: Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  color: var(--ink); font-size: 15px; line-height: 1.72;
+  word-break: keep-all;
+}
+
+header { border-bottom: 2px solid var(--ink); padding-bottom: 18px; margin-bottom: 26px; }
+.label { font-size: 11px; letter-spacing: .14em; color: var(--accent); font-weight: 700; }
+h1 { font-size: 27px; line-height: 1.3; margin: 10px 0 12px; letter-spacing: -.02em; }
+.meta { font-size: 12.5px; color: var(--muted); }
+.meta a { color: var(--muted); }
+
+.conclusion {
+  border-left: 3px solid var(--accent); background: var(--wash);
+  padding: 16px 18px; margin-bottom: 34px; font-size: 15.5px;
+}
+.tag {
+  display: block; font-size: 11px; font-weight: 700; letter-spacing: .1em;
+  color: var(--accent); margin-bottom: 6px;
+}
+
+section { margin-bottom: 34px; }
+h2 { font-size: 19px; margin: 0 0 4px; letter-spacing: -.01em; }
+.num {
+  display: inline-block; min-width: 26px; height: 22px; margin-right: 8px;
+  background: var(--accent); color: #fff; font-size: 12px; font-weight: 700;
+  text-align: center; line-height: 22px; border-radius: 3px;
+}
+.sub { font-size: 13px; color: var(--muted); margin: 0 0 16px; }
+time { font-variant-numeric: tabular-nums; font-size: 12px; color: var(--accent); font-weight: 600; }
+
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.card { border: 1px solid var(--line); border-radius: 5px; padding: 14px 16px; }
+.card h4 { margin: 0 0 8px; font-size: 14.5px; }
+.card p { margin: 0; font-size: 14px; }
+
+.term { border-top: 1px solid var(--line); padding: 13px 0; }
+.term h4 { margin: 0 0 5px; font-size: 15px; }
+.term h4 em { font-style: normal; font-weight: 400; font-size: 12.5px; color: var(--muted); }
+.term p { margin: 0; }
+.aside {
+  margin-top: 7px !important; background: var(--wash); padding: 8px 11px;
+  border-radius: 4px; font-size: 13.5px; color: #3f4450;
+}
+.aside b { color: var(--accent); font-weight: 700; }
+
+.step { display: flex; gap: 14px; padding: 15px 0; border-top: 1px solid var(--line); }
+.marker {
+  flex: 0 0 26px; height: 26px; border-radius: 50%; background: var(--ink); color: #fff;
+  font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+}
+.step .body { flex: 1; }
+.step h4 { margin: 0 0 6px; font-size: 15px; display: flex; gap: 8px; align-items: baseline; }
+.step p { margin: 0 0 6px; }
+.step p:last-child { margin-bottom: 0; }
+blockquote {
+  margin: 9px 0 0; padding-left: 12px; border-left: 2px solid var(--line);
+  color: #3f4450; font-size: 14px;
+}
+
+table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin: 8px 0 10px; }
+th, td { border: 1px solid var(--line); padding: 6px 9px; text-align: left; vertical-align: top; }
+th { background: var(--wash); font-weight: 600; font-size: 12.5px; }
+
+.insight { padding: 12px 0; border-top: 1px solid var(--line); }
+.insight h4 { margin: 0 0 4px; font-size: 15px; }
+.insight p { margin: 0; font-size: 14.5px; }
+
+.watch { margin: 0; padding-left: 18px; }
+.watch li { margin-bottom: 9px; }
+
+footer {
+  margin-top: 38px; padding-top: 14px; border-top: 1px solid var(--line);
+  font-size: 12px; color: var(--muted);
+}
+
+@page { size: A4; margin: 14mm; }
+.card, .term, .step, .insight, .conclusion, blockquote, tr { break-inside: avoid; page-break-inside: avoid; }
+h1, h2, h3, h4 { break-after: avoid; page-break-after: avoid; }
+@media print {
+  .note { max-width: none; padding: 0; font-size: 10.5pt; }
+  section { margin-bottom: 22px; }
+  a { text-decoration: underline; }
+}
+</style>
+</head>
+<body>
+<div class="note">
+
+  <header>
+    <div class="label">STUDY NOTE · AI 에이전트와 피해주</div>
+    <h1>AI 에이전트가 노는 돈을 다 찾아내서 옮긴다 — 우려가 현실이 된 위기의 주식들</h1>
+    <div class="meta">소수몽키 · 2026.9.29 · 23분 38초 · <a href="https://www.youtube.com/watch?v=Cswz8biSRHs">원본 영상</a></div>
+  </header>
+
+  <div class="conclusion">
+    <span class="tag">한 줄 결론</span>
+    AI 에이전트가 대중화되면 인간의 게으름으로 돈을 벌던 기업들, 즉 잠자는 돈(레이지 캐시)과 무심코 새는 돈(레이지 택스)에 기대던 증권사·은행·보험사·통신사·구독 서비스·광고 플랫폼의 마진이 깎인다. 화자는 몰락론까지는 과하다고 보지만, 아마존이 메타의 뮤즈를 차단하고 법원이 AI 챗봇을 "사람의 대리인"으로 인정한 것은 이 우려가 현실이 됐다는 신호다. 반대편에는 문을 열고 협업하는 기업과 새로 깔리는 AI 결제·금융 인프라라는 수혜가 있다.
+  </div>
+
+  <section>
+    <h2><span class="num">01</span> 두 단어 — 레이지 캐시와 레이지 택스</h2>
+    <p class="sub">영상의 출발점 — 인간은 컴퓨터처럼 완벽하지 않다 <time>0:00–1:37</time></p>
+    <div class="split">
+      <div class="card">
+        <h4>레이지 캐시 — 잠자는 돈</h4>
+        <p>게을러서 어딘가에 놀고 있는 유휴 자금. 화자 자신도 옛날 어딘가에서 개설한 은행 계좌에 100원이라도 남아 있을 것 같다고 말한다. 증권사 계좌에 배당이나 이자가 들어왔는데 무심코 안 빼고 둔 몇 천 원, 몇 만 원도 여기 들어간다.</p>
+      </div>
+      <div class="card">
+        <h4>레이지 택스 — 무심코 새는 돈</h4>
+        <p>게을러서 세금처럼 비효율적으로 나가는 돈. 꼭 나쁜 돈이 아니라, 넷플릭스를 가족이 두 번 세 번 중복 구독해 더블로 내는 것처럼 "저의 게으름 때문에 세금처럼 아쉽게 나가는 돈"이다.</p>
+      </div>
+    </div>
+    <p>화자는 이 말이 월가에서 진짜 쓰는 용어인지 확실치 않다고 하면서도 단어가 재밌어 가져왔다. 핵심 프레임은 하나다. 이 두 종류의 돈으로 은근히 돈을 벌던 기업들이 있었고, 뮤즈 같은 AI 비서가 실생활에 침투하면 그 기업들이 위험하다는 경고성 기사와 보고서가 이번 주에 쏟아졌다는 것.</p>
+  </section>
+
+  <section>
+    <h2><span class="num">02</span> 용어 사전</h2>
+    <p class="sub">영상에 등장한 개념을 쉬운 말로</p>
+
+    <div class="term">
+      <h4>소비자 관성 <em>consumer inertia</em></h4>
+      <p>귀찮아서, 게을러서 하던 대로 하는 소비 습관. 언론이 "소비자 관성에 의존하던 기업들의 위기, 패닉"이라고 표현한 것을 화자는 레이지 택스와 똑같은 말이라고 본다.</p>
+      <p class="aside"><b>포인트</b> — "소비자 행동이 인간 심리에 의해 좌우되던 시절, 그러니까 인간이 게을러서 덕 봤던 그런 전략은 더 이상 통하지 않게 될 것이다." 이 경고는 챗GPT·클로드가 나왔을 때도 있었는데, 뮤즈의 대중화 기대가 붙으면서 다시 나온 것.</p>
+    </div>
+
+    <div class="term">
+      <h4>유휴 자금 · 예수금</h4>
+      <p>증권사 계좌에 놀고 있는 돈. 계좌에 돈이 있다는 것 자체가 증권사가 굴릴 수 있는 수단이 된다. 은행 예금도 같다 — 적금이었으면 훨씬 더 많은 이자를 줬어야 하는데 안 줘도 되니 JP모건·뱅크오브아메리카 같은 금융사엔 이득.</p>
+      <p class="aside"><b>쉽게</b> — AI 비서가 "여기 있는 돈 제가 더 굴려 드릴게요" 하고 딸깍 옮기면 그 이득이 사라진다는 우려.</p>
+    </div>
+
+    <div class="term">
+      <h4>광고판 <em>플랫폼의 광고 모델</em></h4>
+      <p>아마존이 수십 년간 구축한 680억 달러(화자 환산 70~80조 원) 규모의 광고 사업. 최저가 비교, 스폰서 추천 상품, 평점과 고객 후기, 관련 상품 알고리즘이 전부 광고비를 받는 광고판이다.</p>
+      <p class="aside"><b>포인트</b> — "이건 인간이, 눈이 달린 인간이나 보는 거지. AI 에이전트한테 눈이 없죠." 에이전트는 광고를 안 보고 필요한 것만 쏙 가져간다.</p>
+    </div>
+
+    <div class="term">
+      <h4>대리 구매와 에이전트의 법적 지위</h4>
+      <p>사람은 딴 걸 하고 AI 에이전트가 쇼핑몰에 들어가 결제까지 해 버리는 것. 아마존이 올해 상반기 한 AI 회사를 무단 접속·결제 시도로 소송했는데, 법원은 "AI 챗봇은 사람의 손발, 대리인이니까 사람이나 다를 바 없다"며 AI 기업 편을 들었다.</p>
+      <p class="aside"><b>포인트</b> — 작년까지는 AI 쇼핑이 추천·검색 수준이라 아마존도 봐 줬다. 고객이 결국 아마존에 들어오니까. 에이전트 시대부터는 고객이 안 온다.</p>
+    </div>
+
+    <div class="term">
+      <h4>머신 네이티브 경제 <em>machine-native economy</em></h4>
+      <p>세계 최대 자산운용사 블랙락 보고서의 용어. AI 에이전트가 스스로 데이터를 사고, 서비스를 예약하고, 컴퓨팅 자원을 빌려 직접 돈을 쓰기 시작한 경제. 화자 말로 "AI가 돌리는 경제".</p>
+      <p class="aside"><b>비유</b> — 우리는 못 느끼지만 컴퓨터 속에서 수십억, 수백억 개의 에이전트가 "지네끼리 대화하고 협상하고 결제하고 예약하고" 돌아다니는 세상.</p>
+    </div>
+
+    <div class="term">
+      <h4>시트린 보고서 <em>(자막 표기)</em></h4>
+      <p>올해 초 "2028년 글로벌 AI 위기" 시나리오로 주목받은 기관의 비관 보고서. 2026년 가을부터 중개 비즈니스 붕괴가 시작된다고 했고, 이번에 다시 증권사(찰스 슈왑)와 보험사를 저격했다.</p>
+      <p class="aside"><b>포인트</b> — 화자는 "몰락까지는 과장", "되게 과하게 비관론적"이라고 선을 그으면서도 "지금 봐도 틀린 얘기는 아닌 것 같다"고 한다.</p>
+    </div>
+
+    <div class="term">
+      <h4>AI 구독료 격차</h4>
+      <p>무료로 쓰는 사람, 기본 20달러, 100달러, 그리고 오픈AI가 내놓는다는 500~600달러 티어. 지식·정보 접근의 양극화가 여기서 날 수 있다는 것.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">03</span> 영상의 논리 흐름</h2>
+    <p class="sub">"돈 아껴 주는 비서"에서 "누가 잃고 누가 얻나"까지 9단계</p>
+
+    <div class="step">
+      <div class="marker">1</div>
+      <div class="body">
+        <h4>돈 아껴 주는 에이전트, 사례가 바이럴이 됐다 <time>1:38–4:29</time></h4>
+        <p>메타의 뮤즈는 묻지 않아도 먼저 제안한다 — 이메일을 연결해 결제 청구 메일을 스캔하고 중복 구독을 자동 해지, 최저가 추적, 콘서트 티켓 판매가 뜨면 바로 구매. 뉴욕타임스 기자 후기에는 치과 보험사와 직접 연결해 보험료를 청구해 준 것, 식당 예약, 맞춤 팟캐스트가 있고 단점은 로그인·비밀번호 권한을 줘야 하는 보안 부담. 3년 동안 못 받은 보험금을 AI가 집요하게 파고들어 받아 줬다는 사례, 중개사가 55,000달러가 적정가라던 집을 AI 분석으로 9만 달러에 판 후기도 나온다. 메타도 연례 행사에서 "돈을 벌어다 줄 것"을 계속 강조한다.</p>
+        <blockquote>"사람들은 다 돈 아끼고 싶어 하니까 민감한 주제인데 되게 관심이 많은 주제잖아요. 그걸 이제 집중적으로 파고들고 있는 겁니다."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">2</div>
+      <div class="body">
+        <h4>내가 아낀 돈은 누군가의 마진이다 <time>4:29–7:31</time></h4>
+        <p>여기서 뒤집힌다. 우리가 돈을 아끼거나 타 갔다는 얘기는 회사 쪽에서는 마진이나 수익이 줄었다는 얘기다. 시트린은 증권사를 최고 위기로 꼽았다 — 찰스 슈왑에 놀고 있는 유휴 자금이 어마어마한데 에이전트가 다 빼 갈 거라는 것. 다른 이유도 있지만 주가가 주간 기준 6% 빠졌다. 보험사도 마찬가지. "1,000원밖에 안 되는데 서류 내는 시간이 더 아까워" 하고 넘어갔던 보험금을 AI가 다 받아 준다. 시트린은 "사람들이 보험료 챙기려고 5시간 동안 통화하지 않게 되면" 보험사에 위기가 온다고 비판했다.</p>
+        <blockquote>"우리가 이만큼 돈을 아끼거나 돈을 타갔다는 얘기는 마진이나 수익이 줄어들었다는 얘기니까 이제 반대급부가 될 수 있는 거죠."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">3</div>
+      <div class="body">
+        <h4>피해주 리스트 — 관성으로 벌던 곳들 <time>7:31–9:13</time></h4>
+        <p>블룸버그가 "소비자 관성에 의존해 추가 수익을 내던 기업" 리스트를 뽑았다. 화자의 정리는 아래와 같다. 다만 화자 자신은 "진짜 위기론보다는 약간의 부정적인 우려는 낄 수 있다 정도"로 본다.</p>
+        <table>
+          <tr><th>업종</th><th>관성으로 벌던 돈</th><th>에이전트가 하는 일</th></tr>
+          <tr><td>은행 (JP모건·뱅크오브아메리카)</td><td>게을러서 예금에 쌓아 둔 돈, 안 줘도 되는 이자</td><td>더 굴려 주겠다며 딸깍 옮김</td></tr>
+          <tr><td>증권사·자산운용사 (찰스 슈왑)</td><td>놀고 있는 예수금, 비싼 수수료</td><td>더 싼 데 찾아 옮김</td></tr>
+          <tr><td>보험사</td><td>중복 납부, 비싸게 갱신, 안 준 보험금</td><td>다 찾아내고 청구</td></tr>
+          <tr><td>쇼핑몰</td><td>최적가가 아닌 구매</td><td>최저가로 합리적 소비</td></tr>
+          <tr><td>통신사</td><td>모르고 쓰는 부가서비스 월 1,000~2,000원</td><td>다 찾아 해지</td></tr>
+          <tr><td>구독 서비스 (넷플릭스·스포티파이) · 소프트웨어</td><td>눌러 놓고 안 보는 구독, 안 쓰는 소프트웨어</td><td>싹 해지</td></tr>
+        </table>
+        <blockquote>"저는 진짜 위기론보다는 좀 약간의 부정적인 우려는 낄 수 있다 정도 보시면 되겠죠."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">4</div>
+      <div class="body">
+        <h4>기업의 두 가지 선택 — 문을 열거나, 걸어 잠그거나 <time>9:13–9:57</time></h4>
+        <p>뮤즈는 일주일 만에 1,500개 기업과 협업했다고 발표했다. 결제·쇼핑·구독·배송·소프트웨어 기업이 하루가 다르게 메타와 협업을 발표한다. 논리는 "컨택 안 하면 어차피 뒤처지니까, 잡아먹히는 것보다 수익이 줄더라도 협업해서 손님이 더 오게 하는 게 낫다. 괜히 문 걸어 잠갔다가 이도 저도 아니게 된다." 반대로 끝까지 문을 잠그는 기업이 있다.</p>
+        <blockquote>"AI 에이전트가 쏙쏙 필요한 것만 빼가기 때문에 더 손해 볼 수 있다. 차라리 문을 열어 주고 더 많이 손님들이 오게끔 하는 것이 낫다."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">5</div>
+      <div class="body">
+        <h4>아마존의 철벽 — 680억 달러 광고판을 지켜라 <time>9:57–12:00</time></h4>
+        <p>화자가 "오늘 가장 드리고 싶은 말씀"이라고 한 대목. 블룸버그는 아마존이 견고하게 구축한 680억 달러 광고판이 사라질 위기라고 썼다. 베조스는 "막아라", 저커버그는 "침투해". 이번 주 뮤즈가 아마존에 접속해 최저가만 쏙쏙 빼 가려 했고 아마존은 차단했다. 아마존은 "에이전트가 사람인 척 들어와 개인정보를 빼 가니 보안 때문"이라 했지만, 업계는 보안은 핑계고 광고판이 사라지기 때문이라고 보고, 화자도 동의한다. 쿠팡을 떠올리면 된다 — 스폰서 추천, 평점, 후기, 관련 상품 알고리즘 모두 인간 눈을 위한 광고판이고 에이전트는 그걸 안 본다.</p>
+        <blockquote>"아마존의 최대 강점이 이렇게 비교해 주고 그걸 대가로 광고도 받고 하는 건데요. AI 에이전트는 그 사람처럼 보지 않죠. 그냥 쏙 가져가죠."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">6</div>
+      <div class="body">
+        <h4>법원이 에이전트 편을 들었다 <time>12:00–13:52</time></h4>
+        <p>작년까지는 문제가 없었다. 에이전트 기능이 추천·검색 수준이어서 고객이 결국 아마존에 들어왔기 때문. 이제는 사람은 딴 걸 하고 에이전트가 들어와 광고 안 보고 결제까지 한다. 그래서 아마존이 올해 상반기 소송을 걸었는데, 법원은 "AI 챗봇은 사람의 손발, 대리인이니 사람이나 다를 바 없다"고 AI 기업 손을 들어 줬다. 메타도 이 판결을 근거로 다시 열어 달라고 요청할 것으로 추측된다. 8월에 AI 에이전트 결제 시대가 열린 뒤라 쇼핑몰이나 광고 기반 플랫폼은 많은 고민을 해야 할 상황.</p>
+        <blockquote>"AI 에이전트들이 이렇게 귀엽게 생겼지만 무시무시한 침투력으로 많은 기업들을 무너뜨릴 수 있고 휘청거리게도 할 수 있다."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">7</div>
+      <div class="body">
+        <h4>블랙락 — 머신 네이티브 경제가 시작됐다, 그래서 인프라와 암호화폐 <time>13:52–16:33</time></h4>
+        <p>화자가 직접 해 봤더니 "러닝화 좋은 거 추천해서 사줘" 하면 결제창까지 열어 놓는다. 결제 정보만 입력하면 끝이라 광고판을 하나도 보지 않은 셈. 블랙락은 에이전트가 직접 돈을 쓰기 시작한 것을 머신 네이티브 경제의 시작으로 보고 AI 인프라에 긍정적으로 톤을 바꿨다. 이번 주 "AI 인프라, 고금리 이겨낸다" 보고서도 냈다. 수십 년 쌓은 인간용 디자인·UI/UX가 필요 없어지고 AI가 쓸 결제·금융 인프라가 새로 설계되는데, 그 기저가 AI 인프라와 암호화폐라는 것. 암호화폐와 관련주에는 이 수요가 아직 반영되지 않은 과소평가된 수요원이라는 보고서다. 화자는 극초기라 봐야겠지만 일리가 있다고 본다.</p>
+        <blockquote>"그동안은 신용카드, 진짜 인간을 위해서 결제망이 다 형성돼 있었는데 이제는 AI 에이전트가 돌리는 세상이니까 많이 바뀔 것 같습니다. 그래서 거기서 또 기회도 있을 것 같고."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">8</div>
+      <div class="body">
+        <h4>시트린의 비관 시나리오, 다시 읽어 보면 <time>16:33–20:12</time></h4>
+        <p>올해 초 그 보고서는 2028년 글로벌 AI 위기, 2026년 가을부터 중개 비즈니스 붕괴 시작을 말했다. 근거는 오늘 얘기와 같다 — 에이전트는 지치지 않고 귀찾아하지 않고 최저가를 찾아낸다. 인간은 "좀 비싸도 사던 거 사자" 하는 브랜드 충성도가 있지만 에이전트에게는 없다. 브랜드 무시, 무조건 최적가, 24시간 주 7일 휴일 없이 비교, 인간용 디자인을 건너뛰고 다이렉트로 꽂아 필요한 정보만. 그 뒤로 시나리오는 비자·마스터카드가 만든 사람용 결제망이 필요 없어지는 신용카드 위기(스테이블코인 채택), 고소득 전문직 대량 실직, 소비 위기, 부동산 위기, 구제금융, 실리콘밸리 시위(화자는 "농담입니다")까지 간다. 화자는 과도한 비관이라 선을 긋지만, 일자리가 많이 대체될 것 같아 "호들갑이 아니고 무섭다"고 한다.</p>
+        <blockquote>"AI 에이전트는 지치지 않고 귀찾아하지 않고 최저가를 찾아내기 때문입니다. 제가 오늘 하는 얘기랑 똑같죠. 인간의 게으름을 기반으로 하던 비즈니스 모델의 붕괴."</blockquote>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="marker">9</div>
+      <div class="body">
+        <h4>변곡점, 그리고 영화 인타임 <time>20:12–22:11</time></h4>
+        <p>2022년 챗GPT가 변곡점을 만들었고, 2026년 초 AI 에이전트 등장이 두 번째 변곡점, 이제는 소수의 전유물이 아니라 아무나 실생활에 쓰는 대중화 단계. 실생활로 침투하는 만큼 일자리 영향도 가속될 수 있다. 화자는 영화 인타임을 꼭 보라고 한다. 시간을 돈으로 사는 세상에서 돈 없는 사람은 죽고 돈 있는 사람은 영생을 누리는데, AI도 돈 있는 사람이 더 빠르고 정확한 지능과 정보를 얻어 더 많은 돈을 버는 구조가 되고 있다는 것. 구독료 무료·20달러·100달러·500~600달러의 격차가 곧 지식 접근 격차다.</p>
+        <blockquote>"결국은 진짜 부자는 돈이 많은 게 아니라 시간이 많은 거 같거든요. … 시간 이런 것들이 점점 더 귀해지겠다."</blockquote>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">04</span> 인사이트</h2>
+    <p class="sub">영상 밖에서도 통하는 원칙</p>
+
+    <div class="insight">
+      <h4>① 소비자가 아낀 돈은 누군가의 매출이다 — 편익 기사 뒤의 손익계산서를 찾아라</h4>
+      <p>"AI가 돈을 아껴 줬다"는 후기가 바이럴이 될 때, 투자자는 그 돈이 어느 회사의 어느 항목에서 빠져나갔는지를 봐야 한다. 소비자 편익과 기업 마진은 같은 돈의 양면이다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>② 마찰이 수익의 원천인 비즈니스는 마찰이 사라질 때 위험하다</h4>
+      <p>귀찮음, 5시간 통화, 서류, 비교의 번거로움이 이익의 근거였다면 그 이익은 기술이 마찰을 없애는 순간 사라진다. 보유 종목의 이익이 고객의 관성에서 나오는지, 고객이 실제로 원하는 것에서 나오는지 가려 본다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>③ 인간의 눈에 맞춰 쌓은 자산은 눈이 없는 고객 앞에서 재평가된다</h4>
+      <p>광고판, UI/UX, 평점과 후기, 브랜드 충성도는 모두 "보는 사람"을 전제로 한 자산이다. 고객이 사람이 아니라 대리인이 되면 그 자산의 가치는 다시 매겨진다. 수십 년 쌓았다는 사실이 방어력을 보장하지 않는다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>④ 막을 수 없는 흐름이면 문을 여는 쪽이 살아남는다</h4>
+      <p>일주일에 1,500개 기업이 협업을 택한 이유는 거부하면 "이도 저도 아니게" 되기 때문이다. 법원이 에이전트를 사람의 대리인으로 인정한 순간 차단은 시간을 벌 뿐이다. 변화의 방향이 정해졌다면 누가 먼저 열고 적응하는지를 본다.</p>
+    </div>
+
+    <div class="insight">
+      <h4>⑤ 붕괴 리스트만 보지 말고, 그 아래 새로 깔리는 인프라를 보라</h4>
+      <p>낡은 결제망과 광고판이 흔들리는 자리에는 새 경제가 쓸 결제·금융 인프라가 깔린다. 피해주를 피하는 것과 함께, 새 경제의 배관이 어디에 놓이는지가 다음 기회다.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">05</span> 앞으로 지켜볼 것</h2>
+    <ul class="watch">
+      <li><b>아마존 vs 메타</b> — 뮤즈 차단에 대해 메타가 판결을 근거로 재개방을 요청하는지, 후속 소송이 붙는지. 680억 달러 광고판의 방어 결과.</li>
+      <li><b>뮤즈 협업 기업 수</b> — 일주일 만에 1,500개. 결제·쇼핑·구독·배송·소프트웨어에서 문을 여는 기업과 잠그는 기업의 명단.</li>
+      <li><b>찰스 슈왑·보험사</b> — 주간 6% 하락 이후 유휴 자금 이탈이 실제 실적에 나타나는지.</li>
+      <li><b>블룸버그 리스트 업종</b>(은행·증권·보험·통신·구독·소프트웨어)의 관성 수익 감소가 숫자로 확인되는지. 화자의 기준선은 "몰락이 아니라 약간의 부정적 우려".</li>
+      <li><b>블랙락의 두 보고서</b> — AI 인프라(고금리 이겨낸다)와 암호화폐(과소평가된 수요원)의 후속 톤.</li>
+      <li><b>시트린 시나리오의 첫 체크포인트</b> — 2026년 가을부터 중개 비즈니스 붕괴가 시작된다는 예측이 실제 흐름과 맞는지.</li>
+      <li><b>AI 구독료 500~600달러 티어</b> 출시와 접근 격차의 확대.</li>
+    </ul>
+  </section>
+
+  <footer>유튜브 자동 생성 자막 전문을 바탕으로 정리 (미측정 기본값 2.2초 보정). 발언자의 견해이며 투자 판단의 근거가 아닌 학습 자료입니다. 영상 말미의 텔레그램 채널 구독 안내는 제외했습니다.</footer>
+</div>
+</body>
+</html>
