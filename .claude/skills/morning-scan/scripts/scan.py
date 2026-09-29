@@ -288,6 +288,10 @@ def watch_url(video_id):
 
 
 def passes_rule(rule, seconds, is_live):
+    # ponytail: 재생시간 0초는 아직 시작 안 한 예약 라이브다 (2026-09-29 실측 — 다음날 모닝루틴이 PT0S 로 와서 쇼츠로 찍혔다).
+    # 쇼츠 판정보다 먼저 가른다. 진행 중인 라이브도 0초로 오는지는 아직 못 봤다 — 보이면 문구를 "예정·진행 중" 으로 넓힌다.
+    if seconds == 0:
+        return False, "예정"
     if seconds <= SHORTS_MAX_SEC:
         return False, "쇼츠"
     if rule == "live_only" and not is_live:
@@ -507,6 +511,7 @@ def selftest():
 
     uploads = {
         "UUGCGxsbmG_9nincyI7xypow": [
+            ("UpcomingLiv", "2026-09-04T00:30:00Z", "한국경제신문 30분 만에 읽기 | 20260905🌞#모닝루틴"),
             ("GqTNwCSiS_k", "2026-09-03T23:42:53Z", "한국경제신문 30분 만에 읽기 | 20260904🌞#모닝루틴 | 환노출 vs 환헤지 ETF"),
             ("5j7Lu6Msfp0", "2026-09-03T09:00:21Z", "카스 vs 테라 당신의 선택은?"),
             ("ooSrteQzfdI", "2026-09-02T23:37:53Z", "한국경제신문 30분 만에 읽기 | 20260903🌞#모닝루틴"),
@@ -526,6 +531,7 @@ def selftest():
         ],
     }
     durations = {
+        "UpcomingLiv": "PT0S",
         "GqTNwCSiS_k": "PT38M56S",
         "5j7Lu6Msfp0": "PT15S",
         "ooSrteQzfdI": "PT34M15S",
@@ -569,6 +575,10 @@ def selftest():
         ("38:56 재생시간", "38:56" in html),
         ("라이브 배지", 'class="kind live"' in html),
         ("15초 쇼츠 제외", "5j7Lu6Msfp0" not in html),
+        ("0초 예약 라이브는 카드에 없음", "UpcomingLiv" not in html),
+        ("0초는 쇼츠가 아니라 예정으로 표기", "0:00(예정)" in html and "0:00(쇼츠)" not in html),
+        ("passes_rule 0초", passes_rule("live_only", 0, False) == (False, "예정")
+                            and passes_rule("live_only", 15, False) == (False, "쇼츠")),
         ("1분 1초 쇼츠 제외", "LEczVIueQAA" not in html),
         ("어제 라이브는 창 밖", "ooSrteQzfdI" not in html),
         ("조용한 채널: 박종훈", "e3jLOQUfkyI" in html),
