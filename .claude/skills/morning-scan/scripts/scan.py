@@ -40,7 +40,7 @@ BRIDGE_PORT = 47821
 DIGEST_TITLE_KEYWORDS = ("모닝루틴",)
 SKILL_LABEL = {
     "youtube-study-note": "스터디 노트",
-    "news-briefing-digest": "다이제스트",
+    "news-briefing-digest": "뉴스브리핑",
 }
 
 HERE = Path(__file__).resolve().parent
@@ -322,7 +322,7 @@ def render_card(entry):
         <h3><a class="card-link" href="{watch_url(entry['video_id'])}" target="_blank" rel="noopener">{esc(entry['title'])}</a></h3>{subnote}
         <div class="actions">
           <button class="act primary" type="button" data-skill="{primary}">정리하기 → {SKILL_LABEL[primary]}</button>
-          <button class="act" type="button" data-skill="{other}">{SKILL_LABEL[other]}로 정리</button>
+          <button class="act" type="button" data-skill="{other}">{SKILL_LABEL[other]} 형식으로</button>
         </div>
       </div>
       <div class="runtime">

@@ -58,7 +58,7 @@ curl -s "https://www.googleapis.com/youtube/v3/channels?part=snippet,contentDeta
 
 ## 정리하기 버튼 (cmux 안에서만)
 
-카드마다 `정리하기 → 스터디 노트`(채운 색, 기본 스킬) / `다이제스트로 정리`(테두리만, 다른 스킬) 두 버튼이 있다. 모닝루틴 카드는 반대다. 브라우저 패널의 페이지는 JS 라서 터미널을 직접 못 건드리므로 `scripts/bridge.py` 가 사이에 선다.
+카드마다 `정리하기 → 스터디 노트`(채운 색, 기본 스킬) / `뉴스브리핑 형식으로`(테두리만, 다른 스킬) 두 버튼이 있다. 라벨은 `scan.py` `SKILL_LABEL`. 모닝루틴 카드는 반대다. 브라우저 패널의 페이지는 JS 라서 터미널을 직접 못 건드리므로 `scripts/bridge.py` 가 사이에 선다.
 
 ```
 버튼 클릭 → GET http://127.0.0.1:47821/note?v=<videoId>&skill=<스킬>
