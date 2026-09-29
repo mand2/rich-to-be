@@ -33,8 +33,9 @@ root=$(git rev-parse --show-toplevel) || exit 0
 # SKILL.md 까지 확인하는 건 ".." 같은 경로가 디렉토리로 통과하는 걸 막기도 한다.
 [ -f "$root/.claude/skills/$skill/SKILL.md" ] || exit 0
 
-# slack-mention-notes 만 예외다 — 스스로 worktree 에이전트를 띄우므로 중첩되면 안 된다
-[ "$skill" = slack-mention-notes ] && exit 0
+# 예외 둘. slack-mention-notes 는 스스로 worktree 에이전트를 띄우므로 중첩되면 안 되고,
+# morning-scan 은 notes/ 를 안 써서(산출물이 .work/ 와 Artifact 뿐) 격리할 게 없다 — 격리하면 빈 브랜치만 남는다.
+case "$skill" in slack-mention-notes|morning-scan) exit 0 ;; esac
 
 # 브랜치는 feature/<yyyyMMddHHmmss> 다. EnterWorktree(name:) 는 브랜치에 worktree- 를 강제로 붙이고
 # 같은 스킬을 두 번 부르면 이름이 겹치므로, 워크트리를 git 으로 직접 만들고 path 로 들어가게 시킨다.

@@ -1,17 +1,18 @@
 # rich-to-be
 
-유튜브 영상을 **한 장짜리 HTML 문서**로 정리하는 Claude Code 스킬 두 개. 리포의 산출물은 `notes/<폴더>/{yyMMdd}_<slug>.html` 이다 (날짜는 노트를 만든 날, 영상 방송일이 아니다). **폴더는 모닝루틴 `notes/morning-routine/` · 투자 노트 `notes/invest/` · 부동산 `notes/real-estate/` · 개인 공부용 `notes/self-study/` 넷뿐이다.** 스터디 노트 스킬은 투자·부동산·개인 공부용 중 어디인지 사용자에게 한 번 묻는다.
+유튜브 영상을 **한 장짜리 HTML 문서**로 정리하는 Claude Code 스킬 두 개, 그리고 팔로우 채널의 새 업로드만 확인하는 `morning-scan`. 리포의 산출물은 `notes/<폴더>/{yyMMdd}_<slug>.html` 이다 (날짜는 노트를 만든 날, 영상 방송일이 아니다). **폴더는 모닝루틴 `notes/morning-routine/` · 투자 노트 `notes/invest/` · 부동산 `notes/real-estate/` · 개인 공부용 `notes/self-study/` 넷뿐이다.** 스터디 노트 스킬은 투자·부동산·개인 공부용 중 어디인지 사용자에게 한 번 묻는다.
 
 | 스킬 | 대상 | 만드는 것 |
 |---|---|---|
 | `news-briefing-digest` | 꼭지 10~15개가 나열되는 뉴스 브리핑 (조간·모닝루틴·마켓 브리핑) | 스캔용 다이제스트 — 헤드라인 3줄, 숫자, 분야별 꼭지 카드, 종목 인덱스 |
 | `youtube-study-note` | 단일 주제를 파는 해설·강의 | 학습 자료 — 용어 사전, 논리 흐름 분해, 인사이트, 관전 포인트 |
+| `morning-scan` | 팔로우 채널 5곳의 지난 24시간 **업로드 목록** (영상 내용은 안 본다) | Artifact 페이지 한 장 갱신 — 새 영상 카드, 조용한 채널, 걸러낸 항목. cmux 안이면 같은 페이지를 오른쪽 패널에도 열고, 카드의 "정리하기" 버튼이 이 터미널에 노트 스킬 명령을 넣는다. 산출물은 `.work/` 라 `notes/` 에 안 쌓인다 |
 
 **둘의 차이는 요약 방식이 아니라 목적이다.** 다이제스트는 선별과 재배열, 스터디 노트는 재구성과 추상화다. 스터디 노트의 `04 인사이트` 는 영상 밖에도 통하는 원칙으로 한 단계 올리는 것이 요구 사항이고, 다이제스트는 중요도 재배열과 파급 효과 서술이 요구 사항이다. **각 스킬의 `references/rules.md` 가 규칙의 정본이고, 두 파일을 섞어 쓰지 마라.**
 
 ## 환경
 
-Python은 **반드시 `.venv/bin/python`** 을 쓴다. `youtube-transcript-api` 가 여기에만 설치돼 있고, 시스템 python에는 없다.
+Python은 **반드시 `.venv/bin/python`** 을 쓴다. `youtube-transcript-api` 가 여기에만 설치돼 있고, 시스템 python에는 없다. **`.venv` 는 gitignore 라 워크트리엔 없다 — 스킬 워크트리 안에서는 리포 루트의 `.venv` 를 절대경로로 부른다.**
 
 ```sh
 .venv/bin/python scripts/transcript.py --selftest
@@ -21,7 +22,7 @@ Python은 **반드시 `.venv/bin/python`** 을 쓴다. `youtube-transcript-api` 
 
 ## 공용 스크립트 (`scripts/`)
 
-두 스킬이 같이 쓰므로 스킬 폴더 밖에 둔다. 한쪽 스킬 안에 넣으면 다른 쪽이 남의 폴더를 참조하게 된다.
+두 스킬이 같이 쓰므로 스킬 폴더 밖에 둔다. 한쪽 스킬 안에 넣으면 다른 쪽이 남의 폴더를 참조하게 된다. 반대로 한 스킬만 쓰는 스크립트는 그 스킬 안에 둔다 — `morning-scan` 의 `scan.py` · `bridge.py`(둘 다 `--selftest` 있음) · `template.html` · `run.sh` 는 `.claude/skills/morning-scan/scripts/` 에 있고, `YOUTUBE_API_KEY` 는 `.env` 에서 스크립트가 직접 읽는다. `bridge.py` 는 cmux 브라우저 패널의 "정리하기" 버튼을 `cmux send` 로 터미널 슬래시 커맨드로 바꾸는 127.0.0.1 서버다 — cmux 안에서만 뜬다.
 
 | 파일 | 무엇 |
 |---|---|
@@ -38,7 +39,7 @@ transcript.py (자동자막이면 2.2초 자동 보정) → 본문 작성 → no
 
 **노트 파일은 Write 툴로 만들고 Edit 툴로 고친다. Bash 리다이렉트(`cat > ...`)로 쓰지 마라.** `.claude/settings.json` 의 `PostToolUse(Write|Edit)` 훅이 `scripts/commit-note.sh` 를 불러 커밋·푸시까지 하는데, Bash 로 쓰면 훅이 매칭될 툴 호출이 없어서 **발행이 조용히 멈춘다.** `.work/` 나 스크래치 파일은 Bash 로 써도 된다.
 
-`.claude/skill-worktree.sh` 가 노트 스킬을 격리 worktree 로 몬다. 대상은 손으로 적은 목록이 아니라 **`.claude/skills/<이름>/SKILL.md` 가 있는 스킬**, 즉 이 리포에 등록된 커스텀 스킬이다 (`slack-mention-notes` 만 예외 — 스스로 worktree 에이전트를 띄운다). 내장·플러그인 스킬은 자연히 빠진다. **입구가 둘이라 훅도 둘에 걸린다** — `Skill` 툴 호출은 `PreToolUse`, `/스킬명` 슬래시 커맨드는 툴 호출이 없어 `UserPromptSubmit` 으로만 온다. 한쪽만 걸면 다른 쪽이 main 에서 그대로 돈다. 배선은 gitignore 되는 `.claude/settings.local.json` 에 있으니 클론한 곳에선 직접 넣어야 한다.
+`.claude/skill-worktree.sh` 가 노트 스킬을 격리 worktree 로 몬다. 대상은 손으로 적은 목록이 아니라 **`.claude/skills/<이름>/SKILL.md` 가 있는 스킬**, 즉 이 리포에 등록된 커스텀 스킬이다 (예외 둘 — `slack-mention-notes` 는 스스로 worktree 에이전트를 띄우고, `morning-scan` 은 `notes/` 를 안 써서 격리할 게 없다). 내장·플러그인 스킬은 자연히 빠진다. **입구가 둘이라 훅도 둘에 걸린다** — `Skill` 툴 호출은 `PreToolUse`, `/스킬명` 슬래시 커맨드는 툴 호출이 없어 `UserPromptSubmit` 으로만 온다. 한쪽만 걸면 다른 쪽이 main 에서 그대로 돈다. 배선은 gitignore 되는 `.claude/settings.local.json` 에 있으니 클론한 곳에선 직접 넣어야 한다.
 
 `commit-note.sh` 는 어디서 도는지에 따라 갈린다 — main 워크트리면 바로 푸시, `worktree-agent-*`(slack 병렬 에이전트) 면 커밋만, 그 밖의 워크트리면 브랜치를 올리고 PR 을 연다. 머지된 워크트리·브랜치는 `scripts/prune-note-worktrees.sh` 가 세션 시작 때 치우고, 리모트 브랜치는 GitHub 의 `delete_branch_on_merge` 가 지운다. 두 스크립트 다 옆에 `*.test.sh` 가 있다.
 
@@ -89,4 +90,4 @@ scripts/transcript.py "<URL>" --lag 3.5    # 영상과 대조한 값으로 재�
 
 ## 설계 배경
 
-**폐기된 대안을 다시 제안하지 마라** — NotebookLM 자동화, yt-dlp, YouTube Data API v3 는 실측 후 버렸다. 근거(`docs/ideas/youtube-note-agents.md`), 스킬을 둘로 쪼갠 경위와 버린 코넬 모드(`tasks/split-youtube-note.md`) 는 삭제됐으니 필요하면 git 이력에서 꺼낸다.
+**폐기된 대안을 다시 제안하지 마라** — NotebookLM 자동화, yt-dlp, YouTube Data API v3 는 **자막 확보 수단으로는** 실측 후 버렸다 (업로드 목록 조회에는 `morning-scan` 이 Data API v3 를 쓴다 — 자막이 아니라 메타데이터라 문제가 없다). 근거(`docs/ideas/youtube-note-agents.md`), 스킬을 둘로 쪼갠 경위와 버린 코넬 모드(`tasks/split-youtube-note.md`) 는 삭제됐으니 필요하면 git 이력에서 꺼낸다.

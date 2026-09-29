@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.morningscan.daily</string>
+
+  <!-- __경로__ 를 rich-to-be 리포의 절대경로로 바꾼다. 절차는 references/schedule.md -->
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>__경로__/.claude/skills/morning-scan/scripts/run.sh</string>
+  </array>
+
+  <key>WorkingDirectory</key>
+  <string>__경로__</string>
+
+  <!-- 매일 09:00 (맥의 현지 시각). 맥이 자고 있었다면 깨어난 직후에 놓친 작업을 실행한다. -->
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key>
+    <integer>9</integer>
+    <key>Minute</key>
+    <integer>0</integer>
+  </dict>
+
+  <key>RunAtLoad</key>
+  <false/>
+
+  <key>StandardOutPath</key>
+  <string>__경로__/.work/morning-scan/launchd.out.log</string>
+  <key>StandardErrorPath</key>
+  <string>__경로__/.work/morning-scan/launchd.err.log</string>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+  </dict>
+</dict>
+</plist>
