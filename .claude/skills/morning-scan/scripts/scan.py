@@ -321,8 +321,8 @@ def render_card(entry):
         </div>
         <h3><a class="card-link" href="{watch_url(entry['video_id'])}" target="_blank" rel="noopener">{esc(entry['title'])}</a></h3>{subnote}
         <div class="actions">
-          <button class="act primary" type="button" data-skill="{primary}">정리하기 · {SKILL_LABEL[primary]}</button>
-          <button class="act" type="button" data-skill="{other}">{SKILL_LABEL[other]}로</button>
+          <button class="act primary" type="button" data-skill="{primary}">정리하기 → {SKILL_LABEL[primary]}</button>
+          <button class="act" type="button" data-skill="{other}">{SKILL_LABEL[other]}로 정리</button>
         </div>
       </div>
       <div class="runtime">
